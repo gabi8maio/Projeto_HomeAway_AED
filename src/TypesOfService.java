@@ -6,6 +6,7 @@ public enum TypesOfService {
     private final String typeName;
 
     TypesOfService(String typeName) {
+
         this.typeName = typeName;
     }
 

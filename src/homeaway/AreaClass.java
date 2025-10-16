@@ -1,7 +1,6 @@
 package homeaway;
 import dataStructures.*;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -44,7 +43,21 @@ public class AreaClass implements Area, Serializable {
     }
 
     public void createService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName) {
-        Services newService = new ServicesClassAbstract(serviceType, latitude, longitude, price, value, serviceName)
+
+        Services newService = null;
+        TypesOfService type = TypesOfService.fromString(serviceType);
+        // Use switch with enum
+        switch (type) {
+            case LODGING:
+                newService = new LodgingClass(latitude, longitude, price, value, serviceName);
+                break;
+            case EATING:
+                newService = new EatingClass(latitude, longitude, price, value, serviceName);
+                break;
+            case LEISURE:
+                newService = new LeisureClass(latitude, longitude, price, value, serviceName);
+                break;
+        }
     }
 
     public boolean serviceExists(String serviceName) {

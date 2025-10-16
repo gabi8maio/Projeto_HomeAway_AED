@@ -1,6 +1,6 @@
 package homeaway;
 
-public abstract class ServicesClassAbstract implements Services, ServicesChange {
+public abstract class ServicesClassAbstract implements Services, ServicesChange{
 
     private final long latitude;
     private final long longitude;
@@ -9,7 +9,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange 
     private final String serviceName;
 
 
-    public ServicesClassAbstract(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName){
+    public ServicesClassAbstract(long latitude, long longitude, Double price, Double value, String serviceName){
         this.serviceName = serviceName;
         this.value = value;
         this.price = price;
@@ -30,5 +30,6 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange 
     public int getServicePrice() {
         return 0;
     }
+
 
 }
