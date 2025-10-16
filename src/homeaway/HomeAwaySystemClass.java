@@ -17,8 +17,9 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     }
 
     @Override
-    public void addTemporaryArea(Area tempArea){
-        this.tempArea = tempArea;
+    public void addTemporaryArea(){
+        Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
+        this.tempArea = area;
     }
     @Override
     public String getTempAreaName(){

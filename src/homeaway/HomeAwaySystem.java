@@ -1,7 +1,7 @@
 package homeaway;
 
 public interface HomeAwaySystem {
-    void addTemporaryArea(Area area);
+    void addTemporaryArea();
 
     boolean hasArea(String name);
 

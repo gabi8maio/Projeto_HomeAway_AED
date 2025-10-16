@@ -128,9 +128,7 @@ public class Main {
                 System.out.println(INVALID_BOUNDS);
                 return;
             }
-
-            Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
-            system.addTemporaryArea(area);
+            system.addTemporaryArea();
             System.out.printf(BOUNDS_CREATED, name);
         } catch (Exception e) {
             System.out.println(INVALID_BOUNDS);
