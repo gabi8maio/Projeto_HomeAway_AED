@@ -25,6 +25,10 @@ public class AreaClass implements Area {
         this.rightLongitude = rightLongitude;
     }
 
+    public String getName() {
+        return areaName;
+    }
+
     public void removeStudent() {
     }
 

@@ -9,7 +9,7 @@ import dataStructures.exceptions.NoSuchElementException;
  * @param <E> Generic Element
  * 
  */
-class TwoWayDoublyIterator<E> extends DoublyIterator<E>
+public class TwoWayDoublyIterator<E> extends DoublyIterator<E>
         implements TwoWayIterator<E> {
 
     /**

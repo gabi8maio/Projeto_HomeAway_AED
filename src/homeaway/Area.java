@@ -5,6 +5,7 @@ import dataStructures.TwoWayDoublyIterator;
 
 public interface Area {
 
+    String getName();
     void removeStudent();
     boolean studentExists();
     boolean lodgingExists();
@@ -17,10 +18,10 @@ public interface Area {
     boolean isAlreadyThere();
     boolean IsItFull();
     void changedLodging();
-    Service whereIsStudent();
+    Services whereIsStudent();
     TwoWayDoublyIterator locationStudentIterator();
     DoublyIterator rankServicesIterator();
     long getDistance();
     DoublyIterator rankedCommand();
-    Service findCommand();
+    Services findCommand();
 }

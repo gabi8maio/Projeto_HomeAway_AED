@@ -8,7 +8,7 @@ import dataStructures.exceptions.NoSuchElementException;
  * @param <E> Generic Element
  * 
  */
-class DoublyIterator<E> implements Iterator<E> {
+public class DoublyIterator<E> implements Iterator<E> {
     /**
      * Node with the first element in the iteration.
      */
