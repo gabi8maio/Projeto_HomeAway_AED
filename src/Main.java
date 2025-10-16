@@ -120,7 +120,6 @@ public class Main {
             long rightLongitude = in.nextLong();
             name = in.nextLine().trim(); // Remove espaços em branco
 
-            // Verificar se já existe uma área com o mesmo nome
             if (system.hasArea(name)) {
                 System.out.println(AREA_ALREADY_EXISTS);
                 return;
@@ -129,11 +128,10 @@ public class Main {
                 System.out.println(INVALID_BOUNDS);
                 return;
             }
-            // Criar a área mas NÃO guardar ainda - só será guardada com o comando save
+            // Creates area and stores on a temp var on System
             Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
-            system.addTemporaryArea(area); // Método que adiciona à lista temporária
+            system.addTemporaryArea(area);
             System.out.println(AREA_CREATED_SUCCESSFULLY); // Deves definir esta constante
-
         } catch (Exception e) {
             System.out.println(INVALID_BOUNDS);
         }
@@ -163,7 +161,7 @@ public class Main {
     }
 
     private static void executeSave(Scanner in, HomeAwaySystem system) {
-        // Implementation for save command
+
         in.nextLine(); // Consume remaining input
     }
 
