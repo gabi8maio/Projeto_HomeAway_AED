@@ -24,10 +24,17 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return tempArea.getName();
     }
 
+    @Override
     public void saveArea(){
         if(tempArea == null) throw new NoSuchElementException();
         store(tempArea.getName(), tempArea);
         savedAreas.addFirst(tempArea);
+    }
+
+    @Override
+    public void loadArea(String name){
+        //if(hasArea == null) throw new NoSuchElementException();
+        Area areaToLoad = load(name);
     }
 
 

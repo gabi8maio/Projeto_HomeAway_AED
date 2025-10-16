@@ -7,4 +7,5 @@ public interface HomeAwaySystem {
 
     String getTempAreaName();
     void saveArea();
+    void loadArea(String name);
 }

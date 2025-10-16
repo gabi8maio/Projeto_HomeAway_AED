@@ -128,10 +128,10 @@ public class Main {
                 System.out.println(INVALID_BOUNDS);
                 return;
             }
-            // Creates area and stores on a temp var on System
+
             Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
             system.addTemporaryArea(area);
-            System.out.printf(BOUNDS_CREATED, name); // Deves definir esta constante
+            System.out.printf(BOUNDS_CREATED, name);
         } catch (Exception e) {
             System.out.println(INVALID_BOUNDS);
         }
@@ -147,9 +147,13 @@ public class Main {
     }
 
     private static void executeLoad(Scanner in, HomeAwaySystem system) {
-       try{
-
-       }catch ()
+        String areaName = null;
+        try{
+            areaName = in.nextLine().trim();
+           system.loadArea(areaName);
+       }catch (Exception e){
+           System.out.printf(BOUNDS_NOT_EXISTS, areaName);
+       }
     }
 
     private static void executeService(Scanner in, HomeAwaySystem system) {
