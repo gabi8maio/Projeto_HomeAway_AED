@@ -26,7 +26,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     }
 
     @Override
-    public void saveArea(){
+    public String saveArea(){
         if(tempArea == null) throw new NoSuchElementException();
         store(tempArea.getName(), tempArea);
         savedAreas.addFirst(tempArea);

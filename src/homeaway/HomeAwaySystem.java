@@ -6,6 +6,6 @@ public interface HomeAwaySystem {
     boolean hasArea(String name);
 
     String getTempAreaName();
-    void saveArea();
+    String saveArea();
     void loadArea(String name);
 }

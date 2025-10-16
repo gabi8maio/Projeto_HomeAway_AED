@@ -141,7 +141,8 @@ public class Main {
 
     private static void executeSave(Scanner in, HomeAwaySystem system) {
         try{
-            system.saveArea();
+            String areaName = system.saveArea();
+            System.out.printf(BOUNDS_SAVED, areaName);
         }catch(Exception e){ System.out.println(SYSTEM_BOUNDS_NOT_DEFINED);}
 
     }
@@ -151,9 +152,11 @@ public class Main {
         try{
             areaName = in.nextLine().trim();
             system.loadArea(areaName);
+            System.out.printf(BOUNDS_LOADED, areaName);
        }catch (Exception e){
            System.out.printf(BOUNDS_NOT_EXISTS, areaName);
        }
+
     }
 
     private static void executeService(Scanner in, HomeAwaySystem system) {
