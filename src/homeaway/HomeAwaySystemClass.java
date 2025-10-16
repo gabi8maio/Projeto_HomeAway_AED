@@ -9,10 +9,11 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
 
 
     Area tempArea;
+    Area loadedArea; // NS se devemos ter isto ou usar apenas a tempArea como a loaded
     DoublyLinkedList<Area> savedAreas;
 
     public HomeAwaySystemClass(){
-
+        savedAreas = new DoublyLinkedList<>();
     }
 
     @Override
@@ -35,6 +36,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     public void loadArea(String name){
         //if(hasArea == null) throw new NoSuchElementException();
         Area areaToLoad = load(name);
+        loadedArea = areaToLoad;
     }
 
 

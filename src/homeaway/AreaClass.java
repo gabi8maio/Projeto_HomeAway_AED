@@ -1,8 +1,11 @@
 package homeaway;
 import dataStructures.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 
-public class AreaClass implements Area {
+
+public class AreaClass implements Area, Serializable {
 
     public long topLatitude;
     public long bottomLatitude;

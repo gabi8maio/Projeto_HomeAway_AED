@@ -150,7 +150,7 @@ public class Main {
         String areaName = null;
         try{
             areaName = in.nextLine().trim();
-           system.loadArea(areaName);
+            system.loadArea(areaName);
        }catch (Exception e){
            System.out.printf(BOUNDS_NOT_EXISTS, areaName);
        }
