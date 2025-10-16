@@ -128,7 +128,7 @@ public class Main {
                 System.out.println(INVALID_BOUNDS);
                 return;
             }
-            system.addTemporaryArea();
+            system.addTemporaryArea(name, topLatitude,bottomLatitude,leftLongitude,rightLongitude);
             System.out.printf(BOUNDS_CREATED, name);
         } catch (Exception e) {
             System.out.println(INVALID_BOUNDS);

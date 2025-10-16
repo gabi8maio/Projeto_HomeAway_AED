@@ -17,7 +17,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     }
 
     @Override
-    public void addTemporaryArea(){
+    public void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
         Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
         this.tempArea = area;
     }
@@ -42,6 +42,9 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
 
 
     public boolean hasArea(String name){
+        for(int i = 0; i < savedAreas.size(); i++)
+            if(savedAreas.get(i).getName().equals(name))
+                return true;
         return false;
     }
 
