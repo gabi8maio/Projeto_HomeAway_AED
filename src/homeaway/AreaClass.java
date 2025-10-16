@@ -2,7 +2,7 @@ package homeaway;
 import dataStructures.*;
 
 
-public class AreaClass {
+public class AreaClass implements Area {
 
     public long topLatitude;
     public long bottomLatitude;
@@ -24,7 +24,6 @@ public class AreaClass {
         this.leftLongitude = leftLongitude;
         this.rightLongitude = rightLongitude;
     }
-
 
     public void removeStudent() {
     }

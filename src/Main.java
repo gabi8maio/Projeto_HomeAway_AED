@@ -1,5 +1,7 @@
 import homeaway.*;
 import dataStructures.Iterator;
+
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
@@ -110,21 +112,54 @@ public class Main {
     // Command execution methods
     private static void executeBounds(Scanner in, HomeAwaySystem system) {
         in.nextLine(); // Consume remaining input
-        try{
-            long topLatitude    = in.nextLong();
+        String name;
+        try {
+            long topLatitude = in.nextLong();
             long bottomLatitude = in.nextLong();
-            long leftLongitude  = in.nextLong();
+            long leftLongitude = in.nextLong();
             long rightLongitude = in.nextLong();
-            String name = in.nextLine();
+            name = in.nextLine().trim(); // Remove espaços em branco
 
-            if( )
-            if (topLatitude <= bottomLatitude || rightLongitude <= leftLongitude){
-                System.out.println(INVALID_BOUNDS);
+            // Verificar se já existe uma área com o mesmo nome
+            if (system.hasArea(name)) {
+                System.out.println(AREA_ALREADY_EXISTS);
+                return;
             }
+            if (topLatitude <= bottomLatitude || rightLongitude <= leftLongitude) {
+                System.out.println(INVALID_BOUNDS);
+                return;
+            }
+            // Criar a área mas NÃO guardar ainda - só será guardada com o comando save
+            Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
+            system.addTemporaryArea(area); // Método que adiciona à lista temporária
+            System.out.println(AREA_CREATED_SUCCESSFULLY); // Deves definir esta constante
 
-        }catch ()
+        } catch (Exception e) {
+            System.out.println(INVALID_BOUNDS);
+        }
+    }
 
-
+    private static void store(String fileName, Area area){
+        try{
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+            oos.writeObject(area);
+            oos.flush();
+            oos.close();
+        }catch (IOException e){
+            System.out.println("Erro de escrita");
+        }
+    }
+    private static Area load(String name){
+        Area area = null;
+        try{
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(name));
+            area = (Area) ois.readObject();
+            ois.close();
+        }catch (IOException e){
+            throw new ;
+        }finally {
+            return area;
+        }
     }
 
     private static void executeSave(Scanner in, HomeAwaySystem system) {
