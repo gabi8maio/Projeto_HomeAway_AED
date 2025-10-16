@@ -34,7 +34,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
 
     @Override
     public void loadArea(String name){
-        //if(hasArea == null) throw new NoSuchElementException();
+        //if(hasArea) throw new NoSuchElementException();
         Area areaToLoad = load(name);
         loadedArea = areaToLoad;
     }
