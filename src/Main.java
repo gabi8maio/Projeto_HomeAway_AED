@@ -109,8 +109,22 @@ public class Main {
 
     // Command execution methods
     private static void executeBounds(Scanner in, HomeAwaySystem system) {
-        // Implementation for bounds command
         in.nextLine(); // Consume remaining input
+        try{
+            long topLatitude    = in.nextLong();
+            long bottomLatitude = in.nextLong();
+            long leftLongitude  = in.nextLong();
+            long rightLongitude = in.nextLong();
+            String name = in.nextLine();
+
+            if( )
+            if (topLatitude <= bottomLatitude || rightLongitude <= leftLongitude){
+                System.out.println(INVALID_BOUNDS);
+            }
+
+        }catch ()
+
+
     }
 
     private static void executeSave(Scanner in, HomeAwaySystem system) {

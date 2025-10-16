@@ -1,4 +1,4 @@
 package homeaway;
 
-public interface Students {
+public interface Students extends Comparable<Students> {
 }

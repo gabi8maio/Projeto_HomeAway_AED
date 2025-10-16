@@ -1,4 +1,4 @@
 package homeaway;
 
-public interface Services {
+public interface Services extends Comparable<Services> {
 }

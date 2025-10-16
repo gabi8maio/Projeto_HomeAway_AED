@@ -17,8 +17,12 @@ public class AreaClass {
     public ListInArray<Services> EatingServices;
     public ListInArray<Services> LodgingServices;
 
-    public AreaClass(){
-
+    public AreaClass(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
+        areaName = name;
+        this.topLatitude = topLatitude;
+        this.bottomLatitude = bottomLatitude;
+        this.leftLongitude = leftLongitude;
+        this.rightLongitude = rightLongitude;
     }
 
 
