@@ -43,10 +43,13 @@ public class AreaClass implements Area, Serializable {
         return false;
     }
 
-    public void createService() {
+    public void createService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName) {
+        Services newService = new ServicesClassAbstract(serviceType, latitude, longitude, price, value, serviceName)
     }
 
-    public boolean serviceExists() {
+    public boolean serviceExists(String serviceName) {
+        for(int i = 0; i < services.size(); i++)
+            if(services.get(i).getServiceName().equals(serviceName)) return true;
         return false;
     }
 

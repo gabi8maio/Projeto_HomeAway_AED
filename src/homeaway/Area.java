@@ -9,8 +9,8 @@ public interface Area {
     void removeStudent();
     boolean studentExists();
     boolean lodgingExists();
-    void createService();
-    boolean serviceExists();
+    void createService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName);
+    boolean serviceExists(String serviceName);
     boolean isPriceValid();
     boolean isValueValid();
     DoublyIterator<Services> serviceIterator();

@@ -29,8 +29,10 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     @Override
     public String saveArea(){
         if(tempArea == null) throw new NoSuchElementException();
-        store(tempArea.getName(), tempArea);
+        String tempAreaName = tempArea.getName();
+        store(tempAreaName, tempArea);
         savedAreas.addFirst(tempArea);
+        return tempAreaName;
     }
 
     @Override
@@ -40,12 +42,21 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         loadedArea = areaToLoad;
     }
 
-
     public boolean hasArea(String name){
         for(int i = 0; i < savedAreas.size(); i++)
             if(savedAreas.get(i).getName().equals(name))
                 return true;
         return false;
+    }
+
+    @Override
+    public boolean serviceNameExists(String name) {
+        return loadedArea.serviceExists(name);
+    }
+
+    @Override
+    public void addService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName) {
+        loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
     }
 
     private void store(String fileName, Area area){

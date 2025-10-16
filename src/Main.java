@@ -80,8 +80,14 @@ public class Main {
         do {
             cmd = getCommand(in);
             switch (cmd) {
-                case HELP -> { executeHelp(); in.nextLine(); }
-                case EXIT -> { executeExit(system); System.out.println(END); }
+                case HELP -> {
+                    executeHelp();
+                    in.nextLine();
+                }
+                case EXIT -> {
+                    executeExit(system);
+                    System.out.println(END);
+                }
                 case BOUNDS -> executeBounds(in, system);
                 case SAVE -> executeSave(in, system);
                 case LOAD -> executeLoad(in, system);
@@ -109,16 +115,14 @@ public class Main {
         in.close();
     }
 
-    // Command execution methods
     private static void executeBounds(Scanner in, HomeAwaySystem system) {
-        //in.nextLine(); // Consume remaining input
         String name;
         try {
             long topLatitude = in.nextLong();
             long bottomLatitude = in.nextLong();
             long leftLongitude = in.nextLong();
             long rightLongitude = in.nextLong();
-            name = in.nextLine().trim(); // Remove espaços em branco
+            name = in.nextLine().trim();
 
             if (system.hasArea(name)) {
                 System.out.println(BOUNDS_ALREADY_EXISTS);
@@ -128,7 +132,7 @@ public class Main {
                 System.out.println(INVALID_BOUNDS);
                 return;
             }
-            system.addTemporaryArea(name, topLatitude,bottomLatitude,leftLongitude,rightLongitude);
+            system.addTemporaryArea(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
             System.out.printf(BOUNDS_CREATED, name);
         } catch (Exception e) {
             System.out.println(INVALID_BOUNDS);
@@ -136,31 +140,91 @@ public class Main {
     }
 
 
-
     private static void executeSave(Scanner in, HomeAwaySystem system) {
-        try{
+        try {
             String areaName = system.saveArea();
             System.out.printf(BOUNDS_SAVED, areaName);
-        }catch(Exception e){ System.out.println(SYSTEM_BOUNDS_NOT_DEFINED);}
+        } catch (Exception e) {
+            System.out.println(SYSTEM_BOUNDS_NOT_DEFINED);
+        }
 
     }
 
     private static void executeLoad(Scanner in, HomeAwaySystem system) {
         String areaName = null;
-        try{
+        try {
             areaName = in.nextLine().trim();
             system.loadArea(areaName);
             System.out.printf(BOUNDS_LOADED, areaName);
-       }catch (Exception e){
-           System.out.printf(BOUNDS_NOT_EXISTS, areaName);
-       }
+        } catch (Exception e) {
+            System.out.printf(BOUNDS_NOT_EXISTS, areaName);
+        }
 
     }
 
     private static void executeService(Scanner in, HomeAwaySystem system) {
-        // Implementation for service command
-        in.nextLine(); // Consume remaining input
+        String serviceType = in.next().toUpperCase();
+        long latitude = in.nextLong();
+        long longitude = in.nextLong();
+        double price = in.nextDouble();
+        double value = in.nextDouble();
+        String serviceName = in.nextLine().trim();
+
+        try{
+        TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType); // Podemos fazer isto?
+        if (serviceTypeEnum == null) {
+            System.out.println("Invalid service type!");
+            return;
+        }
+        if (latitude <= longitude) { // Meti ao calhas
+            System.out.println("Invalid location!");
+            return;
+        }
+
+        if (price <= 0) {
+            switch (serviceType) { // mDUAR as strings para enumerador
+                case "EATING":
+                    System.out.println(INVALID_MENU_PRICE);
+                    return;
+                case "LODGING":
+                    System.out.println(INVALID_ROOM_PRICE);
+                    return;
+                case "LEISURE":
+                    System.out.println(INVALID_TICKET_PRICE);
+                    return;
+            }
+        }
+
+        // Validar  value conforme o tipo de serviço
+        if (serviceType.equals("leisure")) {
+            if (value < 0 || value > 100) {
+                System.out.println(INVALID_DISCOUNT);
+                return;
+            }
+        } else { // eating ou lodging
+            if (value <= 0) {
+                System.out.println(INVALID_CAPACITY);
+                return;
+            }
+        }
+
+        // Validar se nome já existe
+        if (system.serviceNameExists(serviceName)) {
+            System.out.println(serviceName + " already exists!");
+            return;
+        }
+
+        // Adicionar serviço
+        system.addService(serviceType, latitude, longitude, price, value, serviceName);
+        System.out.println(serviceType + " " + serviceName + " added.");
+
+    } catch(Exception e)
+    {
+        System.out.println("Invalid arguments!");
     }
+    }
+
+
 
     private static void executeServices(Scanner in, HomeAwaySystem system) {
         // Implementation for services command
