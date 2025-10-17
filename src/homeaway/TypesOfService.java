@@ -1,3 +1,5 @@
+package homeaway;
+
 public enum TypesOfService {
 
     LODGING("LODGING"),

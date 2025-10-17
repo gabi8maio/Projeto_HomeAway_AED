@@ -1,7 +1,5 @@
 import homeaway.*;
-import dataStructures.Iterator;
 
-import java.io.*;
 import java.util.Scanner;
 
 public class Main {
@@ -182,21 +180,21 @@ public class Main {
         }
 
         if (price <= 0) {
-            switch (serviceType) { // mDUAR as strings para enumerador
-                case "EATING":
+            switch (serviceTypeEnum) {
+                case EATING:
                     System.out.println(INVALID_MENU_PRICE);
                     return;
-                case "LODGING":
+                case LODGING:
                     System.out.println(INVALID_ROOM_PRICE);
                     return;
-                case "LEISURE":
+                case LEISURE:
                     System.out.println(INVALID_TICKET_PRICE);
                     return;
             }
         }
 
         // Validar  value conforme o tipo de serviço
-        if (serviceType.equals("leisure")) {
+        if (serviceTypeEnum.equals(TypesOfService.LEISURE)) {
             if (value < 0 || value > 100) {
                 System.out.println(INVALID_DISCOUNT);
                 return;
@@ -220,11 +218,9 @@ public class Main {
 
     } catch(Exception e)
     {
-        System.out.println("Invalid arguments!");
+        System.out.println("Invalid arguments!"); // MUDAR
     }
     }
-
-
 
     private static void executeServices(Scanner in, HomeAwaySystem system) {
         // Implementation for services command

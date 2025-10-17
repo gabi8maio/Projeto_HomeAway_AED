@@ -46,7 +46,7 @@ public class AreaClass implements Area, Serializable {
 
         Services newService = null;
         TypesOfService type = TypesOfService.fromString(serviceType);
-        // Use switch with enum
+
         switch (type) {
             case LODGING:
                 newService = new LodgingClass(latitude, longitude, price, value, serviceName);
