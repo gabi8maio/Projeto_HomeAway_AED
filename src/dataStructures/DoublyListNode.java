@@ -10,11 +10,7 @@ import java.io.Serializable;
      * 
      */
 class DoublyListNode<E> implements Serializable {
-    	/**
-    	 * Serial Version UID of the Class
-    	 */
-        static final long serialVersionUID = 0L;
-        
+
     	/**
          * Element stored in the node.
          */
@@ -39,7 +35,9 @@ class DoublyListNode<E> implements Serializable {
         public DoublyListNode(E theElement, DoublyListNode<E> thePrevious,
                               DoublyListNode<E> theNext ) {
             //TODO: Left as an exercise.
-
+                element = theElement;
+                previous = thePrevious;
+                next = theNext;
         }
 
         /**
@@ -48,7 +46,7 @@ class DoublyListNode<E> implements Serializable {
          */
         public DoublyListNode(E theElement ) {
             //TODO: Left as an exercise.
-
+                element = theElement;
         }
 
         /**
@@ -81,7 +79,7 @@ class DoublyListNode<E> implements Serializable {
          */
         public void setElement( E newElement ) {
             //TODO: Left as an exercise.
-
+                element = newElement;
         }
 
         /**
@@ -90,7 +88,7 @@ class DoublyListNode<E> implements Serializable {
          */
         public void setPrevious( DoublyListNode<E> newPrevious ) {
             //TODO: Left as an exercise.
-
+                previous = newPrevious;
         }
 
         /**
@@ -99,6 +97,6 @@ class DoublyListNode<E> implements Serializable {
          */
         public void setNext( DoublyListNode<E> newNext ) {
             //TODO: Left as an exercise.
-
+                next = newNext;
         }
     }

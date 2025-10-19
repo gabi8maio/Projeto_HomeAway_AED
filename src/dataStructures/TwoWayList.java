@@ -1,5 +1,4 @@
 package dataStructures;
-
 /**
  * Two-Way List
  *

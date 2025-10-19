@@ -21,6 +21,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     public void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
         Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
         this.tempArea = area;
+        loadedArea = area;
     }
 
     @Override
@@ -35,10 +36,10 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
 
     @Override
     public String saveArea(){
-        if(tempArea == null) throw new NoSuchElementException();
-        String tempAreaName = tempArea.getName();
-        store(tempAreaName, tempArea);
-        savedAreas.addFirst(tempArea);
+        if(loadedArea == null) throw new NoSuchElementException();
+        String tempAreaName = loadedArea.getName();
+        store(tempAreaName, loadedArea);
+        savedAreas.addFirst(loadedArea);
         return tempAreaName;
     }
 
