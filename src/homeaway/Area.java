@@ -1,10 +1,12 @@
 package homeaway;
 
 import dataStructures.DoublyIterator;
+import dataStructures.Iterator;
 import dataStructures.TwoWayDoublyIterator;
 
 public interface Area {
 
+    Iterator<Services> getServicesIterator();
     String getName();
     void removeStudent();
     boolean studentExists();

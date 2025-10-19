@@ -1,4 +1,4 @@
 package homeaway;
 
-public class OutgoingClass {
+public class OutgoingClass implements Outgoing{
 }

@@ -1,3 +1,4 @@
+import dataStructures.Iterator;
 import homeaway.*;
 
 import java.util.Scanner;
@@ -145,7 +146,6 @@ public class Main {
         } catch (Exception e) {
             System.out.println(SYSTEM_BOUNDS_NOT_DEFINED);
         }
-
     }
 
     private static void executeLoad(Scanner in, HomeAwaySystem system) {
@@ -223,8 +223,20 @@ public class Main {
     }
 
     private static void executeServices(Scanner in, HomeAwaySystem system) {
-        // Implementation for services command
-        in.nextLine(); // Consume remaining input
+        Iterator<Services> serviceIterator = system.getServiceIterator();
+
+        if (!serviceIterator.hasNext()) {
+            System.out.println("No services yet!");
+            return;
+        }
+
+        while (serviceIterator.hasNext()) {
+            Services service = serviceIterator.next();
+            System.out.println(service.getServiceName() + ": " +
+                    service.getServiceType().toString().toLowerCase() + " " +
+                    service.getLatitude() + " " +
+                    service.getLongitude() + ".");
+        }
     }
 
     private static void executeStudent(Scanner in, HomeAwaySystem system) {

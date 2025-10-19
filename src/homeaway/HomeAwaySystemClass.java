@@ -1,6 +1,7 @@
 package homeaway;
 
 import dataStructures.DoublyLinkedList;
+import dataStructures.Iterator;
 import dataStructures.exceptions.NoSuchElementException;
 
 import java.io.*;
@@ -21,6 +22,12 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
         this.tempArea = area;
     }
+
+    @Override
+    public Iterator<Services> getServiceIterator() {
+        return loadedArea.getServicesIterator();
+    }
+
     @Override
     public String getTempAreaName(){
         return tempArea.getName();
@@ -42,6 +49,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         loadedArea = areaToLoad;
     }
 
+    @Override
     public boolean hasArea(String name){
         for(int i = 0; i < savedAreas.size(); i++)
             if(savedAreas.get(i).getName().equals(name))

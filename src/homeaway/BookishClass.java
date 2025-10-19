@@ -1,4 +1,4 @@
 package homeaway;
 
-public class BookishClass {
+public class BookishClass implements Outgoing{
 }

@@ -1,4 +1,4 @@
 package homeaway;
 
-public class ThriftyClass {
+public class ThriftyClass implements Thrifty {
 }

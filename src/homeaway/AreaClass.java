@@ -25,6 +25,12 @@ public class AreaClass implements Area, Serializable {
         this.bottomLatitude = bottomLatitude;
         this.leftLongitude = leftLongitude;
         this.rightLongitude = rightLongitude;
+        services = new DoublyLinkedList<>();
+    }
+
+    @Override
+    public Iterator<Services> getServicesIterator() {
+        return services.iterator();
     }
 
     public String getName() {
@@ -58,9 +64,11 @@ public class AreaClass implements Area, Serializable {
                 newService = new LeisureClass(latitude, longitude, price, value, serviceName);
                 break;
         }
+        services.addFirst(newService);
     }
 
     public boolean serviceExists(String serviceName) {
+        if(services == null) return false;
         for(int i = 0; i < services.size(); i++)
             if(services.get(i).getServiceName().equals(serviceName)) return true;
         return false;
