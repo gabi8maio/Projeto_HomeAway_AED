@@ -241,7 +241,24 @@ public class Main {
 
     private static void executeStudent(Scanner in, HomeAwaySystem system) {
         // Implementation for student command
+        String studentType = in.nextLine().toLowerCase();
+        String name = in.nextLine().trim();
+        String country = in.nextLine().trim();
+        String lodging = in.nextLine().trim();
         in.nextLine(); // Consume remaining input
+
+        try{
+            if (StudentTypes.valueOf(studentType) == null) {
+                System.out.println("Invalid student type!");
+            }
+            if (!system.lodgingExists(lodging)) {
+                System.out.printf(LODGING_NOT_EXISTS, lodging);
+            }
+           // if ()
+
+        }catch (Exception e){
+            System.out.println("Invalid arguments!");
+        }
     }
 
     private static void executeStudents(Scanner in, HomeAwaySystem system) {

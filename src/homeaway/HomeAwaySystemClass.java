@@ -90,4 +90,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         }
     }
 
+    public boolean lodgingExists (String name){
+        return loadedArea.lodgingExists();
+    }
+
 }

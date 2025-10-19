@@ -12,4 +12,5 @@ public interface HomeAwaySystem {
     String getTempAreaName();
     String saveArea();
     void loadArea(String name);
+    boolean lodgingExists(String name);
 }
