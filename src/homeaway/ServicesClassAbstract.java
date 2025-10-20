@@ -23,7 +23,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
 
     @Override
     public String getServiceName() {
-        return "";
+        return serviceName;
     }
 
     @Override

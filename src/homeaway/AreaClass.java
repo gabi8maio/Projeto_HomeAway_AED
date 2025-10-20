@@ -1,6 +1,8 @@
 package homeaway;
 import dataStructures.*;
+import dataStructures.exceptions.InvalidPositionException;
 
+import java.io.InvalidObjectException;
 import java.io.Serializable;
 
 
@@ -30,8 +32,8 @@ public class AreaClass implements Area, Serializable {
         LeisureServices = new ListInArray<>(100);
         EatingServices = new ListInArray<>(100);
         studentsByCountry = new DoublyLinkedList<>();
-        allStudents = new SortedDoublyLinkedList<>();
-        servicesByRank = new SortedDoublyLinkedList<>();
+        allStudents = new SortedDoublyLinkedList<>(null); // Need to change
+        servicesByRank = new SortedDoublyLinkedList<>(null); // Need to change
     }
 
     @Override
@@ -43,21 +45,42 @@ public class AreaClass implements Area, Serializable {
         return areaName;
     }
 
-    public void removeStudent() {
+    @Override
+    public void removeStudent(String studentName) {
+        Students student = findStudentElem(studentName);
+        if(student == null) throw new InvalidPositionException(); // Isto em principio n vai acontecer
+        allStudents.remove(student);
+    }
+    private Students findStudentElem(String name){
+        Iterator<Students> it = allStudents.iterator();
+        while (it.hasNext()) {
+            Students s = it.next();
+            if (s.getName().equals(name)) return s;
+        }
+       return null;
     }
 
     public boolean studentExists(String name) {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if (s.getName().equals(name)) {
-                return true;
-            }
+            if (s.getName().equals(name)) return true;
         }
         return false;
     }
 
-    public boolean lodgingExists() {
+    public Iterator<Students> getAllStudentsIterator(){
+        return allStudents.iterator();
+    }
+
+    public Iterator<Students> getStudentsByCountryIterator(){
+        return studentsByCountry.iterator();
+    }
+
+    public boolean lodgingExists(String serviceName) {
+        if(LodgingServices == null) return false;
+        for(int i = 0; i < LodgingServices.size(); i++)
+            if(LodgingServices.get(i).getServiceName().equals(serviceName)) return true;
         return false;
     }
 
@@ -115,8 +138,8 @@ public class AreaClass implements Area, Serializable {
         while(iterator.hasNext()) {
             Services service = iterator.next();
             if(service.getServiceName().equals(name))
-                if (Lodging.isFull())
-                    return true;
+                if (service instanceof Lodging lodging) // If it's Lodging
+                    return lodging.isFull();
         }
         return false;
     }

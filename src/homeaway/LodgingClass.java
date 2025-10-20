@@ -38,6 +38,6 @@ public class LodgingClass extends ServicesClassAbstract implements Lodging{
     }
 
     public boolean isFull(){
-        return super.getValue()==studentsThere.size();
+        return super.getValue() == studentsThere.size();
     }
 }

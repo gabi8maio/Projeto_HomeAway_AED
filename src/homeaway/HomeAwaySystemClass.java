@@ -92,15 +92,28 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     }
 
     public boolean lodgingExists (String name){
-        return loadedArea.lodgingExists();
+        return loadedArea.lodgingExists(name);
     }
 
     public boolean lodgingIsFull(String name){
         return loadedArea.isItFull(name);
     }
 
+    public void removeStudent(String studentName){
+        loadedArea.removeStudent(studentName);
+    }
+
     public boolean studentExists (String name){
         return loadedArea.studentExists(name);
+    }
+
+    public Iterator<Students> getAllStudentsIterator(){
+        return loadedArea.getAllStudentsIterator();
+    }
+
+    @Override
+    public Iterator<Students> getStudentsByCountryIterator(String country) {
+        return null;
     }
 
     public void addStudent (String studentType, String name, String country, String lodging){

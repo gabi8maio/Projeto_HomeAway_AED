@@ -12,9 +12,11 @@ public interface HomeAwaySystem {
     String getTempAreaName();
     String saveArea();
     void loadArea(String name);
+    void removeStudent(String studentName);
     boolean lodgingExists(String name);
     boolean lodgingIsFull(String name);
     boolean studentExists(String name);
-
+    Iterator<Students> getAllStudentsIterator();
+    Iterator<Students> getStudentsByCountryIterator(String country);
     void addStudent(String studentType, String name, String country, String lodging);
 }

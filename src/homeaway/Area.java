@@ -8,9 +8,9 @@ public interface Area {
 
     Iterator<Services> getServicesIterator();
     String getName();
-    void removeStudent();
+    void removeStudent(String studentName);
     boolean studentExists(String name);
-    boolean lodgingExists();
+    boolean lodgingExists(String serviceName);
     void createService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName);
     boolean serviceExists(String serviceName);
     boolean isPriceValid();
@@ -21,10 +21,12 @@ public interface Area {
     boolean isItFull(String name);
     void changedLodging();
     Services whereIsStudent();
-    TwoWayDoublyIterator locationStudentIterator();
-    DoublyIterator rankServicesIterator();
+    TwoWayDoublyIterator<Students> locationStudentIterator();
+    DoublyIterator<Services> rankServicesIterator();
+    Iterator<Students> getAllStudentsIterator();
+    Iterator<Students> getStudentsByCountryIterator();
     long getDistance();
-    DoublyIterator rankedCommand();
+    DoublyIterator<Students> rankedCommand();
     Services findCommand();
 
     void addStudent(String studentType, String name, String country, String lodging);

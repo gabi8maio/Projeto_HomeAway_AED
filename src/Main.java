@@ -62,6 +62,8 @@ public class Main {
     private static final String NO_SERVICES_TYPE = "No %s services!\n";
     private static final String NO_SERVICES_AVERAGE = "No %s services with average!\n";
     private static final String NO_SERVICES_TAG = "There are no services with this tag!\n";
+    private static final String SERVICES_COMMAND = "%s: %s %d %d\n";
+    private static final String STUDENTS_COMMAND = "%s: %s at %s.\n";
 
     private static Command getCommand(Scanner input) {
         try {
@@ -230,33 +232,34 @@ public class Main {
 
         while (serviceIterator.hasNext()) {
             Services service = serviceIterator.next();
-            System.out.println(service.getServiceName() + ": " +
-                    service.getServiceType().toString().toLowerCase() + " " +
-                    service.getLatitude() + " " +
-                    service.getLongitude() + ".");
+            System.out.printf(SERVICES_COMMAND ,service.getServiceName(),
+                    service.getServiceType().toLowerCase(),
+                    service.getLatitude(),
+                    service.getLongitude());
         }
     }
 
     private static void executeStudent(Scanner in, HomeAwaySystem system) {
         // Implementation for student command
-        String studentType = in.nextLine().toLowerCase();
+        String studentType = in.nextLine().toLowerCase().trim();
         String name = in.nextLine().trim();
         String country = in.nextLine().trim();
         String lodging = in.nextLine().trim();
         in.nextLine(); // Consume remaining input
 
         try{
-            if (StudentTypes.valueOf(studentType) == null) {
+            if (StudentTypes.fromString(studentType) == null) {
                 System.out.println("Invalid student type!");
-            }
-            if (!system.lodgingExists(lodging)) {
+                return;
+            } if (!system.lodgingExists(lodging)) {
                 System.out.printf(LODGING_NOT_EXISTS, lodging);
-            }
-            if (system.lodgingIsFull(lodging)){
+                return;
+            } if (system.lodgingIsFull(lodging)){
                 System.out.printf(LODGING_FULL, lodging);
-            }
-            if (system.studentExists(name)){
+                return;
+            } if (system.studentExists(name)){
                 System.out.printf(STUDENT_ALREADY_EXISTS, name);
+                return;
             }
             system.addStudent(studentType, name, country, lodging);
             System.out.printf(STUDENT_ADDED, name);
@@ -267,13 +270,61 @@ public class Main {
     }
 
     private static void executeStudents(Scanner in, HomeAwaySystem system) {
-        // Implementation for students command
-        in.nextLine(); // Consume remaining input
+        String argument = in.nextLine().trim();
+
+        try {
+            if (argument.equals("all")) {
+                Iterator<Students> studentIterator = system.getAllStudentsIterator();
+
+                if (!studentIterator.hasNext()) {
+                    System.out.println("No students yet!");
+                    return;
+                }
+
+                while (studentIterator.hasNext()) {
+                    Students student = studentIterator.next();
+                    System.out.printf(STUDENTS_COMMAND,
+                            student.getName(),
+                            student.getType().toLowerCase(),
+                            student.getCountry());
+                }
+
+            } else {
+                // The argument will be the country now
+                Iterator<Students> countryStudentIterator = system.getStudentsByCountryIterator(argument);
+
+                if (!countryStudentIterator.hasNext()) {
+                    System.out.printf(NO_STUDENTS_FROM, argument);
+                    return;
+                }
+
+                while (countryStudentIterator.hasNext()) {
+                    Students student = countryStudentIterator.next();
+                    System.out.printf(STUDENTS_COMMAND,
+                            student.getName(),
+                            student.getType().toLowerCase(),
+                            student.getCountry());
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Invalid arguments!");
+        }
     }
 
     private static void executeLeave(Scanner in, HomeAwaySystem system) {
-        // Implementation for leave command
-        in.nextLine(); // Consume remaining input
+        String name = in.nextLine().trim();
+        try {
+            if (!system.studentExists(name)) {
+                System.out.printf(STUDENT_NOT_EXISTS, name);
+                return;
+            }
+            system.removeStudent(name);
+            System.out.printf(STUDENT_LEFT, name);
+
+        } catch (Exception e) {
+            System.out.println("Invalid arguments!");
+        }
     }
 
     private static void executeGo(Scanner in, HomeAwaySystem system) {
