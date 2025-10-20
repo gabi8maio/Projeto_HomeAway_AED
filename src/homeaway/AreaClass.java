@@ -22,6 +22,13 @@ public class AreaClass implements Area, Serializable {
     public ListInArray<Services> LodgingServices;
 
     public AreaClass(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
+
+        // Isto parece uma javardice aqui ns
+        Comparator<Students> studentComparatorByName = (s1, s2) ->
+                s1.getName().compareTo(s2.getName());
+       // Comparator<Services> serviceComparatorByRank = (s1, s2) ->
+         //       s1.getServicePrice().compareTo(s2.getServicePrice());
+
         areaName = name;
         this.topLatitude = topLatitude;
         this.bottomLatitude = bottomLatitude;
@@ -32,8 +39,9 @@ public class AreaClass implements Area, Serializable {
         LeisureServices = new ListInArray<>(100);
         EatingServices = new ListInArray<>(100);
         studentsByCountry = new DoublyLinkedList<>();
-        allStudents = new SortedDoublyLinkedList<>(null); // Need to change
+        allStudents = new SortedDoublyLinkedList<>(studentComparatorByName); // Need to change
         servicesByRank = new SortedDoublyLinkedList<>(null); // Need to change
+
     }
 
     @Override
