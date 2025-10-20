@@ -19,7 +19,7 @@ public class TwoWayDoublyIterator<E> extends DoublyIterator<E>
     /**
      * Node with the previous element in the iteration.
      */
-    DoublyListNode<E> prevToReturn;
+    private DoublyListNode<E> prevToReturn;
 
     /**
      * DoublyLLIterator constructor
@@ -30,6 +30,8 @@ public class TwoWayDoublyIterator<E> extends DoublyIterator<E>
     public TwoWayDoublyIterator(DoublyListNode<E> first, DoublyListNode<E> last) {
         super(first);
         //TODO: Left as an exercise.
+        lastNode = last;
+        prevToReturn = null;
     }
 
     /**
@@ -39,7 +41,7 @@ public class TwoWayDoublyIterator<E> extends DoublyIterator<E>
      */
     public boolean hasPrevious( ) {
         //TODO: Left as an exercise.
-        return true;
+        return prevToReturn != null;
     }
 
     /**
@@ -49,7 +51,10 @@ public class TwoWayDoublyIterator<E> extends DoublyIterator<E>
      */
     public E next( ){
         //TODO: Left as an exercise.
-        return null;
+        E element = nextToReturn.getElement();
+        prevToReturn = nextToReturn;
+        nextToReturn = nextToReturn.getNext();
+        return element;
     }
 
     /**
@@ -59,7 +64,10 @@ public class TwoWayDoublyIterator<E> extends DoublyIterator<E>
      */
     public E previous( ) {
         //TODO: Left as an exercise.
-        return null;
+        E element = prevToReturn.getElement();
+        nextToReturn = prevToReturn;
+        prevToReturn = prevToReturn.getPrevious();
+        return element;
     }
 
     /**
@@ -67,14 +75,20 @@ public class TwoWayDoublyIterator<E> extends DoublyIterator<E>
      * After fullForward, if iteration is not empty,
      * previous will return the last element
      */
+
     public void fullForward() {
         //TODO: Left as an exercise.
+        nextToReturn = null;
+        prevToReturn = lastNode;
     }
 
     /**
-     * Restart the iterator
+     * Restarts the iteration.
+     * After rewind, if the iteration is not empty, next will return the first element.
      */
     public void rewind() {
         //TODO: Left as an exercise.
+        nextToReturn = firstNode;
+        prevToReturn = null;
     }
 }

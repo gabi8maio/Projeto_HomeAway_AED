@@ -12,7 +12,7 @@ public class DoublyIterator<E> implements Iterator<E> {
     /**
      * Node with the first element in the iteration.
      */
-    private DoublyListNode<E> firstNode;
+    protected DoublyListNode<E> firstNode; // changed To protected
 
     /**
      * Node with the next element in the iteration.
@@ -27,7 +27,8 @@ public class DoublyIterator<E> implements Iterator<E> {
      */
     public DoublyIterator(DoublyListNode<E> first) {
         //TODO: Left as an exercise.
-
+        firstNode = first;
+        nextToReturn = first;
     }
     /**
      * Returns the next element in the iteration.
@@ -37,7 +38,12 @@ public class DoublyIterator<E> implements Iterator<E> {
      */
     public E next( ){
         //TODO: Left as an exercise.
-        return null;
+        if (!hasNext())
+            throw new NoSuchElementException();
+
+        DoublyListNode<E> now = nextToReturn;
+        nextToReturn = nextToReturn.getNext();
+        return now.getElement();
     }
 
     /**
@@ -45,6 +51,7 @@ public class DoublyIterator<E> implements Iterator<E> {
      */
     public void rewind() {
         //TODO: Left as an exercise.
+        nextToReturn = firstNode;
 
     }
     /**
@@ -54,7 +61,7 @@ public class DoublyIterator<E> implements Iterator<E> {
      */
     public boolean hasNext( ) {
         //TODO: Left as an exercise.
-        return true;
+        return nextToReturn != null;
     }
 
 

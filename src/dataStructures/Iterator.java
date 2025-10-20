@@ -2,6 +2,7 @@ package dataStructures;
 
 import dataStructures.exceptions.NoSuchElementException;
 
+
 /**
  * Iterator Abstract Data Type 
  * Includes description of general methods for one way iterator.

@@ -6,62 +6,62 @@ import java.util.Scanner;
 public class Main {
 
     // Constants for output messages
-    private static final String CMD_NOT_EXIST = "Unknown command. Type help to see available commands.";
-    private static final String END = "Bye!";
-    private static final String SYSTEM_BOUNDS_NOT_DEFINED = "System bounds not defined.";
-    private static final String BOUNDS_ALREADY_EXISTS = "Bounds already exists. Please load it!";
-    private static final String INVALID_BOUNDS = "Invalid bounds.";
-    private static final String BOUNDS_CREATED = "%s created.";
-    private static final String BOUNDS_SAVED = "%s saved.";
-    private static final String BOUNDS_LOADED = "%s loaded.";
-    private static final String BOUNDS_NOT_EXISTS = "Bounds %s does not exists.";
+    private static final String CMD_NOT_EXIST = "Unknown command. Type help to see available commands.\n";
+    private static final String END = "Bye!\n";
+    private static final String SYSTEM_BOUNDS_NOT_DEFINED = "System bounds not defined.\n";
+    private static final String BOUNDS_ALREADY_EXISTS = "Bounds already exists. Please load it!\n";
+    private static final String INVALID_BOUNDS = "Invalid bounds.\n";
+    private static final String BOUNDS_CREATED = "%s created.\n";
+    private static final String BOUNDS_SAVED = "%s saved.\n";
+    private static final String BOUNDS_LOADED = "%s loaded.\n";
+    private static final String BOUNDS_NOT_EXISTS = "Bounds %s does not exists.\n";
 
     // Service related constants
-    private static final String INVALID_SERVICE_TYPE = "Invalid service type!";
-    private static final String INVALID_LOCATION = "Invalid location!";
-    private static final String INVALID_MENU_PRICE = "Invalid menu price!";
-    private static final String INVALID_ROOM_PRICE = "Invalid room price!";
-    private static final String INVALID_TICKET_PRICE = "Invalid ticket price!";
-    private static final String INVALID_DISCOUNT = "Invalid discount price!";
-    private static final String INVALID_CAPACITY = "Invalid capacity!";
-    private static final String SERVICE_ALREADY_EXISTS = "%s already exists!";
-    private static final String SERVICE_ADDED = "%s %s added.";
+    private static final String INVALID_SERVICE_TYPE = "Invalid service type!\n";
+    private static final String INVALID_LOCATION = "Invalid location!\n";
+    private static final String INVALID_MENU_PRICE = "Invalid menu price!\n";
+    private static final String INVALID_ROOM_PRICE = "Invalid room price!\n";
+    private static final String INVALID_TICKET_PRICE = "Invalid ticket price!\n";
+    private static final String INVALID_DISCOUNT = "Invalid discount price!\n";
+    private static final String INVALID_CAPACITY = "Invalid capacity!\n";
+    private static final String SERVICE_ALREADY_EXISTS = "%s already exists!\n";
+    private static final String SERVICE_ADDED = "%s %s added.\n";
 
     // Student related constants
-    private static final String INVALID_STUDENT_TYPE = "Invalid student type!";
-    private static final String LODGING_NOT_EXISTS = "lodging %s does not exist!";
-    private static final String LODGING_FULL = "lodging %s is full!";
-    private static final String STUDENT_ALREADY_EXISTS = "%s already exists!";
-    private static final String STUDENT_ADDED = "%s added.";
-    private static final String STUDENT_LEFT = "%s has left.";
-    private static final String STUDENT_NOT_EXISTS = "%s does not exist.";
+    private static final String INVALID_STUDENT_TYPE = "Invalid student type!\n";
+    private static final String LODGING_NOT_EXISTS = "lodging %s does not exist!\n";
+    private static final String LODGING_FULL = "lodging %s is full!\n";
+    private static final String STUDENT_ALREADY_EXISTS = "%s already exists!\n";
+    private static final String STUDENT_ADDED = "%s added.\n";
+    private static final String STUDENT_LEFT = "%s has left.\n";
+    private static final String STUDENT_NOT_EXISTS = "%s does not exist.\n";
 
     // Other command constants
-    private static final String NO_SERVICES = "No services yet!";
-    private static final String NO_STUDENTS = "No students yet!";
-    private static final String NO_STUDENTS_FROM = "No students from %s!";
-    private static final String ALREADY_THERE = "Already there!";
-    private static final String SERVICE_NOT_VALID = "%s is not a valid service!";
-    private static final String EATING_FULL = "eating %s is full!";
-    private static final String STUDENT_DISTRACTED = "%s is distracted!";
-    private static final String STUDENT_NOW_AT = "%s is now at %s.";
-    private static final String MOVE_HOME = "lodging %s is now %s's home. %s is at home.";
-    private static final String ALREADY_HOME = "That is %s's home!";
-    private static final String MOVE_NOT_ACCEPTABLE = "Move is not acceptable for %s!";
-    private static final String INVALID_ORDER = "This order does not exist!";
-    private static final String NO_CONTROL_ENTRY_EXIT = "%s does not control student entry and exit!";
-    private static final String NO_STUDENTS_ON = "No students on %s!";
-    private static final String WHERE_FORMAT = "%s is at %s %s (%d, %d).";
-    private static final String STUDENT_THRIFTY = "%s is thrifty!";
-    private static final String NO_VISITED_LOCATIONS = "%s has not visited any locations!";
-    private static final String INVALID_EVALUATION = "Invalid evaluation!";
-    private static final String EVALUATION_REGISTERED = "Your evaluation has been registered!";
-    private static final String NO_SERVICES_IN_SYSTEM = "No services in the system.";
-    private static final String SERVICES_SORTED_HEADER = "Services sorted in descending order";
-    private static final String INVALID_STARS = "Invalid stars!";
-    private static final String NO_SERVICES_TYPE = "No %s services!";
-    private static final String NO_SERVICES_AVERAGE = "No %s services with average!";
-    private static final String NO_SERVICES_TAG = "There are no services with this tag!";
+    private static final String NO_SERVICES = "No services yet!\n";
+    private static final String NO_STUDENTS = "No students yet!\n";
+    private static final String NO_STUDENTS_FROM = "No students from %s!\n";
+    private static final String ALREADY_THERE = "Already there!\n";
+    private static final String SERVICE_NOT_VALID = "%s is not a valid service!\n";
+    private static final String EATING_FULL = "eating %s is full!\n";
+    private static final String STUDENT_DISTRACTED = "%s is distracted!\n";
+    private static final String STUDENT_NOW_AT = "%s is now at %s.\n";
+    private static final String MOVE_HOME = "lodging %s is now %s's home. %s is at home.\n";
+    private static final String ALREADY_HOME = "That is %s's home!\n";
+    private static final String MOVE_NOT_ACCEPTABLE = "Move is not acceptable for %s!\n";
+    private static final String INVALID_ORDER = "This order does not exist!\n";
+    private static final String NO_CONTROL_ENTRY_EXIT = "%s does not control student entry and exit!\n";
+    private static final String NO_STUDENTS_ON = "No students on %s!\n";
+    private static final String WHERE_FORMAT = "%s is at %s %s (%d, %d).\n";
+    private static final String STUDENT_THRIFTY = "%s is thrifty!\n";
+    private static final String NO_VISITED_LOCATIONS = "%s has not visited any locations!\n";
+    private static final String INVALID_EVALUATION = "Invalid evaluation!\n";
+    private static final String EVALUATION_REGISTERED = "Your evaluation has been registered!\n";
+    private static final String NO_SERVICES_IN_SYSTEM = "No services in the system.\n";
+    private static final String SERVICES_SORTED_HEADER = "Services sorted in descending order\n";
+    private static final String INVALID_STARS = "Invalid stars!\n";
+    private static final String NO_SERVICES_TYPE = "No %s services!\n";
+    private static final String NO_SERVICES_AVERAGE = "No %s services with average!\n";
+    private static final String NO_SERVICES_TAG = "There are no services with this tag!\n";
 
     private static Command getCommand(Scanner input) {
         try {
@@ -138,7 +138,6 @@ public class Main {
         }
     }
 
-
     private static void executeSave(Scanner in, HomeAwaySystem system) {
         try {
             String areaName = system.saveArea();
@@ -157,11 +156,10 @@ public class Main {
         } catch (Exception e) {
             System.out.printf(BOUNDS_NOT_EXISTS, areaName);
         }
-
     }
 
     private static void executeService(Scanner in, HomeAwaySystem system) {
-        String serviceType = in.next().toUpperCase();
+        String serviceType = in.next().toUpperCase().trim();
         long latitude = in.nextLong();
         long longitude = in.nextLong();
         double price = in.nextDouble();

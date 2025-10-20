@@ -1,6 +1,8 @@
 package dataStructures;
 
 import dataStructures.exceptions.*;
+
+
 /**
  * Sorted Doubly linked list Implementation
  * @author AED  Team
@@ -8,7 +10,7 @@ import dataStructures.exceptions.*;
  * @param <E> Generic Element
  * 
  */
-public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedList<E> {
+public class SortedDoublyLinkedList<E> implements SortedList<E> {
 
     /**
      *  Node at the head of the list.
@@ -23,12 +25,20 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      */
     private int currentSize;
     /**
+     * Comparator of elements.
+     */
+    private final Comparator<E> comparator;
+    /**
      * Constructor of an empty sorted double linked list.
      * head and tail are initialized as null.
      * currentSize is initialized as 0.
      */
-    public SortedDoublyLinkedList( ) {
+    public SortedDoublyLinkedList(Comparator<E> comparator) {
         //TODO: Left as an exercise.
+        this.comparator = comparator;
+        head = null;
+        tail = null;
+        currentSize = 0;
     }
 
     /**
@@ -36,8 +46,7 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      * @return true if list is empty
      */
     public boolean isEmpty() {
-        //TODO: Left as an exercise.
-        return true;
+        return currentSize==0;
     }
 
     /**
@@ -46,8 +55,7 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      */
 
     public int size() {
-        //TODO: Left as an exercise.
-        return 0;
+        return currentSize;
     }
 
     /**
@@ -65,7 +73,8 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      */
     public E getMin( ) {
         //TODO: Left as an exercise.
-        return null;
+        if(currentSize == 0) throw new NoSuchElementException();
+        return head.getElement();
     }
 
     /**
@@ -75,15 +84,22 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      */
     public E getMax( ) {
         //TODO: Left as an exercise.
-        return null;
+        if(currentSize == 0) throw new NoSuchElementException();
+        return tail.getElement();
     }
     /**
      * Returns the first occurrence of the element equals to the given element in the list.
      * @return element in the list or null
      */
-    @Override
     public E get(E element) {
         //TODO: Left as an exercise.
+        DoublyListNode<E> nextToCheck = head;
+        while(nextToCheck != null){
+            int cmp = comparator.compare(nextToCheck.getElement(), element);
+            if(cmp == 0) return nextToCheck.getElement();
+            if(cmp > 0) return null;
+            nextToCheck = nextToCheck.getNext();
+        }
         return null;
     }
 
@@ -95,7 +111,14 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      */
     public boolean contains(E element) {
         //TODO: Left as an exercise.
-        return true;
+        DoublyListNode<E> current = head;
+        while (current != null) {
+            int cmp = comparator.compare(current.getElement(), element);
+            if (cmp == 0) return true;
+            else if (cmp > 0) return false;
+            current = current.getNext(); // < 0
+        }
+        return false;
     }
 
     /**
@@ -105,6 +128,43 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      */
     public void add(E element) {
         //TODO: Left as an exercise.
+        if (head == null) {
+            DoublyListNode<E> newNode = new DoublyListNode<>(element);
+            head = newNode;
+            tail = newNode;
+            currentSize++;
+            return;
+        }
+
+        DoublyListNode<E> current = head;
+        DoublyListNode<E> previous = null;
+
+        while (current != null && comparator.compare(current.getElement(), element) < 0) {
+            previous = current;
+            current = current.getNext();
+        }
+        DoublyListNode<E> newNode = new DoublyListNode<>(element);
+
+        // Insert on the Head -
+        if (previous == null) {
+            newNode.setNext(head);
+            head.setPrevious(newNode);
+            head = newNode;
+        }
+        // Insert on the Tail
+        else if (current == null) {
+            tail.setNext(newNode);
+            newNode.setPrevious(tail);
+            tail = newNode;
+        }
+        // Insert in the middle.
+        else {
+            previous.setNext(newNode);
+            newNode.setPrevious(previous);
+            newNode.setNext(current);
+            current.setPrevious(newNode);
+        }
+        currentSize++;
     }
 
     /**
@@ -113,6 +173,26 @@ public class SortedDoublyLinkedList<E extends Comparable<E>> implements SortedLi
      */
     public E remove(E element) {
         //TODO: Left as an exercise.
+        DoublyListNode<E> nodeToRemove = head;
+        while (nodeToRemove != null) {
+            int cmp = comparator.compare(nodeToRemove.getElement(), element);
+            if (cmp == 0) {
+
+                DoublyListNode<E> previous = nodeToRemove.getPrevious();
+                DoublyListNode<E> next = nodeToRemove.getNext();
+
+                if (previous != null) previous.setNext(next);
+                else head = next;
+
+                if (next != null) next.setPrevious(previous);
+                else tail = previous;
+
+                currentSize--;
+                return nodeToRemove.getElement();
+            } else if (cmp > 0) return null;
+            nodeToRemove = nodeToRemove.getNext();
+        }
         return null;
     }
+
 }

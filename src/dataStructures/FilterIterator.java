@@ -12,15 +12,30 @@ import dataStructures.exceptions.NoSuchElementException;
  */
 public class FilterIterator<E> implements Iterator<E> {
 
-    //TODO: Left as an exercise.
+    /**
+     *  Iterator of elements to filter.
+     */
+    private Iterator<E> iterator;
+
+    /**
+     *  Filter.
+     */
+    private Predicate<E> filter;
+
+    /**
+     * Node with the next element in the iteration.
+     */
+    private E nextToReturn;
 
     /**
      *
      * @param list to be iterated
-     * @param criterion filter
+     * @param filter
      */
-    public FilterIterator(Iterator<E> list, Predicate<E> criterion) {
+    public FilterIterator(Iterator<E> list, Predicate<E> filter) {
         //TODO: Left as an exercise.
+        iterator = list;
+        this.filter = filter;
     }
 
     /**
@@ -30,7 +45,16 @@ public class FilterIterator<E> implements Iterator<E> {
      */
     public boolean hasNext() {
         //TODO: Left as an exercise.
-        return true;
+
+        while(iterator.hasNext()){
+            E tryNext = iterator.next();
+            if(filter.check(tryNext)){
+                nextToReturn = tryNext;
+                return true;
+            }
+        }
+        nextToReturn = null;
+        return false;
     }
 
     /**
@@ -41,7 +65,7 @@ public class FilterIterator<E> implements Iterator<E> {
      */
     public E next() {
         //TODO: Left as an exercise.
-        return null;
+        return nextToReturn;
     }
 
     /**
@@ -50,6 +74,8 @@ public class FilterIterator<E> implements Iterator<E> {
      */
     public void rewind() {
         //TODO: Left as an exercise.
+        iterator.rewind();
+        nextToReturn = null;
     }
 
 }
