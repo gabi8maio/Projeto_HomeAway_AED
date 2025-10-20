@@ -94,4 +94,15 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.lodgingExists();
     }
 
+    public boolean lodgingIsFull(String name){
+        return loadedArea.isItFull(name);
+    }
+
+    public boolean studentExists (String name){
+        return loadedArea.studentExists(name);
+    }
+
+    public void addStudent (String studentType, String name, String country, String lodging){
+        loadedArea.addStudent(studentType, name, country, lodging);
+    }
 }

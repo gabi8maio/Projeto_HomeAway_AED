@@ -26,6 +26,12 @@ public class AreaClass implements Area, Serializable {
         this.leftLongitude = leftLongitude;
         this.rightLongitude = rightLongitude;
         services = new DoublyLinkedList<>();
+        LodgingServices = new ListInArray<>(100);
+        LeisureServices = new ListInArray<>(100);
+        EatingServices = new ListInArray<>(100);
+        studentsByCountry = new DoublyLinkedList<>();
+        allStudents = new SortedDoublyLinkedList<>();
+        servicesByRank = new SortedDoublyLinkedList<>();
     }
 
     @Override
@@ -40,7 +46,14 @@ public class AreaClass implements Area, Serializable {
     public void removeStudent() {
     }
 
-    public boolean studentExists() {
+    public boolean studentExists(String name) {
+        Iterator<Students> it = allStudents.iterator();
+        while (it.hasNext()) {
+            Students s = it.next();
+            if (s.getName().equals(name)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -56,12 +69,15 @@ public class AreaClass implements Area, Serializable {
         switch (type) {
             case LODGING:
                 newService = new LodgingClass(latitude, longitude, price, value, serviceName);
+                LodgingServices.addLast(newService);
                 break;
             case EATING:
                 newService = new EatingClass(latitude, longitude, price, value, serviceName);
+                EatingServices.addLast(newService);
                 break;
             case LEISURE:
                 newService = new LeisureClass(latitude, longitude, price, value, serviceName);
+                LeisureServices.addLast(newService);
                 break;
         }
         services.addFirst(newService);
@@ -94,7 +110,14 @@ public class AreaClass implements Area, Serializable {
         return false;
     }
 
-    public boolean IsItFull() {
+    public boolean isItFull(String name) {
+        Iterator<Services> iterator = LodgingServices.iterator();
+        while(iterator.hasNext()) {
+            Services service = iterator.next();
+            if(service.getServiceName().equals(name))
+                if (Lodging.isFull())
+                    return true;
+        }
         return false;
     }
 
@@ -123,5 +146,16 @@ public class AreaClass implements Area, Serializable {
 
     public Services findCommand() {
         return null;
+    }
+
+    public void addStudent(String studentType, String name, String country, String lodging) {
+        Students newStudent = null;
+        StudentTypes type = StudentTypes.fromString(studentType);
+        switch (type) {
+            case OUTGOING -> newStudent = new OutgoingClass (studentType, name, country, lodging);
+            case BOOKISH -> newStudent = new BookishClass(studentType, name, country, lodging);
+            case THRIFTY -> newStudent = new ThriftyClass(studentType, name, country, lodging);
+        }
+        allStudents.add(newStudent);
     }
 }

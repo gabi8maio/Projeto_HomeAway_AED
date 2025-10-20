@@ -13,4 +13,8 @@ public interface HomeAwaySystem {
     String saveArea();
     void loadArea(String name);
     boolean lodgingExists(String name);
+    boolean lodgingIsFull(String name);
+    boolean studentExists(String name);
+
+    void addStudent(String studentType, String name, String country, String lodging);
 }

@@ -4,12 +4,12 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
 
     private final long latitude;
     private final long longitude;
-    private final Double price;
-    private final Double value;
+    private final double price;
+    private final double value;
     private final String serviceName;
 
 
-    public ServicesClassAbstract(long latitude, long longitude, Double price, Double value, String serviceName){
+    public ServicesClassAbstract(long latitude, long longitude, Double price, double value, String serviceName){
         this.serviceName = serviceName;
         this.value = value;
         this.price = price;
@@ -31,5 +31,8 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
         return 0;
     }
 
+    public double getValue(){
+        return value;
+    }
 
 }

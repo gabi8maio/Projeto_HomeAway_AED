@@ -254,7 +254,14 @@ public class Main {
             if (!system.lodgingExists(lodging)) {
                 System.out.printf(LODGING_NOT_EXISTS, lodging);
             }
-           // if ()
+            if (system.lodgingIsFull(lodging)){
+                System.out.printf(LODGING_FULL, lodging);
+            }
+            if (system.studentExists(name)){
+                System.out.printf(STUDENT_ALREADY_EXISTS, name);
+            }
+            system.addStudent(studentType, name, country, lodging);
+            System.out.printf(STUDENT_ADDED, name);
 
         }catch (Exception e){
             System.out.println("Invalid arguments!");
