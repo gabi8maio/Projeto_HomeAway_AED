@@ -21,7 +21,7 @@ public class AreaClass implements Area, Serializable {
     private ListInArray<Services> eatingServices;
     private ListInArray<Services> lodgingServices;
 
-//s
+//sss
     @SuppressWarnings("unchecked")
     public AreaClass(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
 
