@@ -17,9 +17,9 @@ public class AreaClass implements Area, Serializable {
     private SortedDoublyLinkedList<Services> servicesByRank;
     private SortedList<Students> allStudents;
     private DoublyLinkedList<Students> studentsByCountry;
-    private ListInArray</*ListDoubluy...*/> leisureServices; // Tirar estas tres var, e meter apenas uma
-    private ListInArray<Services> eatingServices;
-    private ListInArray<Services> lodgingServices;
+    //private ListInArray</*ListDoubluy...*/> leisureServices; // Tirar estas tres var, e meter apenas uma
+    //private ListInArray<Services> eatingServices;
+    //private ListInArray<Services> lodgingServices;
 
 //sss
     @SuppressWarnings("unchecked")
@@ -37,9 +37,9 @@ public class AreaClass implements Area, Serializable {
         this.leftLongitude = leftLongitude;
         this.rightLongitude = rightLongitude;
         services = new DoublyLinkedList<>();
-        lodgingServices = new ListInArray<>(100);
-        leisureServices = new ListInArray<>(100);
-        eatingServices = new ListInArray<>(100);
+        //lodgingServices = new ListInArray<>(100);
+        //leisureServices = new ListInArray<>(100);
+        //eatingServices = new ListInArray<>(100);
         studentsByCountry = new DoublyLinkedList<>();
         allStudents = new SortedDoublyLinkedList<>((Comparator<Students>) new studentComparatorByName()); // Need to change
         servicesByRank = new SortedDoublyLinkedList<>(null); // Need to change
@@ -104,15 +104,12 @@ public class AreaClass implements Area, Serializable {
         switch (type) {
             case LODGING:
                 newService = new LodgingClass(latitude, longitude, price, value, serviceName);
-                lodgingServices.addLast(newService);
                 break;
             case EATING:
                 newService = new EatingClass(latitude, longitude, price, value, serviceName);
-                eatingServices.addLast(newService);
                 break;
             case LEISURE:
                 newService = new LeisureClass(latitude, longitude, price, value, serviceName);
-                leisureServices.addLast(newService);
                 break;
         }
         services.addLast(newService);
@@ -139,8 +136,8 @@ public class AreaClass implements Area, Serializable {
         return null;
     }
 
-    public boolean isLodging() {
-        return false;
+    public boolean isLodging(Services service) {
+        return service instanceof Lodging lodging;
     }
 
     public boolean isAlreadyThere() {
@@ -148,7 +145,7 @@ public class AreaClass implements Area, Serializable {
     }
 
     public boolean isItFull(String name) {
-        Iterator<Services> iterator = lodgingServices.iterator();
+        Iterator<Services> iterator = services.iterator();
         while(iterator.hasNext()) {
             Services service = iterator.next();
             if(service.getServiceName().equals(name))

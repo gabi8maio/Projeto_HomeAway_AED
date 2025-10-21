@@ -74,6 +74,7 @@ public class Main {
         }
     }
 
+    //TODO: Colocar a mensagem de erro de comando como uma excepção
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         HomeAwaySystem system = new HomeAwaySystemClass();
@@ -378,7 +379,7 @@ public class Main {
     }
 
     private static void executeExit(HomeAwaySystem system) {
-        // Implementation for exit command - save current area if exists
+        system.saveArea();
     }
 
     private static void executeHelp() {
