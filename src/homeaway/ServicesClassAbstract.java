@@ -27,10 +27,21 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
     }
 
     @Override
-    public int getServicePrice() {
-        return 0;
+    public double getServicePrice() {
+        return price;
     }
 
+    @Override
+    public long getLatitude() {
+        return latitude;
+    }
+
+    @Override
+    public long getLongitude() {
+        return longitude;
+    }
+
+    @Override
     public double getValue(){
         return value;
     }

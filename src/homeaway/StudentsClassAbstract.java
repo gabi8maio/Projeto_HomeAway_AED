@@ -1,6 +1,6 @@
 package homeaway;
 
-public abstract class StudentsClassAbstract {
+public abstract class StudentsClassAbstract implements Students {
 
     private String name;
     private String type;
@@ -18,6 +18,10 @@ public abstract class StudentsClassAbstract {
 
     public String getName() {
         return name;
+    }
+
+    public int compareTo(Students o1){
+        return this.getName().compareTo(o1.getName());
     }
 
     public String getType() {

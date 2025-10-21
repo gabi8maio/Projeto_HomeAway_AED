@@ -8,26 +8,6 @@ public class EatingClass extends ServicesClassAbstract implements Eating{
 
     @Override
     public String getServiceType() {
-        return "";
-    }
-
-    @Override
-    public long getLatitude() {
-        return 0;
-    }
-
-    @Override
-    public long getLongitude() {
-        return 0;
-    }
-
-    @Override
-    public double getPrice() {
-        return 0;
-    }
-
-    @Override
-    public double getValue() {
-        return 0;
+        return TypesOfService.EATING.toString();
     }
 }

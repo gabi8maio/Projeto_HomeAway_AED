@@ -2,6 +2,7 @@ package homeaway;
 
 import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
+import dataStructures.exceptions.EmptyStackException;
 import dataStructures.exceptions.NoSuchElementException;
 
 import java.io.*;
@@ -46,8 +47,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     @Override
     public void loadArea(String name){
         //if(hasArea) throw new NoSuchElementException();
-        Area areaToLoad = load(name);
-        loadedArea = areaToLoad;
+        load(name);
     }
 
     @Override
@@ -68,26 +68,25 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
     }
 
-    private void store(String fileName, Area area){
+    private static void store(String fileName, Area area){
         try{
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
             oos.writeObject(area);
             oos.flush();
             oos.close();
         }catch (IOException e){
+            System.out.println(e.getMessage());
             System.out.println("Erro de escrita");
         }
     }
-    private Area load(String name){
-        Area area = null;
+    private void load(String name){
+         loadedArea = null;
         try{
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(name));
-            area = (Area) ois.readObject();
+            loadedArea = (Area) ois.readObject();
             ois.close();
-        }catch (IOException e){
-            throw new Exception() ; // mudar
-        }finally {
-            return area;
+        }catch (IOException | ClassNotFoundException e){
+            throw new EmptyStackException(); // mudar
         }
     }
 

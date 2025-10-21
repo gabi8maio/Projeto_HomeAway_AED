@@ -2,6 +2,8 @@ package dataStructures;
 
 import dataStructures.exceptions.*;
 
+import java.io.Serializable;
+
 /**
  * List (sequence) Abstract Data Type 
  * Includes description of general methods to be implemented by lists.
@@ -11,7 +13,7 @@ import dataStructures.exceptions.*;
  * 
  */
 
-public interface List<E> {
+public interface List<E> extends Serializable {
     int NOT_FOUND=-1;
     /**
      * Returns true iff the list contains no elements.

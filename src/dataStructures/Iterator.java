@@ -2,6 +2,8 @@ package dataStructures;
 
 import dataStructures.exceptions.NoSuchElementException;
 
+import java.io.Serializable;
+
 
 /**
  * Iterator Abstract Data Type 
@@ -11,7 +13,7 @@ import dataStructures.exceptions.NoSuchElementException;
  * @param <E> Generic Element
  * 
  */
-public interface Iterator<E>  {
+public interface Iterator<E> extends Serializable {
 
     /** 
      * Returns true if next would return an element 

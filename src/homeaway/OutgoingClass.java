@@ -9,8 +9,5 @@ public class OutgoingClass extends StudentsClassAbstract implements Outgoing, St
         super(type, name, country, lodging);
     }
 
-    @Override
-    public int compareTo(Students o) {
-        return 0;
-    }
+
 }

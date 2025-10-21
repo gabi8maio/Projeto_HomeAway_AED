@@ -1,6 +1,4 @@
 public enum Command {
-    HELP("help - Shows the available commands"),
-    EXIT("exit - Terminates the execution of the program"),
     BOUNDS("bounds - Defines the new geographic bounding rectangle"),
     SAVE("save - Saves the current geographic bounding rectangle to a text file"),
     LOAD("load - Load a geographic bounding rectangle from a text file"),
@@ -12,13 +10,15 @@ public enum Command {
     GO("go - Changes the location of a student to a leisure service, or eating service"),
     MOVE("move - Changes the home of a student"),
     USERS("users - List all students who are in a given service (eating or lodging)"),
+    STAR("star - Evaluates a service"),
     WHERE("where - Locates a student"),
     VISITED("visited - Lists locations visited by one student"),
-    STAR("star - Evaluates a service"),
     RANKING("ranking - Lists services ordered by star"),
     RANKED("ranked - Lists the service(s) of the indicated type with the given score that are closer to the student location"),
-    TAG("tag - Lists all services that have at least one review whose description contains the specified word. This list is from the most recent review to the oldest"),
+    TAG("tag - Lists all services that have at least one review whose description contains the specified word"),
     FIND("find - Finds the most relevant service of a certain type, for a specific student"),
+    HELP("help - Shows the available commands"),
+    EXIT("exit - Terminates the execution of the program"),
     UNKNOWN("");
 
     private final String msg;

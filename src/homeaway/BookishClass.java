@@ -6,8 +6,5 @@ public class BookishClass extends StudentsClassAbstract implements Outgoing, Stu
         super(type, name, country, lodging);
     }
 
-    @Override
-    public int compareTo(Students o) {
-        return 0;
-    }
+
 }

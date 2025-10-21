@@ -6,10 +6,4 @@ public class ThriftyClass extends StudentsClassAbstract implements Thrifty, Stud
         super (studentType, name, country, lodging);
     }
 
-    @Override
-    public int compareTo(Students o) {
-        return 0;
-    }
-
-
 }

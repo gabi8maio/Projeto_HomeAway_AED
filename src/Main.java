@@ -62,7 +62,7 @@ public class Main {
     private static final String NO_SERVICES_TYPE = "No %s services!\n";
     private static final String NO_SERVICES_AVERAGE = "No %s services with average!\n";
     private static final String NO_SERVICES_TAG = "There are no services with this tag!\n";
-    private static final String SERVICES_COMMAND = "%s: %s %d %d\n";
+    private static final String SERVICES_COMMAND = "%s: %s (%d, %d).\n";
     private static final String STUDENTS_COMMAND = "%s: %s at %s.\n";
 
     private static Command getCommand(Scanner input) {
@@ -129,14 +129,14 @@ public class Main {
                 System.out.println(BOUNDS_ALREADY_EXISTS);
                 return;
             }
-            if (topLatitude <= bottomLatitude || rightLongitude <= leftLongitude) {
+            if (!(topLatitude >= bottomLatitude || leftLongitude >= rightLongitude)) {
                 System.out.println(INVALID_BOUNDS);
                 return;
             }
             system.addTemporaryArea(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
             System.out.printf(BOUNDS_CREATED, name);
         } catch (Exception e) {
-            System.out.println(INVALID_BOUNDS);
+            System.out.println("Erro");
         }
     }
 
@@ -208,13 +208,13 @@ public class Main {
 
         // Validar se nome já existe
         if (system.serviceNameExists(serviceName)) {
-            System.out.println(serviceName + " already exists!");
+            System.out.printf(SERVICE_ALREADY_EXISTS, serviceName);
             return;
         }
 
         // Adicionar serviço
         system.addService(serviceType, latitude, longitude, price, value, serviceName);
-        System.out.println(serviceType + " " + serviceName + " added.");
+        System.out.printf(SERVICE_ADDED, serviceType.toLowerCase(), serviceName);
 
     } catch(Exception e)
     {
