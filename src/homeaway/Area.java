@@ -12,7 +12,7 @@ public interface Area {
     boolean studentExists(String name);
     boolean lodgingExists(String serviceName);
     void createService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName);
-    boolean serviceExists(String serviceName);
+    boolean serviceExists(String serviceName, TypesOfService type);
     boolean isPriceValid();
     boolean isValueValid();
     DoublyIterator<Services> serviceIterator();

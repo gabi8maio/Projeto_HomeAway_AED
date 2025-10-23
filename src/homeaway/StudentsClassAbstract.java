@@ -1,6 +1,8 @@
 package homeaway;
 
-public abstract class StudentsClassAbstract implements Students {
+import java.io.Serializable;
+
+public abstract class StudentsClassAbstract implements Students, Serializable {
 
     private String name;
     private String type;

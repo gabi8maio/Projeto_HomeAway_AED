@@ -7,7 +7,7 @@ public interface HomeAwaySystem {
 
     Iterator<Services> getServiceIterator();
     boolean hasArea(String name);
-    boolean serviceNameExists(String name);
+    boolean serviceNameExists(String name, TypesOfService types);
     void addService(String serviceType,long latitude,long longitude,Double price,Double value,String serviceName);
     String getTempAreaName();
     String saveArea();

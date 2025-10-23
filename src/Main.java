@@ -130,7 +130,7 @@ public class Main {
                 System.out.println(BOUNDS_ALREADY_EXISTS);
                 return;
             }
-            if (!(topLatitude >= bottomLatitude || leftLongitude >= rightLongitude)) {
+            if ((topLatitude <= bottomLatitude || leftLongitude >= rightLongitude)) {
                 System.out.println(INVALID_BOUNDS);
                 return;
             }
@@ -208,7 +208,7 @@ public class Main {
         }
 
         // Validar se nome já existe
-        if (system.serviceNameExists(serviceName)) {
+        if (system.serviceNameExists(serviceName, serviceTypeEnum)) {
             System.out.printf(SERVICE_ALREADY_EXISTS, serviceName);
             return;
         }

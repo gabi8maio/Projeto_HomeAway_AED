@@ -7,8 +7,7 @@ import dataStructures.exceptions.NoSuchElementException;
 
 import java.io.*;
 
-public class HomeAwaySystemClass implements HomeAwaySystem{
-
+public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
     Area tempArea;
     Area loadedArea; // NS se devemos ter isto ou usar apenas a tempArea como a loaded
@@ -59,8 +58,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     }
 
     @Override
-    public boolean serviceNameExists(String name) {
-        return loadedArea.serviceExists(name);
+    public boolean serviceNameExists(String name, TypesOfService types) {
+        return loadedArea.serviceExists(name, types);
     }
 
     @Override
@@ -86,7 +85,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
             loadedArea = (Area) ois.readObject();
             ois.close();
         }catch (IOException | ClassNotFoundException e){
-            throw new EmptyStackException(); // mudar
+            e.printStackTrace(); // See what's actually wrong
+            throw new RuntimeException("Failed to load area from file: " + name, e);
         }
     }
 

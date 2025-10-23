@@ -2,7 +2,9 @@ package homeaway;
 
 import dataStructures.DoublyLinkedList;
 
-public class LodgingClass extends ServicesClassAbstract implements Lodging{
+import java.io.Serializable;
+
+public class LodgingClass extends ServicesClassAbstract implements Lodging, Serializable {
 
     public DoublyLinkedList<Students> studentsThere;
 

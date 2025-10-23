@@ -115,11 +115,13 @@ public class AreaClass implements Area, Serializable {
         services.addLast(newService);
     }
 
-    public boolean serviceExists(String serviceName) {
+    // By type btw
+    public boolean serviceExists(String serviceName, TypesOfService type) {
+
         Iterator<Services> it = services.iterator();
         while (it.hasNext()) {
             Services s = it.next();
-            if (s.getServiceName().equals(serviceName)) return true;
+            if((s.getServiceName().equalsIgnoreCase(serviceName))) return true;
         }
         return false;
     }
@@ -134,6 +136,11 @@ public class AreaClass implements Area, Serializable {
 
     public DoublyIterator<Services> serviceIterator() {
         return null;
+    }
+
+    @Override
+    public boolean isLodging() {
+        return false;
     }
 
     public boolean isLodging(Services service) {
