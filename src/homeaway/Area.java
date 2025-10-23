@@ -30,4 +30,5 @@ public interface Area {
     Services findCommand();
 
     void addStudent(String studentType, String name, String country, String lodging);
+    boolean isInBounds (long latitude, long longitude);
 }

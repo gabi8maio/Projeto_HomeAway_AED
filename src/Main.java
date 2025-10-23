@@ -1,5 +1,6 @@
 import dataStructures.Iterator;
 import homeaway.*;
+import homeaway.Exeptions.*;
 
 import java.util.Scanner;
 
@@ -116,6 +117,7 @@ public class Main {
         in.close();
     }
 
+    //exceptions added
     private static void executeBounds(Scanner in, HomeAwaySystem system) {
         String name;
         try {
@@ -124,22 +126,14 @@ public class Main {
             long leftLongitude = in.nextLong();
             long rightLongitude = in.nextLong();
             name = in.nextLine().trim();
-
-            if (system.hasArea(name)) {
-                System.out.println(BOUNDS_ALREADY_EXISTS);
-                return;
-            }
-            if (!(topLatitude >= bottomLatitude || leftLongitude >= rightLongitude)) {
-                System.out.println(INVALID_BOUNDS);
-                return;
-            }
             system.addTemporaryArea(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
             System.out.printf(BOUNDS_CREATED, name);
-        } catch (Exception e) {
-            System.out.println("Erro");
+        } catch (BoundsAlreadyExistException | InvalidBoundsException e) {
+            System.out.println(e.getMessage());
         }
     }
 
+    //no exceptions needed
     private static void executeSave(Scanner in, HomeAwaySystem system) {
         try {
             String areaName = system.saveArea();
@@ -149,6 +143,7 @@ public class Main {
         }
     }
 
+    //TODO: check if in this command we need excpetions
     private static void executeLoad(Scanner in, HomeAwaySystem system) {
         String areaName = null;
         try {
@@ -169,57 +164,15 @@ public class Main {
         String serviceName = in.nextLine().trim();
 
         try{
-        TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType); // Podemos fazer isto?
-        if (serviceTypeEnum == null) {
-            System.out.println("Invalid service type!");
-            return;
-        }
-        if (latitude <= longitude) { // Meti ao calhas
-            System.out.println("Invalid location!");
-            return;
-        }
-
-        if (price <= 0) {
-            switch (serviceTypeEnum) {
-                case EATING:
-                    System.out.println(INVALID_MENU_PRICE);
-                    return;
-                case LODGING:
-                    System.out.println(INVALID_ROOM_PRICE);
-                    return;
-                case LEISURE:
-                    System.out.println(INVALID_TICKET_PRICE);
-                    return;
-            }
-        }
-
-        // Validar  value conforme o tipo de serviço
-        if (serviceTypeEnum.equals(TypesOfService.LEISURE)) {
-            if (value < 0 || value > 100) {
-                System.out.println(INVALID_DISCOUNT);
-                return;
-            }
-        } else { // eating ou lodging
-            if (value <= 0) {
-                System.out.println(INVALID_CAPACITY);
-                return;
-            }
-        }
-
-        // Validar se nome já existe
-        if (system.serviceNameExists(serviceName)) {
-            System.out.printf(SERVICE_ALREADY_EXISTS, serviceName);
-            return;
-        }
-
-        // Adicionar serviço
         system.addService(serviceType, latitude, longitude, price, value, serviceName);
         System.out.printf(SERVICE_ADDED, serviceType.toLowerCase(), serviceName);
 
-    } catch(Exception e)
-    {
-        System.out.println("Invalid arguments!"); // MUDAR
-    }
+        } catch(InvalidServiceTypeException | InvalidLocationException | InvalidPriceMenuException | InvalidRoomPriceException | InvalidTicketPriceException |
+                InvalidDiscountException | InvalidCapacityException e){
+            System.out.println(e.getMessage());
+        } catch (ServiceAlreadyExistsException e){
+            System.out.printf(e.getMessage(), serviceName);
+        }
     }
 
     private static void executeServices(Scanner in, HomeAwaySystem system) {

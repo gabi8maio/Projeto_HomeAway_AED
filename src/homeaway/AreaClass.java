@@ -17,9 +17,9 @@ public class AreaClass implements Area, Serializable {
     private SortedDoublyLinkedList<Services> servicesByRank;
     private SortedList<Students> allStudents;
     private DoublyLinkedList<Students> studentsByCountry;
-    private ListInArray</*ListDoubluy...*/> leisureServices; // Tirar estas tres var, e meter apenas uma
-    private ListInArray<Services> eatingServices;
-    private ListInArray<Services> lodgingServices;
+    //private ListInArray</*ListDoubluy...*/> leisureServices; // Tirar estas tres var, e meter apenas uma
+    //private ListInArray<Services> eatingServices;
+    //private ListInArray<Services> lodgingServices;
 
 //sss
     @SuppressWarnings("unchecked")
@@ -37,9 +37,9 @@ public class AreaClass implements Area, Serializable {
         this.leftLongitude = leftLongitude;
         this.rightLongitude = rightLongitude;
         services = new DoublyLinkedList<>();
-        lodgingServices = new ListInArray<>(100);
-        leisureServices = new ListInArray<>(100);
-        eatingServices = new ListInArray<>(100);
+        //lodgingServices = new ListInArray<>(100);
+        //leisureServices = new ListInArray<>(100);
+        //eatingServices = new ListInArray<>(100);
         studentsByCountry = new DoublyLinkedList<>();
         allStudents = new SortedDoublyLinkedList<>((Comparator<Students>) new studentComparatorByName()); // Need to change
         servicesByRank = new SortedDoublyLinkedList<>(null); // Need to change
@@ -194,5 +194,10 @@ public class AreaClass implements Area, Serializable {
             case THRIFTY -> newStudent = new ThriftyClass(studentType, name, country, lodging);
         }
         allStudents.add(newStudent);
+    }
+
+    public boolean isInBounds (long latitude, long longitude) {
+        return latitude >= this.bottomLatitude && latitude <= this.topLatitude &&
+                longitude >= this.rightLongitude && longitude <= this.leftLongitude;
     }
 }
