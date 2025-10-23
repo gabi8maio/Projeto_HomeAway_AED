@@ -104,15 +104,12 @@ public class AreaClass implements Area, Serializable {
         switch (type) {
             case LODGING:
                 newService = new LodgingClass(latitude, longitude, price, value, serviceName);
-                lodgingServices.addLast(newService);
                 break;
             case EATING:
                 newService = new EatingClass(latitude, longitude, price, value, serviceName);
-                eatingServices.addLast(newService);
                 break;
             case LEISURE:
                 newService = new LeisureClass(latitude, longitude, price, value, serviceName);
-                leisureServices.addLast(newService);
                 break;
         }
         services.addLast(newService);
@@ -139,8 +136,8 @@ public class AreaClass implements Area, Serializable {
         return null;
     }
 
-    public boolean isLodging() {
-        return false;
+    public boolean isLodging(Services service) {
+        return service instanceof Lodging lodging;
     }
 
     public boolean isAlreadyThere() {
@@ -148,7 +145,7 @@ public class AreaClass implements Area, Serializable {
     }
 
     public boolean isItFull(String name) {
-        Iterator<Services> iterator = lodgingServices.iterator();
+        Iterator<Services> iterator = services.iterator();
         while(iterator.hasNext()) {
             Services service = iterator.next();
             if(service.getServiceName().equals(name))
