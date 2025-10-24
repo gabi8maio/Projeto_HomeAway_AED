@@ -356,8 +356,17 @@ public class Main {
     }
 
     private static void executeUsers(Scanner in, HomeAwaySystem system) {
-        // Implementation for users command
-        in.nextLine(); // Consume remaining input
+        String order = in.next().trim();
+        String serviceName = in.nextLine().trim();
+
+        Iterator<Students> studentIterator = system.usersCommand(order,serviceName);
+
+        while (studentIterator.hasNext()) {
+            Students student = studentIterator.next();
+            System.out.printf(STUDENTS_COMMAND,
+                    student.getName(),
+                    student.getType().toLowerCase());
+        }
     }
 
     private static void executeWhere(Scanner in, HomeAwaySystem system) {

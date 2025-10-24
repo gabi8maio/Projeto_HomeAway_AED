@@ -148,6 +148,18 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         loadedArea.moveStudentToLocation(studentName,locationName);
     }
 
+    private boolean isCorrectOrder(String order){
+        return !order.equals(">") && !order.equals("<");
+    }
+
+    public Iterator<Students> usersCommand(String order, String serviceName){
+        if (!isCorrectOrder(order)) throw new IllegalArgumentException(String.format("Unknown %s!"));
+        if (!serviceNameExists(serviceName)) throw new IllegalArgumentException(String.format("%s does not exist!"));
+        if (!isEatingOrLeisureService(serviceName)) throw new IllegalArgumentException(String.format("%s is not a valid service!"));
+
+        return loadedArea.getAllStudentsIterator();
+    }
+
     public boolean studentExists (String name){
         return loadedArea.studentExists(name);
     }
