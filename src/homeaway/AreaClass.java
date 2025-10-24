@@ -6,7 +6,7 @@ import java.io.InvalidObjectException;
 import java.io.Serializable;
 
 
-public class AreaClass implements Area, Serializable {
+public class AreaClass implements Serializable {
 
     private long topLatitude;
     private long bottomLatitude;
@@ -46,7 +46,7 @@ public class AreaClass implements Area, Serializable {
 
     }
 
-    @Override
+
     public Iterator<Services> getServicesIterator() {
         return services.iterator();
     }
@@ -55,7 +55,7 @@ public class AreaClass implements Area, Serializable {
         return areaName;
     }
 
-    @Override
+
     public void removeStudent(String studentName) {
         Students student = findStudentElem(studentName);
         if(student == null) throw new InvalidPositionException(); // Isto em principio n vai acontecer
@@ -69,14 +69,59 @@ public class AreaClass implements Area, Serializable {
         }
        return null;
     }
+    private Services findServicesElem(String name){
+        Iterator<Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services s = it.next();
+            if (s.getServiceName().equals(name)) return s;
+        }
+        return null;
+    }
+
+
+    public void goStudentToLocation(String studentName, String serviceName){
+        Students student = findStudentElem(studentName);
+        Services service = findServicesElem(serviceName);
+
+        assert student != null; // Deixamos??
+        student.setPlaceGo(service);
+    }
+
+    public void moveStudentToLocation(String studentName, String serviceName){
+        Students student = findStudentElem(studentName);
+        Services service = findServicesElem(serviceName);
+
+        if (student instanceof Thrifty thrifty && service instanceof Eating) {
+            if (thrifty.isMoreExpensiveThanCheapest(service)) {
+                //result += " " + studentName + " is distracted!";
+            }
+        }
+        if (student instanceof Bookish bookish && service instanceof Leisure) {
+            bookish.addVisitedService(service);
+        } else if (student instanceof Outgoing outgoing) {
+            outgoing.addVisitedService(service);
+        }
+
+        assert student != null; // Deixamos??
+        student.setPlaceGo(service);
+    }
 
     public boolean studentExists(String name) {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if (s.getName().equals(name)) return true;
+            if (s.getName().equalsIgnoreCase(name)) return true;
         }
         return false;
+    }
+
+    public Students getStudent(String name) {
+        Iterator<Students> it = allStudents.iterator();
+        while (it.hasNext()) {
+            Students s = it.next();
+            if (s.getName().equalsIgnoreCase(name)) return s;
+        }
+        return null;
     }
 
     public Iterator<Students> getAllStudentsIterator(){
@@ -115,11 +160,51 @@ public class AreaClass implements Area, Serializable {
         services.addLast(newService);
     }
 
-    public boolean serviceExists(String serviceName) {
+    // By type btw
+    public boolean serviceExists(String serviceName, TypesOfService type) {
+
         Iterator<Services> it = services.iterator();
         while (it.hasNext()) {
             Services s = it.next();
-            if (s.getServiceName().equals(serviceName)) return true;
+            if((s.getServiceName().equalsIgnoreCase(serviceName))) return true;
+        }
+        return false;
+    }
+    public boolean serviceExists(String serviceName) {
+
+        Iterator<Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services s = it.next();
+            if((s.getServiceName().equalsIgnoreCase(serviceName))) return true;
+        }
+        return false;
+    }
+
+    public boolean isEatingOrLeisureService(String serviceName) {
+        Iterator<Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services s = it.next();
+            if((s.getServiceName().equalsIgnoreCase(serviceName)) &&
+                    (s.getServiceType().equals(TypesOfService.LEISURE.toString()) ||
+                    s.getServiceType().equals(TypesOfService.LODGING.toString()))) return true;
+        }
+        return false;
+    }
+
+    public boolean isStudentAtLocation(String studentName,String locationName){
+        Iterator<Students> it = allStudents.iterator();
+        while (it.hasNext()) {
+            Students s = it.next();
+            if((s.getName().equalsIgnoreCase(studentName))&&s.getPlaceHome().getServiceName().equalsIgnoreCase(locationName)) return true;
+        }
+        return false;
+    }
+
+    public boolean isEatingServiceFull(String serviceName){
+        Iterator<Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services s = it.next();
+            //if((s.get().equalsIgnoreCase(studentName))&&s.getPlaceInTheMoment().equalsIgnoreCase(locationName)) return true;
         }
         return false;
     }
@@ -134,6 +219,11 @@ public class AreaClass implements Area, Serializable {
 
     public DoublyIterator<Services> serviceIterator() {
         return null;
+    }
+
+
+    public boolean isLodging() {
+        return false;
     }
 
     public boolean isLodging(Services service) {
@@ -153,6 +243,15 @@ public class AreaClass implements Area, Serializable {
                     return lodging.isFull();
         }
         return false;
+    }
+
+    public String getStudentLocationInfo(String studentName){
+        Iterator<Students> it = allStudents.iterator();
+        while (it.hasNext()) {
+            Students s = it.next();
+            if((s.getName().equalsIgnoreCase(studentName))) return s.getLodging().getServiceName();
+        }
+        return null;
     }
 
     public void changedLodging() {
@@ -184,11 +283,12 @@ public class AreaClass implements Area, Serializable {
 
     public void addStudent(String studentType, String name, String country, String lodging) {
         Students newStudent = null;
+        Services service = findServicesElem(lodging);
         StudentTypes type = StudentTypes.fromString(studentType);
         switch (type) {
-            case OUTGOING -> newStudent = new OutgoingClass (studentType, name, country, lodging);
-            case BOOKISH -> newStudent = new BookishClass(studentType, name, country, lodging);
-            case THRIFTY -> newStudent = new ThriftyClass(studentType, name, country, lodging);
+            case OUTGOING -> newStudent = new OutgoingClass (studentType, name, country, service);
+            case BOOKISH -> newStudent = new BookishClass(studentType, name, country, service);
+            case THRIFTY -> newStudent = new ThriftyClass(studentType, name, country, service);
         }
         allStudents.add(newStudent);
     }

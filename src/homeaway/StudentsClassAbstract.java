@@ -1,18 +1,22 @@
 package homeaway;
 
-public abstract class StudentsClassAbstract implements Students {
+import java.io.Serializable;
 
-    private String name;
-    private String type;
-    private String country;
-    private String lodging;
+public abstract class StudentsClassAbstract implements Students, Serializable {
+
+    private final String name;
+    private final String type;
+    private final String country;
+    private final Services lodging;
+    private Services placeNow;
 
 
-    public StudentsClassAbstract(String type, String name, String country, String lodging){
+    public StudentsClassAbstract(String type, String name, String country, Services lodging){
         this.type = type;
         this.name = name;
         this.country = country;
         this.lodging = lodging;
+        this.placeNow = lodging;
 
     }
 
@@ -32,7 +36,19 @@ public abstract class StudentsClassAbstract implements Students {
         return country;
     }
 
-    public String getLodging() {
+    public  Services getPlaceHome() {
+        return placeNow;
+    }
+
+    public void setPlaceHome(Services newPlace) {
+        placeNow = newPlace;
+    }
+
+    public void setPlaceGo(Services newPlace) {
+        placeNow = newPlace;
+    }
+
+    public Services getLodging() {
         return lodging;
     }
 

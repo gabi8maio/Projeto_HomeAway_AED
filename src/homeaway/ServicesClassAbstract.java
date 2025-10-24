@@ -1,6 +1,8 @@
 package homeaway;
 
-public abstract class ServicesClassAbstract implements Services, ServicesChange{
+import java.io.Serializable;
+
+public abstract class ServicesClassAbstract implements Services, ServicesChange, Serializable {
 
     private final long latitude;
     private final long longitude;
