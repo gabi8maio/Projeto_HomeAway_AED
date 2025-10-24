@@ -11,11 +11,13 @@ public interface HomeAwaySystem {
     void addService(String serviceType,long latitude,long longitude,Double price,Double value,String serviceName);
     String getTempAreaName();
     String saveArea();
-    void loadArea(String name);
+    String loadArea(String name);
     void removeStudent(String studentName);
     boolean lodgingExists(String name);
     boolean lodgingIsFull(String name);
+    String getStudentLocationInfo(String studentName);
     boolean studentExists(String name);
+    String moveStudentToLocation(String studentName, String locationName);
     Iterator<Students> getAllStudentsIterator();
     Iterator<Students> getStudentsByCountryIterator(String country);
     void addStudent(String studentType, String name, String country, String lodging);

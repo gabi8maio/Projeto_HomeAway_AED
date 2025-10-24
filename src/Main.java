@@ -152,12 +152,13 @@ public class Main {
 
     private static void executeLoad(Scanner in, HomeAwaySystem system) {
         String areaName = null;
+        String realAreaName = null; // Porque nos outputs vem o nome da area guardada
         try {
             areaName = in.nextLine().trim();
-            system.loadArea(areaName);
-            System.out.printf(BOUNDS_LOADED, areaName);
+            realAreaName = system.loadArea(areaName);
+            System.out.printf(BOUNDS_LOADED, realAreaName);
         } catch (Exception e) {
-            System.out.printf(BOUNDS_NOT_EXISTS, areaName);
+            System.out.printf(BOUNDS_NOT_EXISTS, realAreaName);
         }
     }
 
@@ -246,7 +247,7 @@ public class Main {
         String name = in.nextLine().trim();
         String country = in.nextLine().trim();
         String lodging = in.nextLine().trim();
-        in.nextLine(); // Consume remaining input
+        in.nextLine();
 
         try{
             if (StudentTypes.fromString(studentType) == null) {
@@ -287,7 +288,7 @@ public class Main {
                     System.out.printf(STUDENTS_COMMAND,
                             student.getName(),
                             student.getType().toLowerCase(),
-                            student.getCountry());
+                            student.getLodging());
                 }
 
             } else {
@@ -304,7 +305,7 @@ public class Main {
                     System.out.printf(STUDENTS_COMMAND,
                             student.getName(),
                             student.getType().toLowerCase(),
-                            student.getCountry());
+                            student.getLodging());
                 }
             }
 
@@ -329,8 +330,16 @@ public class Main {
     }
 
     private static void executeGo(Scanner in, HomeAwaySystem system) {
-        // Implementation for go command
-        in.nextLine(); // Consume remaining input
+        String studentName = in.nextLine().trim();
+        String locationName = in.nextLine().trim();
+
+        try {
+            // move Student
+            String result = system.moveStudentToLocation(studentName, locationName);
+            System.out.println(result);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void executeMove(Scanner in, HomeAwaySystem system) {
@@ -344,8 +353,21 @@ public class Main {
     }
 
     private static void executeWhere(Scanner in, HomeAwaySystem system) {
-        // Implementation for where command
-        in.nextLine(); // Consume remaining input
+        String studentName = in.nextLine().trim();
+
+        try {
+            if (!system.studentExists(studentName)) {
+                System.out.printf(STUDENT_NOT_EXISTS, studentName);
+                return;
+            }
+            String locationName = system.getStudentLocationInfo(studentName);
+            // Como é que devemos pegar a longitude e latitude, n se faz dois metodos separados ne?
+            // Podemos passar o objeto para fora?
+            System.out.printf(STUDENT_NOW_AT, studentName, locationName);
+
+        } catch (Exception e) {
+            System.out.println("Error locating student");
+        }
     }
 
     private static void executeVisited(Scanner in, HomeAwaySystem system) {

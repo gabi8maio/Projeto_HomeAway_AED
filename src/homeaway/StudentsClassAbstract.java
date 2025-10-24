@@ -4,10 +4,11 @@ import java.io.Serializable;
 
 public abstract class StudentsClassAbstract implements Students, Serializable {
 
-    private String name;
-    private String type;
-    private String country;
-    private String lodging;
+    private final String name;
+    private final String type;
+    private final String country;
+    private final String lodging;
+    private String placeNow;
 
 
     public StudentsClassAbstract(String type, String name, String country, String lodging){
@@ -15,6 +16,7 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
         this.name = name;
         this.country = country;
         this.lodging = lodging;
+        this.placeNow = lodging;
 
     }
 
@@ -32,6 +34,14 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
 
     public String getCountry() {
         return country;
+    }
+
+    public  String getPlaceInTheMoment() {
+        return placeNow;
+    }
+
+    public void setPlaceInTheMoment(String newPlace) {
+        placeNow = newPlace;
     }
 
     public String getLodging() {

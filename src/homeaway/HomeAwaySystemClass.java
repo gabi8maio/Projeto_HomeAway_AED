@@ -9,9 +9,9 @@ import java.io.*;
 
 public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
-    Area tempArea;
-    Area loadedArea; // NS se devemos ter isto ou usar apenas a tempArea como a loaded
-    DoublyLinkedList<Area> savedAreas;
+    AreaClass tempArea;
+    AreaClass loadedArea; // NS se devemos ter isto ou usar apenas a tempArea como a loaded
+    DoublyLinkedList<AreaClass> savedAreas;
 
     public HomeAwaySystemClass(){
         savedAreas = new DoublyLinkedList<>();
@@ -19,7 +19,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
     @Override
     public void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
-        Area area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
+        AreaClass area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
         this.tempArea = area;
         loadedArea = area;
     }
@@ -44,9 +44,12 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     @Override
-    public void loadArea(String name){
-        //if(hasArea) throw new NoSuchElementException();
-        load(name);
+    public String loadArea(String name){
+        return load(name);
+    }
+
+    public String getStudentLocationInfo(String studentName){
+        return loadedArea.getStudentLocationInfo(studentName);
     }
 
     @Override
@@ -67,12 +70,29 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.serviceExists(name, types);
     }
 
+    // Sem parametros
+    private boolean serviceNameExists(String serviceName) {
+        return loadedArea.serviceExists(serviceName);
+    }
+
+    private boolean isEatingOrLeisureService(String serviceName){
+        return loadedArea.isEatingOrLeisureService(serviceName);
+    }
+
+    private boolean isStudentAtLocation(String studentName,String locationName){
+        return loadedArea.isStudentAtLocation(studentName,locationName);
+    }
+
+    private boolean isEatingServiceFull(String locationName){
+        return loadedArea.isEatingServiceFull(locationName);
+    }
+
     @Override
     public void addService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName) {
         loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
     }
 
-    private static void store(String fileName, Area area){
+    private static void store(String fileName, AreaClass area){
         try{
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
             oos.writeObject(area);
@@ -83,12 +103,13 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             System.out.println("Erro de escrita");
         }
     }
-    private void load(String name){
+    private String load(String name){
          loadedArea = null;
         try{
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(name));
-            loadedArea = (Area) ois.readObject();
+            loadedArea = (AreaClass) ois.readObject();
             ois.close();
+            return loadedArea.getName();
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace(); // See what's actually wrong
             throw new RuntimeException("Failed to load area from file: " + name, e);
@@ -105,6 +126,15 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
     public void removeStudent(String studentName){
         loadedArea.removeStudent(studentName);
+    }
+
+    public void moveStudentToLocation(String studentName, String locationName){
+        if (!serviceNameExists(locationName)) throw new IllegalArgumentException(String.format("Unknown %s!", locationName));
+        if (!studentExists(studentName)) throw new IllegalArgumentException(String.format("%s does not exist!", studentName));
+        if (!isEatingOrLeisureService(locationName)) throw new IllegalArgumentException(String.format("%s is not a valid service!", locationName));
+        if (isStudentAtLocation(studentName, locationName)) throw new IllegalArgumentException("Already there!");
+        if (isEatingServiceFull(locationName)) throw new IllegalArgumentException(String.format("eating %s is full!", locationName));
+
     }
 
     public boolean studentExists (String name){

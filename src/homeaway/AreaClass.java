@@ -6,7 +6,7 @@ import java.io.InvalidObjectException;
 import java.io.Serializable;
 
 
-public class AreaClass implements Area, Serializable {
+public class AreaClass implements Serializable {
 
     private long topLatitude;
     private long bottomLatitude;
@@ -46,7 +46,7 @@ public class AreaClass implements Area, Serializable {
 
     }
 
-    @Override
+
     public Iterator<Services> getServicesIterator() {
         return services.iterator();
     }
@@ -55,7 +55,7 @@ public class AreaClass implements Area, Serializable {
         return areaName;
     }
 
-    @Override
+
     public void removeStudent(String studentName) {
         Students student = findStudentElem(studentName);
         if(student == null) throw new InvalidPositionException(); // Isto em principio n vai acontecer
@@ -74,7 +74,7 @@ public class AreaClass implements Area, Serializable {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if (s.getName().equals(name)) return true;
+            if (s.getName().equalsIgnoreCase(name)) return true;
         }
         return false;
     }
@@ -125,6 +125,44 @@ public class AreaClass implements Area, Serializable {
         }
         return false;
     }
+    public boolean serviceExists(String serviceName) {
+
+        Iterator<Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services s = it.next();
+            if((s.getServiceName().equalsIgnoreCase(serviceName))) return true;
+        }
+        return false;
+    }
+
+    public boolean isEatingOrLeisureService(String serviceName) {
+        Iterator<Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services s = it.next();
+            if((s.getServiceName().equalsIgnoreCase(serviceName)) &&
+                    (s.getServiceType().equals(TypesOfService.LEISURE.toString()) ||
+                    s.getServiceType().equals(TypesOfService.LODGING.toString()))) return true;
+        }
+        return false;
+    }
+
+    public boolean isStudentAtLocation(String studentName,String locationName){
+        Iterator<Students> it = allStudents.iterator();
+        while (it.hasNext()) {
+            Students s = it.next();
+            if((s.getName().equalsIgnoreCase(studentName))&&s.getPlaceInTheMoment().equalsIgnoreCase(locationName)) return true;
+        }
+        return false;
+    }
+
+    public boolean isEatingServiceFull(String serviceName){
+        Iterator<Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services s = it.next();
+            //if((s.get().equalsIgnoreCase(studentName))&&s.getPlaceInTheMoment().equalsIgnoreCase(locationName)) return true;
+        }
+        return false;
+    }
 
     public boolean isPriceValid() {
         return false;
@@ -138,7 +176,7 @@ public class AreaClass implements Area, Serializable {
         return null;
     }
 
-    @Override
+
     public boolean isLodging() {
         return false;
     }
@@ -160,6 +198,15 @@ public class AreaClass implements Area, Serializable {
                     return lodging.isFull();
         }
         return false;
+    }
+
+    public String getStudentLocationInfo(String studentName){
+        Iterator<Students> it = allStudents.iterator();
+        while (it.hasNext()) {
+            Students s = it.next();
+            if((s.getName().equalsIgnoreCase(studentName))) return s.getLodging();
+        }
+        return null;
     }
 
     public void changedLodging() {
