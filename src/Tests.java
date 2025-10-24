@@ -9,8 +9,8 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.util.Locale;
 
-import static org.junit.assertEquals;
-import static org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class Tests {
     @Test public void test01() { test("input01.txt","output01.txt"); }
@@ -48,7 +48,7 @@ public class Tests {
     @Test public void test33() { test("input33.txt","output33.txt"); }
     @Test public void test34() { test("input34.txt","output34.txt"); }
 
-    private static final File BASE = new File("Tests");
+    private static final File BASE = new File("Tests-P1.v3");
 
     private PrintStream consoleStream;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
