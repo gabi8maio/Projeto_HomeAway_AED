@@ -7,7 +7,7 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
     private final String name;
     private final String type;
     private final String country;
-    private final Services lodging;
+    private Services lodging;
     private Services placeNow;
 
 
@@ -36,20 +36,19 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
         return country;
     }
 
-    public  Services getPlaceHome() {
-        return placeNow;
-    }
-
     public void setPlaceHome(Services newPlace) {
-        placeNow = newPlace;
+        lodging = newPlace;
     }
 
     public void setPlaceGo(Services newPlace) {
         placeNow = newPlace;
     }
 
-    public Services getLodging() {
+    public  Services getPlaceHome() {
         return lodging;
+    }
+    public  Services getPlaceNow() {
+        return placeNow;
     }
 
 }

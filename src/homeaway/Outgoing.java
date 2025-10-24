@@ -1,6 +1,6 @@
 package homeaway;
 
-import java.util.Iterator;
+import dataStructures.*;
 
 public interface Outgoing {
     void addVisitedService(Services services);

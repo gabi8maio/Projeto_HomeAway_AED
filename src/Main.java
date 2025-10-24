@@ -1,5 +1,6 @@
 import dataStructures.Iterator;
 import homeaway.*;
+import homeaway.Exeptions.*;
 
 import java.util.Scanner;
 
@@ -117,6 +118,7 @@ public class Main {
         in.close();
     }
 
+    //exceptions feitas
     private static void executeBounds(Scanner in, HomeAwaySystem system) {
         String name;
         try {
@@ -125,31 +127,24 @@ public class Main {
             long bottomLatitude = in.nextLong();
             long rightLongitude = in.nextLong();
             name = in.nextLine().trim();
-
-            if (system.hasArea(name)) {
-                System.out.println(BOUNDS_ALREADY_EXISTS);
-                return;
-            }
-            if (topLatitude <= bottomLatitude || rightLongitude <= leftLongitude) {
-                System.out.println(INVALID_BOUNDS);
-                return;
-            }
             system.addTemporaryArea(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
             System.out.printf(BOUNDS_CREATED, name);
-        } catch (Exception e) {
-            System.out.println("Erro");
+        } catch (BoundsAlreadyExistException | InvalidBoundsException e) {
+            System.out.println(e.getMessage());
         }
     }
 
+    //excpetions adicionadas
     private static void executeSave(Scanner in, HomeAwaySystem system) {
         try {
             String areaName = system.saveArea();
             System.out.printf(BOUNDS_SAVED, areaName);
-        } catch (Exception e) {
-            System.out.println(SYSTEM_BOUNDS_NOT_DEFINED);
+        } catch (SystemBoundsNotDefinedException e) {
+            System.out.println(e.getMessage());
         }
     }
 
+    //excpetions adicionadas
     private static void executeLoad(Scanner in, HomeAwaySystem system) {
         String areaName = null;
         String realAreaName = null; // Porque nos outputs vem o nome da area guardada
@@ -157,11 +152,12 @@ public class Main {
             areaName = in.nextLine().trim();
             realAreaName = system.loadArea(areaName);
             System.out.printf(BOUNDS_LOADED, realAreaName);
-        } catch (Exception e) {
-            System.out.printf(BOUNDS_NOT_EXISTS, realAreaName);
+        } catch (BoundsDoesNotExistException e) {
+            System.out.printf(e.getMessage(), realAreaName);
         }
     }
 
+    //exceptions added
     private static void executeService(Scanner in, HomeAwaySystem system) {
         String serviceType = in.next().toUpperCase().trim();
         long latitude = in.nextLong();
@@ -171,59 +167,20 @@ public class Main {
         String serviceName = in.nextLine().trim();
 
         try{
-        TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType); // Podemos fazer isto?
-        if (serviceTypeEnum == null) {
-            System.out.println("Invalid service type!\n");
-            return;
-        }
-        if (latitude <= longitude) { // Meti ao calhas
-            System.out.println("Invalid location!\n");
-            return;
-        }
-
-        if (price <= 0) {
-            switch (serviceTypeEnum) {
-                case EATING:
-                    System.out.println(INVALID_MENU_PRICE);
-                    return;
-                case LODGING:
-                    System.out.println(INVALID_ROOM_PRICE);
-                    return;
-                case LEISURE:
-                    System.out.println(INVALID_TICKET_PRICE);
-                    return;
-            }
-        }
-
-        // Validar  value conforme o tipo de serviço
-        if (serviceTypeEnum.equals(TypesOfService.LEISURE)) {
-            if (value < 0 || value > 100) {
-                System.out.println(INVALID_DISCOUNT);
-                return;
-            }
-        } else { // eating ou lodging
-            if (value <= 0) {
-                System.out.println(INVALID_CAPACITY);
-                return;
-            }
-        }
-
-        // Validar se nome já existe
-        if (system.serviceNameExists(serviceName, serviceTypeEnum)) {
-            System.out.printf(SERVICE_ALREADY_EXISTS, serviceName);
-            return;
-        }
 
         // Adicionar serviço
         system.addService(serviceType, latitude, longitude, price, value, serviceName);
         System.out.printf(SERVICE_ADDED, serviceType.toLowerCase(), serviceName);
 
-    } catch(Exception e)
-    {
-        System.out.println("Invalid arguments!"); // MUDAR
-    }
+    } catch(InvalidServiceTypeException | InvalidLocationException | InvalidPriceMenuException | InvalidRoomPriceException |
+                InvalidTicketPriceException | InvalidDiscountException | InvalidCapacityException e) {
+        System.out.println(e.getMessage());
+    } catch ( ServiceAlreadyExistsException e){
+            System.out.printf(e.getMessage(), serviceName);
+        }
     }
 
+    //no exceptions needed
     private static void executeServices(Scanner in, HomeAwaySystem system) {
         Iterator<Services> serviceIterator = system.getServiceIterator();
 
@@ -241,6 +198,7 @@ public class Main {
         }
     }
 
+    //exceptions added
     private static void executeStudent(Scanner in, HomeAwaySystem system) {
         // Implementation for student command
         String studentType = in.nextLine().toLowerCase().trim();
@@ -250,82 +208,51 @@ public class Main {
         in.nextLine();
 
         try{
-            if (StudentTypes.fromString(studentType) == null) {
-                System.out.println("Invalid student type!");
-                return;
-            } if (!system.lodgingExists(lodging)) {
-                System.out.printf(LODGING_NOT_EXISTS, lodging);
-                return;
-            } if (system.lodgingIsFull(lodging)){
-                System.out.printf(LODGING_FULL, lodging);
-                return;
-            } if (system.studentExists(name)){
-                System.out.printf(STUDENT_ALREADY_EXISTS, name);
-                return;
-            }
             system.addStudent(studentType, name, country, lodging);
             System.out.printf(STUDENT_ADDED, name);
 
-        }catch (Exception e){
-            System.out.println("Invalid arguments!");
+        }catch (InvalidStudentTypeException e){
+            System.out.println(e.getMessage());
+        } catch (LodgingNotExistsException | LodgingIsFullException e) {
+            System.out.printf(e.getMessage(), lodging);
+        } catch (StudentAlreadyExistsException e){
+            System.out.printf(e.getMessage(), name);
         }
     }
 
+    //exceptions added
     private static void executeStudents(Scanner in, HomeAwaySystem system) {
         String argument = in.nextLine().trim();
 
         try {
-            if (argument.equals("all")) {
-                Iterator<Students> studentIterator = system.getAllStudentsIterator();
 
-                if (!studentIterator.hasNext()) {
-                    System.out.println("No students yet!");
-                    return;
-                }
+            Iterator <Students> it = system.getStudents(argument);
 
-                while (studentIterator.hasNext()) {
-                    Students student = studentIterator.next();
-                    System.out.printf(STUDENTS_COMMAND,
-                            student.getName(),
-                            student.getType().toLowerCase(),
-                            student.getLodging().getServiceName()); // podemos fazer assim?
-                }
-
-            } else {
-                // The argument will be the country now
-                Iterator<Students> countryStudentIterator = system.getStudentsByCountryIterator(argument);
-
-                if (!countryStudentIterator.hasNext()) {
-                    System.out.printf(NO_STUDENTS_FROM, argument);
-                    return;
-                }
-
-                while (countryStudentIterator.hasNext()) {
-                    Students student = countryStudentIterator.next();
-                    System.out.printf(STUDENTS_COMMAND,
-                            student.getName(),
-                            student.getType().toLowerCase(),
-                            student.getLodging());
-                }
+            while (it.hasNext()) {
+                Students student = it.next();
+                System.out.printf(STUDENTS_COMMAND,
+                    student.getName(),
+                    student.getType().toLowerCase(),
+                    student.getPlaceHome());
             }
 
-        } catch (Exception e) {
-            System.out.println("Invalid arguments!");
+
+        } catch (NoStudentsException e) {
+            System.out.println(e.getMessage());
+        } catch  (NoStudentsFromCountryException e) {
+            System.out.printf(e.getMessage(), argument);
         }
     }
 
+    //exceptions added
     private static void executeLeave(Scanner in, HomeAwaySystem system) {
         String name = in.nextLine().trim();
         try {
-            if (!system.studentExists(name)) {
-                System.out.printf(STUDENT_NOT_EXISTS, name);
-                return;
-            }
             system.removeStudent(name);
             System.out.printf(STUDENT_LEFT, name);
 
-        } catch (Exception e) {
-            System.out.println("Invalid arguments!");
+        } catch (StudentDoesNotExistsException e) {
+            System.out.printf(e.getMessage(), name);
         }
     }
 
@@ -358,7 +285,6 @@ public class Main {
     private static void executeUsers(Scanner in, HomeAwaySystem system) {
         String order = in.next().trim();
         String serviceName = in.nextLine().trim();
-
         Iterator<Students> studentIterator = system.usersCommand(order,serviceName);
 
         while (studentIterator.hasNext()) {
@@ -377,10 +303,8 @@ public class Main {
                 System.out.printf(STUDENT_NOT_EXISTS, studentName);
                 return;
             }
-            String locationName = system.getStudentLocationInfo(studentName);
-            // Como é que devemos pegar a longitude e latitude, n se faz dois metodos separados ne?
-            // Podemos passar o objeto para fora?
-            System.out.printf(STUDENT_NOW_AT, studentName, locationName);
+            Services service = system.getStudentLocationInfo(studentName);
+            System.out.printf(WHERE_FORMAT, studentName, service.getServiceName(),service.getServiceType(),service.getLatitude(),service.getLongitude());
 
         } catch (Exception e) {
             System.out.println("Error locating student");
@@ -388,23 +312,64 @@ public class Main {
     }
 
     private static void executeVisited(Scanner in, HomeAwaySystem system) {
-        // Implementation for visited command
-        in.nextLine(); // Consume remaining input
+        String studentName = in.nextLine().trim();
+        try {
+            Iterator<Services> visitedIterator = system.getVisitedLocationsIterator(studentName);
+            if (!visitedIterator.hasNext()) System.out.printf("%s has not visited any locations!%n", studentName);
+            else {
+                while (visitedIterator.hasNext()) {
+                    Services service = visitedIterator.next();
+                    System.out.println(service.getServiceName());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void executeStar(Scanner in, HomeAwaySystem system) {
-        // Implementation for star command
-        in.nextLine(); // Consume remaining input
+        int rating = in.nextInt();
+        String service = in.nextLine().trim();
+        system.starCommand(rating, service);
+        System.out.println(EVALUATION_REGISTERED);
     }
 
     private static void executeRanking(Scanner in, HomeAwaySystem system) {
-        // Implementation for ranking command
-        in.nextLine(); // Consume remaining input
+        try {
+            Iterator<Services> rankingIterator = system.getServicesByRankingIterator();
+            if (!rankingIterator.hasNext()) {
+                System.out.println("No services in the system.");
+                return;
+            }
+
+            System.out.println("Services sorted in descending order");
+            while (rankingIterator.hasNext()) {
+                Services service = rankingIterator.next();
+                System.out.printf("%s: %d.%n", service.getServiceName(), service.getAverageStars());
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error executing ranking command");
+        }
     }
 
     private static void executeRanked(Scanner in, HomeAwaySystem system) {
-        // Implementation for ranked command
-        in.nextLine(); // Consume remaining input
+        try {
+            String type = in.next().trim();
+            int stars = in.nextInt();
+            String studentName = in.nextLine().trim();
+
+            Iterator<Services> rankedIterator = system.getRankedServicesIterator(stars, type, studentName);
+
+            System.out.printf("%s services closer with %d average%n", type, stars);
+            while (rankedIterator.hasNext()) {
+                Service service = rankedIterator.next();
+                System.out.println(service.getName());
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void executeTag(Scanner in, HomeAwaySystem system) {

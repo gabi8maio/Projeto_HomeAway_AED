@@ -1,6 +1,8 @@
 package homeaway;
 
-public interface Services extends Comparable<Services> {
+import java.io.Serializable;
+
+public interface Services extends Comparable<Services>, ServicesChange {
 
     String getServiceName();
     double getServicePrice();
@@ -8,4 +10,8 @@ public interface Services extends Comparable<Services> {
     long getLatitude();
     long getLongitude();
     double getValue();
+    int getLastUpdatedOrder();
+    int getAverageStars();
+    float getTotalStars();
+    int getRatingCount();
 }

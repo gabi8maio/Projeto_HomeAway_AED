@@ -17,6 +17,7 @@ public class AreaClass implements Serializable {
     private SortedDoublyLinkedList<Services> servicesByRank;
     private SortedList<Students> allStudents;
     private DoublyLinkedList<Students> studentsByCountry;
+    int updateCounter;
     //private ListInArray</*ListDoubluy...*/> leisureServices; // Tirar estas tres var, e meter apenas uma
     //private ListInArray<Services> eatingServices;
     //private ListInArray<Services> lodgingServices;
@@ -245,13 +246,44 @@ public class AreaClass implements Serializable {
         return false;
     }
 
-    public String getStudentLocationInfo(String studentName){
+    public Services getStudentLocationInfo(String studentName){
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if((s.getName().equalsIgnoreCase(studentName))) return s.getLodging().getServiceName();
+            if((s.getName().equalsIgnoreCase(studentName))) return s.getPlaceNow();
         }
         return null;
+    }
+
+    public Iterator<Services> getVisitedLocationsIterator(String studentName){
+        Students student = findStudentElem(studentName);
+        if(student instanceof Outgoing outgoing) return outgoing.getAllVisitedServices();
+        if(student instanceof Bookish bookish) return bookish.getAllVisitedServices();
+        return null;
+    }
+
+    public void starCommand(int rating, String serviceName){
+        Services service = findServicesElem(serviceName);
+        assert service != null;
+        int oldUpdateCounter = service.getLastUpdatedOrder();
+        int oldStars = service.getAverageStars();
+        float newTotal = service.getTotalStars();
+        int newCount = service.getRatingCount();
+        int newStars = Math.round((newTotal + rating) / (newCount + 1));
+        if(oldStars != newStars){
+            updateCounter++;
+            service.updateCounterRating();
+            service.addRating(rating,updateCounter);
+        }else
+            service.addRating(rating,oldUpdateCounter);
+    }
+
+    public Iterator<Services> getServicesByRankingIterator(){
+        return servicesByRank.iterator();
+    }
+
+    public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
+
     }
 
     public void changedLodging() {

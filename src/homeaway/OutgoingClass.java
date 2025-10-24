@@ -1,16 +1,18 @@
 package homeaway;
 
 
+import dataStructures.DoublyLinkedList;
+
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
+import dataStructures.*;
 
 public class OutgoingClass extends StudentsClassAbstract implements Outgoing, Students, Serializable {
 
-    private LinkedList<Services> allVisitedServices;
+    private DoublyLinkedList<Services> allVisitedServices;
 
     OutgoingClass(String type, String name, String country, Services lodging) {
         super(type, name, country, lodging);
+        allVisitedServices = new DoublyLinkedList<Services>();
     }
 
     public void addVisitedService(Services service){

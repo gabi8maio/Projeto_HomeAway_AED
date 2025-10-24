@@ -9,15 +9,19 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     private final double price;
     private final double value;
     private final String serviceName;
+    private int lastUpdateCounter;
+    private int averageStars;
+    private int totalStars;
+    private int rating;
 
-
-    public ServicesClassAbstract(long latitude, long longitude, Double price, double value, String serviceName){
+    public ServicesClassAbstract(long latitude, long longitude, Double price, double value, String serviceName) {
         this.serviceName = serviceName;
         this.value = value;
         this.price = price;
         this.longitude = longitude;
         this.latitude = latitude;
     }
+
     @Override
     public int compareTo(Services o) {
         return 0;
@@ -44,8 +48,34 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     }
 
     @Override
-    public double getValue(){
+    public double getValue() {
         return value;
     }
 
+    public int getLastUpdatedOrder() {
+        return lastUpdateCounter;
+    }
+
+    public int getAverageStars() {
+        return averageStars;
+    }
+
+    public float getTotalStars() {
+        return totalStars;
+    }
+
+    public int getRatingCount() {
+        return rating;
+    }
+
+    public void updateCounterRating() {
+        lastUpdateCounter++;
+    }
+
+    public void addRating(int stars, int counter) {
+        totalStars += stars;
+        rating++;
+        lastUpdateCounter = counter;
+    }
 }
+

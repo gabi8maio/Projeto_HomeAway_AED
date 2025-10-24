@@ -1,6 +1,6 @@
 package homeaway;
 
-import java.util.Iterator;
+import dataStructures.*;
 
 public interface Bookish {
     void addVisitedService(Services services);

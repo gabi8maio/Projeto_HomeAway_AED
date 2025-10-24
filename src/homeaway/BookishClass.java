@@ -1,16 +1,15 @@
 package homeaway;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedList;
+import dataStructures.*;
 
 public class BookishClass extends StudentsClassAbstract implements Bookish, Students, Serializable {
 
-    private LinkedList<Services> visitedLeisureServices;
+    private DoublyLinkedList<Services> visitedLeisureServices;
 
     BookishClass (String type, String name, String country, Services lodging) {
         super(type, name, country, lodging);
-        visitedLeisureServices = new LinkedList<>();
+        visitedLeisureServices = new DoublyLinkedList<>();
     }
 
     public void addVisitedService(Services services){

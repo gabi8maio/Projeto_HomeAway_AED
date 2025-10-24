@@ -2,8 +2,8 @@ package homeaway;
 
 import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
-import dataStructures.exceptions.EmptyStackException;
 import dataStructures.exceptions.NoSuchElementException;
+import homeaway.Exeptions.*;
 
 import java.io.*;
 
@@ -17,8 +17,19 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         savedAreas = new DoublyLinkedList<>();
     }
 
+    public Services getWhereService(){
+
+    }
+
     @Override
-    public void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
+    public void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude)
+            throws BoundsAlreadyExistException, InvalidBoundsException {
+        if (hasArea(name)) {
+            throw new BoundsAlreadyExistException();
+        }
+        if (topLatitude <= bottomLatitude || rightLongitude <= leftLongitude) {
+            throw new InvalidBoundsException();
+        }
         AreaClass area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
         this.tempArea = area;
         loadedArea = area;
@@ -35,20 +46,17 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     @Override
-    public String saveArea(){
-        if(loadedArea == null) throw new NoSuchElementException();
+    public String saveArea() throws SystemBoundsNotDefinedException{
+        if(loadedArea == null)
+            throw new SystemBoundsNotDefinedException();
         String tempAreaName = loadedArea.getName();
         store(tempAreaName, loadedArea);
         savedAreas.addFirst(loadedArea);
         return tempAreaName;
     }
 
-    @Override
-    public String loadArea(String name){
-        return load(name);
-    }
 
-    public String getStudentLocationInfo(String studentName){
+    public Services getStudentLocationInfo(String studentName){
         return loadedArea.getStudentLocationInfo(studentName);
     }
 
@@ -87,10 +95,50 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.isEatingServiceFull(locationName);
     }
 
+
+
     @Override
-    public void addService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName) {
+    public void addService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName)
+            throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException,
+            InvalidTicketPriceException, InvalidDiscountException, InvalidCapacityException, ServiceAlreadyExistsException{
+        TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType); // Podemos fazer isto?
+        if (serviceTypeEnum == null) {
+            throw new InvalidServiceTypeException();
+        }
+        if (!loadedArea.isInBounds(latitude, longitude)) { // Meti ao calhas
+            throw new InvalidLocationException();
+        }
+
+        if (price <= 0) {
+            switch (serviceTypeEnum) {
+                case EATING:
+                    throw new InvalidPriceMenuException();
+                case LODGING:
+                    throw new InvalidRoomPriceException();
+                case LEISURE:
+                    throw new InvalidTicketPriceException();
+            }
+        }
+
+        // Validar  value conforme o tipo de serviço
+        if (serviceTypeEnum.equals(TypesOfService.LEISURE)) {
+            if (value < 0 || value > 100) {
+                throw new InvalidDiscountException();
+            }
+        } else { // eating ou lodging
+            if (value <= 0) {
+                throw new InvalidCapacityException();
+            }
+        }
+
+        // Validar se nome já existe
+        if (serviceNameExists(serviceName, serviceTypeEnum)) {
+            throw new ServiceAlreadyExistsException();
+        }
+
         loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
     }
+
 
     private static void store(String fileName, AreaClass area){
         try{
@@ -103,7 +151,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             System.out.println("Erro de escrita");
         }
     }
-    private String load(String name){
+    public String loadArea (String name) throws BoundsDoesNotExistException{
          loadedArea = null;
         try{
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(name));
@@ -112,8 +160,12 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             return loadedArea.getName();
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace(); // See what's actually wrong
-            throw new RuntimeException("Failed to load area from file: " + name, e);
+            throw new BoundsDoesNotExistException();
         }
+    }
+
+    public Iterator<Services> getVisitedLocationsIterator(String studentName){
+        return loadedArea.getVisitedLocationsIterator(studentName);
     }
 
     public boolean lodgingExists (String name){
@@ -124,7 +176,14 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.isItFull(name);
     }
 
-    public void removeStudent(String studentName){
+    public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
+        return loadedArea.getRankedServicesIterator(stars,type,studentName);
+    }
+
+    public void removeStudent(String studentName) throws StudentDoesNotExistsException{
+        if (!studentExists(studentName)) {
+            throw new StudentDoesNotExistsException();
+        }
         loadedArea.removeStudent(studentName);
     }
 
@@ -164,16 +223,53 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.studentExists(name);
     }
 
+    public void starCommand(int rating,String serviceName){
+        loadedArea.starCommand(rating,serviceName);
+    }
+    public Iterator<Services> getServicesByRankingIterator(){
+        return loadedArea.getServicesByRankingIterator();
+    }
+
     public Iterator<Students> getAllStudentsIterator(){
         return loadedArea.getAllStudentsIterator();
     }
 
     @Override
-    public Iterator<Students> getStudentsByCountryIterator(String country) {
+    public Iterator<Students> getStudentsByCountryIterator() {
         return null;
     }
 
-    public void addStudent (String studentType, String name, String country, String lodging){
+    public void addStudent (String studentType, String name, String country, String lodging)
+            throws InvalidStudentTypeException, LodgingNotExistsException, LodgingIsFullException, StudentAlreadyExistsException {
+        if (StudentTypes.fromString(studentType) == null) {
+            throw new InvalidStudentTypeException();
+        } if (!lodgingExists(lodging)) {
+            throw new LodgingNotExistsException();
+        } if (lodgingIsFull(lodging)){
+            throw new LodgingIsFullException();
+        } if (studentExists(name)){
+            throw new StudentAlreadyExistsException();
+        }
         loadedArea.addStudent(studentType, name, country, lodging);
+    }
+
+    @Override
+    public Iterator<Students> getStudents(String argument) throws NoStudentsException, NoStudentsFromCountryException {
+        if (argument.equals("all")) {
+             Iterator <Students> it = getAllStudentsIterator();
+             if (!it.hasNext())
+                 throw new NoStudentsException();
+             else
+                 return it;
+
+        } else {
+            // The argument will be the country now
+            Iterator<Students> countryStudentIterator = getStudentsByCountryIterator(argument);
+
+            if (!countryStudentIterator.hasNext()) {
+                throw new NoStudentsFromCountryException();
+            }else
+                return countryStudentIterator;
+        }
     }
 }
