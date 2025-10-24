@@ -328,10 +328,17 @@ public class Main {
     }
 
     private static void executeStar(Scanner in, HomeAwaySystem system) {
-        int rating = in.nextInt();
-        String service = in.nextLine().trim();
-        system.starCommand(rating, service);
-        System.out.println(EVALUATION_REGISTERED);
+        try {
+            int stars = in.nextInt();
+            String serviceName = in.nextLine().trim();
+            String description = in.nextLine().trim();
+
+            system.starCommand(stars, serviceName, description);
+            System.out.println(EVALUATION_REGISTERED);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void executeRanking(Scanner in, HomeAwaySystem system) {
@@ -363,8 +370,8 @@ public class Main {
 
             System.out.printf("%s services closer with %d average%n", type, stars);
             while (rankedIterator.hasNext()) {
-                Service service = rankedIterator.next();
-                System.out.println(service.getName());
+                Services service = rankedIterator.next();
+                System.out.println(service.getServiceName());
             }
 
         } catch (Exception e) {
@@ -373,8 +380,23 @@ public class Main {
     }
 
     private static void executeTag(Scanner in, HomeAwaySystem system) {
-        // Implementation for tag command
-        in.nextLine(); // Consume remaining input
+        String tag = in.nextLine().trim();
+        try {
+            Iterator<Services> tagIterator = system.getServicesByTagIterator(tag);
+
+            if (!tagIterator.hasNext()) {
+                System.out.println("There are no services with this tag!");
+                return;
+            }
+
+            while (tagIterator.hasNext()) {
+                Service service = tagIterator.next();
+                System.out.printf("%s %s%n", service.getType(), service.getName());
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error executing tag command");
+        }
     }
 
     private static void executeFind(Scanner in, HomeAwaySystem system) {

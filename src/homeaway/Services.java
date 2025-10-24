@@ -1,5 +1,7 @@
 package homeaway;
 
+import dataStructures.Iterator;
+
 import java.io.Serializable;
 
 public interface Services extends Comparable<Services>, ServicesChange {
@@ -14,4 +16,5 @@ public interface Services extends Comparable<Services>, ServicesChange {
     int getAverageStars();
     float getTotalStars();
     int getRatingCount();
+    Iterator<String> getTags();
 }

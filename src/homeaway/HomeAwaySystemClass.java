@@ -223,8 +223,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.studentExists(name);
     }
 
-    public void starCommand(int rating,String serviceName){
-        loadedArea.starCommand(rating,serviceName);
+    public void starCommand(int rating,String serviceName,String tag){
+        loadedArea.starCommand(rating,serviceName,tag);
     }
     public Iterator<Services> getServicesByRankingIterator(){
         return loadedArea.getServicesByRankingIterator();

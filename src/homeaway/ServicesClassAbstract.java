@@ -1,5 +1,8 @@
 package homeaway;
 
+import dataStructures.DoublyLinkedList;
+import dataStructures.Iterator;
+
 import java.io.Serializable;
 
 public abstract class ServicesClassAbstract implements Services, ServicesChange, Serializable {
@@ -14,12 +17,15 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     private int totalStars;
     private int rating;
 
+    private DoublyLinkedList<String> tags;
+
     public ServicesClassAbstract(long latitude, long longitude, Double price, double value, String serviceName) {
         this.serviceName = serviceName;
         this.value = value;
         this.price = price;
         this.longitude = longitude;
         this.latitude = latitude;
+        tags = new DoublyLinkedList<>();
     }
 
     @Override
@@ -66,6 +72,14 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
 
     public int getRatingCount() {
         return rating;
+    }
+
+    public Iterator<String> getTags(){
+        return tags.iterator();
+    }
+
+    public void addTag(String tag){
+        tags.addLast(tag);
     }
 
     public void updateCounterRating() {

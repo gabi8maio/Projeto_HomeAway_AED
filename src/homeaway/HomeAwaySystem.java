@@ -19,7 +19,7 @@ public interface HomeAwaySystem {
     boolean lodgingIsFull(String name);
     Services getStudentLocationInfo(String studentName);
     Iterator<Services> getVisitedLocationsIterator(String studentName);
-    void starCommand(int rating,String serviceName);
+    void starCommand(int rating,String serviceName, String tag);
     Iterator<Services> getServicesByRankingIterator();
     Iterator<Services> getRankedServicesIterator(int stars, String type, String studentName);
     boolean studentExists(String name);

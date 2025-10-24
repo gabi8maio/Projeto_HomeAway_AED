@@ -42,8 +42,8 @@ public class AreaClass implements Serializable {
         //leisureServices = new ListInArray<>(100);
         //eatingServices = new ListInArray<>(100);
         studentsByCountry = new DoublyLinkedList<>();
-        allStudents = new SortedDoublyLinkedList<>((Comparator<Students>) new studentComparatorByName()); // Need to change
-        servicesByRank = new SortedDoublyLinkedList<>(null); // Need to change
+        allStudents = new SortedDoublyLinkedList<>(new studentComparatorByName()); // Need to change
+        servicesByRank = new SortedDoublyLinkedList<>(new ServiceComparatorByStars()); // Need to change
 
     }
 
@@ -262,9 +262,10 @@ public class AreaClass implements Serializable {
         return null;
     }
 
-    public void starCommand(int rating, String serviceName){
+    public void starCommand(int rating, String serviceName,String tag){
         Services service = findServicesElem(serviceName);
         assert service != null;
+        service.addTag(tag); // ADd a  tag
         int oldUpdateCounter = service.getLastUpdatedOrder();
         int oldStars = service.getAverageStars();
         float newTotal = service.getTotalStars();
@@ -284,6 +285,28 @@ public class AreaClass implements Serializable {
 
     public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
 
+        // 5. Ordenar por distância Manhattan e depois por lastUpdatedOrder
+        Students student = getStudent(studentName);
+        Services studentLocation = student.getPlaceNow();
+
+        //falta fazer a logica
+
+        return servicesByRank.iterator();
+    }
+
+    private int calculateManhattanDistance(Service s1, Service s2) {
+        return Math.abs(s1.getLatitude() - s2.getLatitude()) +
+                Math.abs(s1.getLongitude() - s2.getLongitude());
+    }
+
+    private List<Services> getServicesByTypeAndStars(String type, int stars) {
+        List<Service> result = new ArrayList<>();
+        for (Service service : services.values()) {
+            if (service.getType().equals(type) && service.getAverageStars() == stars) {
+                result.add(service);
+            }
+        }
+        return result;
     }
 
     public void changedLodging() {
