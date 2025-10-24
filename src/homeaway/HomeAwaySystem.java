@@ -21,10 +21,12 @@ public interface HomeAwaySystem {
     Iterator<Services> getVisitedLocationsIterator(String studentName);
     void starCommand(int rating,String serviceName, String tag);
     Iterator<Services> getServicesByRankingIterator();
+    Iterator<Services> getServicesByTagIterator(String tag);
+    Services findMostRelevantService(String studentName, String serviceType);
     Iterator<Services> getRankedServicesIterator(int stars, String type, String studentName);
     boolean studentExists(String name);
     void moveStudentToLocation(String studentName, String locationName);
-    void goStudentToLocation(String studentName, String locationName);
+    void goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException;
     Iterator<Students> usersCommand(String order, String serviceName);
     Iterator<Students> getAllStudentsIterator();
     Iterator<Students> getStudentsByCountryIterator(String country);

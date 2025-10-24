@@ -80,7 +80,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
     // Sem parametros
     private boolean serviceNameExists(String serviceName) {
-        return loadedArea.serviceExists(serviceName);
+        return false;
     }
 
     private boolean isEatingOrLeisureService(String serviceName){
@@ -168,6 +168,10 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.getVisitedLocationsIterator(studentName);
     }
 
+    public Iterator<Services> getServicesByTagIterator(String tag){
+        return loadedArea.getServicesByTagIterator(tag);
+    }
+
     public boolean lodgingExists (String name){
         return loadedArea.lodgingExists(name);
     }
@@ -179,6 +183,9 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
         return loadedArea.getRankedServicesIterator(stars,type,studentName);
     }
+    public  Services findMostRelevantService(String studentName, String serviceType){
+        return loadedArea.findMostRelevantService(studentName, serviceType);
+    }
 
     public void removeStudent(String studentName) throws StudentDoesNotExistsException{
         if (!studentExists(studentName)) {
@@ -187,24 +194,43 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         loadedArea.removeStudent(studentName);
     }
 
-    public void goStudentToLocation(String studentName, String locationName){
-        if (!serviceNameExists(locationName)) throw new IllegalArgumentException(String.format("Unknown %s!", locationName));
-        if (!studentExists(studentName)) throw new IllegalArgumentException(String.format("%s does not exist!", studentName));
-        if (!isEatingOrLeisureService(locationName)) throw new IllegalArgumentException(String.format("%s is not a valid service!", locationName));
-        if (isStudentAtLocation(studentName, locationName)) throw new IllegalArgumentException("Already there!");
-        if (isEatingServiceFull(locationName)) throw new IllegalArgumentException(String.format("eating %s is full!", locationName));
+    public void goStudentToLocation(String studentName, String locationName)
+            throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
+        if (!serviceNameExists(locationName))
+            throw new UnknownLocationException();
+        if (!studentExists(studentName))
+            throw new StudentDoesNotExistsException();
+        if (!isEatingOrLeisureService(locationName))
+            throw new InvalidServiceException();
+        if (isStudentAtLocation(studentName, locationName))
+            throw new StudentAlreadyThereException();
+        if (isEatingServiceFull(locationName))
+            throw new EatingIsFullException();
 
         loadedArea.goStudentToLocation(studentName,locationName);
     }
 
     public void moveStudentToLocation(String studentName, String locationName){
-        if (!serviceNameExists(locationName)) throw new IllegalArgumentException(String.format("Unknown %s!", locationName));
-        if (!studentExists(studentName)) throw new IllegalArgumentException(String.format("%s does not exist!", studentName));
-        if (!isEatingOrLeisureService(locationName)) throw new IllegalArgumentException(String.format("%s is not a valid service!", locationName));
-        if (isStudentAtLocation(studentName, locationName)) throw new IllegalArgumentException("Already there!");
-        if (isEatingServiceFull(locationName)) throw new IllegalArgumentException(String.format("eating %s is full!", locationName));
+        if (!serviceNameExists(locationName))
+            throw new LodgingNotExistsException();
+        if (!studentExists(studentName))
+            throw new StudentDoesNotExistsException();
+        if (isStudentHome(studentName, locationName))
+            throw new StudentHomeException();
+        if (lodgingIsFull(locationName))
+            throw new LodgingIsFullException();
+        if (!isAcceptable(studentName, locationName))
+            throw new MoveNotAcceptableException();
 
         loadedArea.moveStudentToLocation(studentName,locationName);
+    }
+
+    private boolean isAcceptable(String studentName, String locationName) {
+        return loadedArea.isAcceptableMove(studentName, locationName);
+    }
+
+    private boolean isStudentHome(String studentName, String locationName) {
+        return loadedArea.isStudentHome(studentName, locationName);
     }
 
     private boolean isCorrectOrder(String order){
@@ -234,7 +260,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.getAllStudentsIterator();
     }
 
-    @Override
+
     public Iterator<Students> getStudentsByCountryIterator() {
         return null;
     }

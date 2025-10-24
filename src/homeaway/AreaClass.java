@@ -4,6 +4,8 @@ import dataStructures.exceptions.InvalidPositionException;
 
 import java.io.InvalidObjectException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class AreaClass implements Serializable {
@@ -62,6 +64,8 @@ public class AreaClass implements Serializable {
         if(student == null) throw new InvalidPositionException(); // Isto em principio n vai acontecer
         allStudents.remove(student);
     }
+
+    //TODO: utilizar iterador filtrado
     private Students findStudentElem(String name){
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
@@ -283,30 +287,151 @@ public class AreaClass implements Serializable {
         return servicesByRank.iterator();
     }
 
+    public Services findMostRelevantService(String studentName, String serviceType){
+        Students student = getStudent(studentName);
+        Services relevantService = null;
+
+        if (student.getType().equals(StudentTypes.THRIFTY.toString())) {
+            // Para thrifty: serviço mais barato
+            relevantService = findCheapestService(serviceType);
+        } else {
+            // Para bookish e outgoing: serviço com melhor avaliação
+            relevantService = findBestRatedService(serviceType);
+        }
+
+        return relevantService;
+    }
+
+    private Services findCheapestService(String serviceType) {
+        Services cheapest = null;
+        Iterator<Services> it = getServicesIterator();
+        while (it.hasNext()) {
+            Services service = it.next();
+                if (service.getServiceType().equals(serviceType)) {
+                    if (cheapest == null || service.getServicePrice() < cheapest.getServicePrice()) {
+                        cheapest = service;
+                    } else if (service.getServicePrice() == cheapest.getServicePrice()) {
+                        // Em caso de empate: primeiro serviço inserido
+                        if (service.getLastUpdatedOrder() < cheapest.getLastUpdatedOrder()) {
+                            cheapest = service;
+                        }
+                    }
+                }
+        }
+        return cheapest;
+    }
+
+    private Services findBestRatedService(String serviceType) {
+        Services bestRated = null;
+        Iterator<Services> it = getServicesIterator();
+        while (it.hasNext()) {
+            Services service = it.next();
+            if (service.getServiceType().equals(serviceType)) {
+                if (bestRated == null || service.getAverageStars() > bestRated.getAverageStars()) {
+                    bestRated = service;
+                } else if (service.getAverageStars() == bestRated.getAverageStars()) {
+                    // Em caso de empate: mais tempo com esta média (lastUpdatedOrder mais antigo)
+                    if (service.getLastUpdatedOrder() < bestRated.getLastUpdatedOrder()) {
+                        bestRated = service;
+                    }
+                }
+            }
+        }
+        return bestRated;
+    }
+
+    private boolean hasServicesOfType(String serviceType) {
+        Iterator<Services> it = getServicesIterator();
+        while (it.hasNext()) {
+            Services service = it.next();
+            if (service.getServiceType().equals(serviceType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Iterator<Services> getServicesByTagIterator(String tag){
+        Iterator<Services> it = services.iterator();
+        DoublyLinkedList<Services> iteratorWithServices = new DoublyLinkedList<>();
+        while (it.hasNext()) {
+            Services s = it.next();
+            Iterator<String> it2 = s.getTags();
+            while (it.hasNext()){
+                String tagService = it2.next();
+                if(tagService.equals(tag)) iteratorWithServices.addLast(s);
+            }
+        }
+        return null;
+    }
+
     public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
 
         // 5. Ordenar por distância Manhattan e depois por lastUpdatedOrder
-        Students student = getStudent(studentName);
+        Students student = findStudentElem(studentName);
+        assert student != null;
         Services studentLocation = student.getPlaceNow();
 
-        //falta fazer a logica
+        // Converter SortedDoublyLinkedList para array temporário
+        Iterator<Services> iterator = servicesByRank.iterator();
+        ListInArray<Services> tempList = new ListInArray<>(100);
 
-        return servicesByRank.iterator();
-    }
-
-    private int calculateManhattanDistance(Service s1, Service s2) {
-        return Math.abs(s1.getLatitude() - s2.getLatitude()) +
-                Math.abs(s1.getLongitude() - s2.getLongitude());
-    }
-
-    private List<Services> getServicesByTypeAndStars(String type, int stars) {
-        List<Service> result = new ArrayList<>();
-        for (Service service : services.values()) {
-            if (service.getType().equals(type) && service.getAverageStars() == stars) {
-                result.add(service);
+        while (iterator.hasNext()) {
+            Services service = iterator.next();
+            if (service.getServiceType().equals(type) && service.getAverageStars() == stars) {
+                tempList.addLast(service);
             }
         }
-        return result;
+
+        // Calcular distância Manhattan para cada serviço
+        // Bubble sort para ordenar por distância
+        for (int i = 0; i < tempList.size() - 1; i++) {
+            for (int j = 0; j < tempList.size() - i - 1; j++) {
+                Services s1 = tempList.get(j);
+                Services s2 = tempList.get(j + 1);
+
+                long dist1 = calculateManhattanDistance(studentLocation, s1);
+                long dist2 = calculateManhattanDistance(studentLocation, s2);
+
+                if (dist1 > dist2) {
+                    // Trocar
+                    tempList.add(j, s2);
+                    tempList.add(j + 1, s1);
+                } else if (dist1 == dist2) {
+                    // Distância igual, ordenar por lastUpdatedOrder (mais recente primeiro)
+                    if (s1.getLastUpdatedOrder() < s2.getLastUpdatedOrder()) {
+                        tempList.add(j, s2);
+                        tempList.add(j + 1, s1);
+                    }
+                }
+            }
+        }
+
+        // Ordenar por distância (mais perto primeiro) e depois por lastUpdatedOrder (mais recente primeiro)
+        for (int i = 0; i < tempList.size() - 1; i++) {
+            for (int j = 0; j < tempList.size() - i - 1; j++) {
+                Services s1 = tempList.get(j);
+                Services s2 = tempList.get(j + 1);
+
+                long dist1 = calculateManhattanDistance(studentLocation, s1);
+                long dist2 = calculateManhattanDistance(studentLocation, s2);
+
+                if (dist1 > dist2 ||
+                        (dist1 == dist2 && s1.getLastUpdatedOrder() < s2.getLastUpdatedOrder())) {
+                    // Trocar diretamente usando set
+                    tempList.remove(j);
+                    tempList.add(j, s2);
+                    tempList.remove(j + 1);
+                    tempList.add(j + 1, s1);
+                }
+            }
+        }
+        return tempList.iterator();
+    }
+
+    private long calculateManhattanDistance(Services s1, Services s2) {
+        return Math.abs(s1.getLatitude() - s2.getLatitude()) +
+                Math.abs(s1.getLongitude() - s2.getLongitude());
     }
 
     public void changedLodging() {
@@ -352,4 +477,24 @@ public class AreaClass implements Serializable {
         return latitude >= this.bottomLatitude && latitude <= this.topLatitude &&
                 longitude >= this.rightLongitude && longitude <= this.leftLongitude;
     }
+
+    public boolean isStudentHome(String studentName, String locationName) {
+        Iterator <Students> it = getAllStudentsIterator();
+        while (it.hasNext() ) {
+            Students student = it.next();
+            if (student.getName().equals(studentName) && student.getPlaceHome().equals(locationName))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isAcceptableMove(String studentName, String locationName) {
+        Students student = findStudentElem(studentName);
+        if (student.getPlaceHome().getServicePrice() >= findServicesElem(locationName).getServicePrice())
+            return false;
+
+        return true;
+    }
+
+
 }

@@ -256,6 +256,7 @@ public class Main {
         }
     }
 
+    //exceptions added
     private static void executeGo(Scanner in, HomeAwaySystem system) {
         String studentName = in.nextLine().trim();
         String locationName = in.nextLine().trim();
@@ -264,8 +265,12 @@ public class Main {
             // go Student
             system.goStudentToLocation(studentName, locationName);
             System.out.printf(STUDENT_NOW_AT,studentName,locationName);
-        } catch (Exception e) {
+        } catch (StudentAlreadyThereException e) {
             System.out.println(e.getMessage());
+        } catch (UnknownLocationException | InvalidServiceException | EatingIsFullException e){
+            System.out.printf(e.getMessage(), locationName);
+        } catch (StudentDoesNotExistsException e){
+            System.out.printf(e.getMessage(), studentName);
         }
     }
 
@@ -315,7 +320,7 @@ public class Main {
         String studentName = in.nextLine().trim();
         try {
             Iterator<Services> visitedIterator = system.getVisitedLocationsIterator(studentName);
-            if (!visitedIterator.hasNext()) System.out.printf("%s has not visited any locations!%n", studentName);
+            if (!visitedIterator.hasNext()) System.out.printf(NO_VISITED_LOCATIONS, studentName);
             else {
                 while (visitedIterator.hasNext()) {
                     Services service = visitedIterator.next();
@@ -345,11 +350,11 @@ public class Main {
         try {
             Iterator<Services> rankingIterator = system.getServicesByRankingIterator();
             if (!rankingIterator.hasNext()) {
-                System.out.println("No services in the system.");
+                System.out.println(NO_SERVICES_IN_SYSTEM);
                 return;
             }
 
-            System.out.println("Services sorted in descending order");
+            System.out.println(SERVICES_SORTED_HEADER);
             while (rankingIterator.hasNext()) {
                 Services service = rankingIterator.next();
                 System.out.printf("%s: %d.%n", service.getServiceName(), service.getAverageStars());
@@ -390,8 +395,8 @@ public class Main {
             }
 
             while (tagIterator.hasNext()) {
-                Service service = tagIterator.next();
-                System.out.printf("%s %s%n", service.getType(), service.getName());
+                Services service = tagIterator.next();
+                System.out.printf("%s %s%n", service.getServiceType(), service.getServiceName());
             }
 
         } catch (Exception e) {
@@ -400,8 +405,15 @@ public class Main {
     }
 
     private static void executeFind(Scanner in, HomeAwaySystem system) {
-        // Implementation for find command
-        in.nextLine(); // Consume remaining input
+        try {
+            String studentName = in.nextLine().trim();
+            String serviceType = in.nextLine().trim();
+
+            Services service = system.findMostRelevantService(studentName, serviceType);
+            System.out.println(service);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void executeExit(HomeAwaySystem system) {
