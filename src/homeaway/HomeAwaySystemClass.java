@@ -135,6 +135,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         if (isStudentAtLocation(studentName, locationName)) throw new IllegalArgumentException("Already there!");
         if (isEatingServiceFull(locationName)) throw new IllegalArgumentException(String.format("eating %s is full!", locationName));
 
+        loadedArea.moveStudentToLocation(studentName,locationName);
     }
 
     public boolean studentExists (String name){

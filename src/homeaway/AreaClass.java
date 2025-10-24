@@ -69,6 +69,33 @@ public class AreaClass implements Serializable {
         }
        return null;
     }
+    private Services findServicesElem(String name){
+        Iterator<Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services s = it.next();
+            if (s.getServiceName().equals(name)) return s;
+        }
+        return null;
+    }
+
+    public void moveStudentToLocation(String studentName, String serviceName){
+        Students student = findStudentElem(studentName);
+        Services service = findServicesElem(serviceName);
+
+        if (student instanceof Thrifty thrifty && service instanceof Eating) {
+            if (thrifty.isMoreExpensiveThanCheapest(service)) {
+                //result += " " + studentName + " is distracted!";
+            }
+        }
+        if (student instanceof Bookish bookish && service instanceof Leisure) {
+            bookish.addVisitedService(service);
+        } else if (student instanceof Outgoing outgoing) {
+            outgoing.addVisitedService(service);
+        }
+
+        assert student != null; // Deixamos??
+        student.setPlaceGo(service);
+    }
 
     public boolean studentExists(String name) {
         Iterator<Students> it = allStudents.iterator();
@@ -77,6 +104,15 @@ public class AreaClass implements Serializable {
             if (s.getName().equalsIgnoreCase(name)) return true;
         }
         return false;
+    }
+
+    public Students getStudent(String name) {
+        Iterator<Students> it = allStudents.iterator();
+        while (it.hasNext()) {
+            Students s = it.next();
+            if (s.getName().equalsIgnoreCase(name)) return s;
+        }
+        return null;
     }
 
     public Iterator<Students> getAllStudentsIterator(){
@@ -150,7 +186,7 @@ public class AreaClass implements Serializable {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if((s.getName().equalsIgnoreCase(studentName))&&s.getPlaceInTheMoment().equalsIgnoreCase(locationName)) return true;
+            if((s.getName().equalsIgnoreCase(studentName))&&s.getPlaceInTheMoment().getServiceName().equalsIgnoreCase(locationName)) return true;
         }
         return false;
     }
@@ -204,7 +240,7 @@ public class AreaClass implements Serializable {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if((s.getName().equalsIgnoreCase(studentName))) return s.getLodging();
+            if((s.getName().equalsIgnoreCase(studentName))) return s.getLodging().getServiceName();
         }
         return null;
     }
@@ -238,11 +274,12 @@ public class AreaClass implements Serializable {
 
     public void addStudent(String studentType, String name, String country, String lodging) {
         Students newStudent = null;
+        Services service = findServicesElem(lodging);
         StudentTypes type = StudentTypes.fromString(studentType);
         switch (type) {
-            case OUTGOING -> newStudent = new OutgoingClass (studentType, name, country, lodging);
-            case BOOKISH -> newStudent = new BookishClass(studentType, name, country, lodging);
-            case THRIFTY -> newStudent = new ThriftyClass(studentType, name, country, lodging);
+            case OUTGOING -> newStudent = new OutgoingClass (studentType, name, country, service);
+            case BOOKISH -> newStudent = new BookishClass(studentType, name, country, service);
+            case THRIFTY -> newStudent = new ThriftyClass(studentType, name, country, service);
         }
         allStudents.add(newStudent);
     }

@@ -1,6 +1,6 @@
 package homeaway;
 
 public interface StudentsChange {
-    void setPlaceInTheMoment(String place);
-
+    String setPlaceInTheMoment(Services place);
+    void setPlaceGo(Services newPlace);
 }

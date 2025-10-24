@@ -335,8 +335,8 @@ public class Main {
 
         try {
             // move Student
-            String result = system.moveStudentToLocation(studentName, locationName);
-            System.out.println(result);
+            system.moveStudentToLocation(studentName, locationName);
+            System.out.println(locationName);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

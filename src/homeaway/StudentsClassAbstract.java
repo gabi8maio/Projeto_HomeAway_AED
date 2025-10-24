@@ -7,11 +7,11 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
     private final String name;
     private final String type;
     private final String country;
-    private final String lodging;
-    private String placeNow;
+    private final Services lodging;
+    private Services placeNow;
 
 
-    public StudentsClassAbstract(String type, String name, String country, String lodging){
+    public StudentsClassAbstract(String type, String name, String country, Services lodging){
         this.type = type;
         this.name = name;
         this.country = country;
@@ -36,15 +36,25 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
         return country;
     }
 
-    public  String getPlaceInTheMoment() {
+    public  Services getPlaceInTheMoment() {
         return placeNow;
     }
 
-    public void setPlaceInTheMoment(String newPlace) {
+    public String setPlaceInTheMoment(Services newPlace) {
+        if(newPlace.equals(lodging)) {
+            placeNow = newPlace;
+            return "home"; // Tem se de mudar
+        }else {
+            placeNow = newPlace;
+            return newPlace.getServiceName();
+        }
+    }
+
+    public void setPlaceGo(Services newPlace) {
         placeNow = newPlace;
     }
 
-    public String getLodging() {
+    public Services getLodging() {
         return lodging;
     }
 
