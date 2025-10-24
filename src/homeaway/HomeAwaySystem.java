@@ -18,6 +18,7 @@ public interface HomeAwaySystem {
     String getStudentLocationInfo(String studentName);
     boolean studentExists(String name);
     void moveStudentToLocation(String studentName, String locationName);
+    void goStudentToLocation(String studentName, String locationName);
     Iterator<Students> getAllStudentsIterator();
     Iterator<Students> getStudentsByCountryIterator(String country);
     void addStudent(String studentType, String name, String country, String lodging);

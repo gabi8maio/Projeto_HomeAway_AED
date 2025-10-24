@@ -128,6 +128,16 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         loadedArea.removeStudent(studentName);
     }
 
+    public void goStudentToLocation(String studentName, String locationName){
+        if (!serviceNameExists(locationName)) throw new IllegalArgumentException(String.format("Unknown %s!", locationName));
+        if (!studentExists(studentName)) throw new IllegalArgumentException(String.format("%s does not exist!", studentName));
+        if (!isEatingOrLeisureService(locationName)) throw new IllegalArgumentException(String.format("%s is not a valid service!", locationName));
+        if (isStudentAtLocation(studentName, locationName)) throw new IllegalArgumentException("Already there!");
+        if (isEatingServiceFull(locationName)) throw new IllegalArgumentException(String.format("eating %s is full!", locationName));
+
+        loadedArea.goStudentToLocation(studentName,locationName);
+    }
+
     public void moveStudentToLocation(String studentName, String locationName){
         if (!serviceNameExists(locationName)) throw new IllegalArgumentException(String.format("Unknown %s!", locationName));
         if (!studentExists(studentName)) throw new IllegalArgumentException(String.format("%s does not exist!", studentName));

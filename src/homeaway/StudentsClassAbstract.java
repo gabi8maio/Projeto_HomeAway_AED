@@ -36,18 +36,12 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
         return country;
     }
 
-    public  Services getPlaceInTheMoment() {
+    public  Services getPlaceHome() {
         return placeNow;
     }
 
-    public String setPlaceInTheMoment(Services newPlace) {
-        if(newPlace.equals(lodging)) {
-            placeNow = newPlace;
-            return "home"; // Tem se de mudar
-        }else {
-            placeNow = newPlace;
-            return newPlace.getServiceName();
-        }
+    public void setPlaceHome(Services newPlace) {
+        placeNow = newPlace;
     }
 
     public void setPlaceGo(Services newPlace) {

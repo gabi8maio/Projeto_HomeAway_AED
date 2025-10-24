@@ -78,6 +78,15 @@ public class AreaClass implements Serializable {
         return null;
     }
 
+
+    public void goStudentToLocation(String studentName, String serviceName){
+        Students student = findStudentElem(studentName);
+        Services service = findServicesElem(serviceName);
+
+        assert student != null; // Deixamos??
+        student.setPlaceGo(service);
+    }
+
     public void moveStudentToLocation(String studentName, String serviceName){
         Students student = findStudentElem(studentName);
         Services service = findServicesElem(serviceName);
@@ -186,7 +195,7 @@ public class AreaClass implements Serializable {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if((s.getName().equalsIgnoreCase(studentName))&&s.getPlaceInTheMoment().getServiceName().equalsIgnoreCase(locationName)) return true;
+            if((s.getName().equalsIgnoreCase(studentName))&&s.getPlaceHome().getServiceName().equalsIgnoreCase(locationName)) return true;
         }
         return false;
     }

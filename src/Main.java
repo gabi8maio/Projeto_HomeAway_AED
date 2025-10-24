@@ -288,7 +288,7 @@ public class Main {
                     System.out.printf(STUDENTS_COMMAND,
                             student.getName(),
                             student.getType().toLowerCase(),
-                            student.getLodging());
+                            student.getLodging().getServiceName()); // podemos fazer assim?
                 }
 
             } else {
@@ -334,17 +334,25 @@ public class Main {
         String locationName = in.nextLine().trim();
 
         try {
-            // move Student
-            system.moveStudentToLocation(studentName, locationName);
-            System.out.println(locationName);
+            // go Student
+            system.goStudentToLocation(studentName, locationName);
+            System.out.printf(STUDENT_NOW_AT,studentName,locationName);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
     private static void executeMove(Scanner in, HomeAwaySystem system) {
-        // Implementation for move command
-        in.nextLine(); // Consume remaining input
+        String studentName = in.nextLine().trim();
+        String locationName = in.nextLine().trim();
+
+        try {
+            // move Student
+            system.moveStudentToLocation(studentName, locationName);
+            System.out.printf(MOVE_HOME,studentName,locationName,studentName);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private static void executeUsers(Scanner in, HomeAwaySystem system) {

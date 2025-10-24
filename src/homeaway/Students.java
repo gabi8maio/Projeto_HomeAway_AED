@@ -5,5 +5,5 @@ public interface Students extends Comparable<Students>, StudentsChange {
     String getType();
     String getCountry();
     Services getLodging ();
-    Services getPlaceInTheMoment();
+    Services getPlaceHome();
 }
