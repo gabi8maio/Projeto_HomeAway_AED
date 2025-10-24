@@ -6,9 +6,9 @@ import java.util.Scanner;
 public class Main {
 
     // Constants for output messages
-    private static final String CMD_NOT_EXIST = "Unknown command. Type help to see available commands.\n";
+    private static final String CMD_NOT_EXIST = "Unknown command. Type help to see available commands.";
     private static final String END = "Bye!\n";
-    private static final String SYSTEM_BOUNDS_NOT_DEFINED = "System bounds not defined.\n";
+    private static final String SYSTEM_BOUNDS_NOT_DEFINED = "System bounds not defined.";
     private static final String BOUNDS_ALREADY_EXISTS = "Bounds already exists. Please load it!\n";
     private static final String INVALID_BOUNDS = "Invalid bounds.\n";
     private static final String BOUNDS_CREATED = "%s created.\n";
@@ -121,8 +121,8 @@ public class Main {
         String name;
         try {
             long topLatitude = in.nextLong();
-            long bottomLatitude = in.nextLong();
             long leftLongitude = in.nextLong();
+            long bottomLatitude = in.nextLong();
             long rightLongitude = in.nextLong();
             name = in.nextLine().trim();
 
@@ -130,7 +130,7 @@ public class Main {
                 System.out.println(BOUNDS_ALREADY_EXISTS);
                 return;
             }
-            if ((topLatitude <= bottomLatitude || leftLongitude >= rightLongitude)) {
+            if (topLatitude <= bottomLatitude || rightLongitude <= leftLongitude) {
                 System.out.println(INVALID_BOUNDS);
                 return;
             }
@@ -172,11 +172,11 @@ public class Main {
         try{
         TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType); // Podemos fazer isto?
         if (serviceTypeEnum == null) {
-            System.out.println("Invalid service type!");
+            System.out.println("Invalid service type!\n");
             return;
         }
         if (latitude <= longitude) { // Meti ao calhas
-            System.out.println("Invalid location!");
+            System.out.println("Invalid location!\n");
             return;
         }
 

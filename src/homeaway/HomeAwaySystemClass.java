@@ -51,10 +51,15 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
     @Override
     public boolean hasArea(String name){
-        for(int i = 0; i < savedAreas.size(); i++)
-            if(savedAreas.get(i).getName().equals(name))
-                return true;
-        return false;
+
+        if (loadedArea != null && loadedArea.getName().equalsIgnoreCase(name)) {
+            return true;
+        }
+
+        // 2. Verificar se existe ficheiro com esse nome na pasta "data"
+        String filename = name.replace(" ", "_") + ".dat";
+        File file = new File("data", filename);
+        return file.exists();
     }
 
     @Override
