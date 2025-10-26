@@ -71,13 +71,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     @Override
-    public String serviceNameExists(String name, TypesOfService types) {
+    public String serviceNameExists(String name) {
         return loadedArea.serviceExists(name);
-    }
-
-    // Sem parametros
-    private boolean serviceNameExists(String serviceName) {
-        return false;
     }
 
     private boolean isEatingOrLeisureService(String serviceName){
@@ -128,7 +123,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         }
 
         // Validar se nome já existe
-        String previousServiceName = serviceNameExists(serviceName, serviceTypeEnum);
+        String previousServiceName = serviceNameExists(serviceName);
         if (previousServiceName != null) {
             throw new ServiceAlreadyExistsException(previousServiceName);
         }
@@ -192,12 +187,12 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         loadedArea.removeStudent(studentName);
     }
 
-    public void goStudentToLocation(String studentName, String locationName)
-            throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
-        if (!serviceNameExists(locationName))
-            throw new UnknownLocationException();
+    public void goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
+        String serviceName = serviceNameExists(studentName);
+        if (serviceName != null)
+            throw new UnknownLocationException(serviceName);
         String studentExistsName = studentExists(studentName);
-        if (studentExists(studentName) != null){
+        if (studentExistsName != null){
             throw new StudentAlreadyExistsException(studentExistsName);
         }
         if (!isEatingOrLeisureService(locationName))
@@ -211,7 +206,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     public void moveStudentToLocation(String studentName, String locationName){
-        if (!serviceNameExists(locationName))
+        String serviceName = serviceNameExists(locationName);
+        if (serviceName != null)
             throw new LodgingNotExistsException(locationName);
         String studentExistsName = studentExists(studentName);
         if (studentExists(studentName) != null){
@@ -243,7 +239,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
     public Iterator<Students> usersCommand(String order, String serviceName){
         if (!isCorrectOrder(order)) throw new IllegalArgumentException(String.format("Unknown %s!"));
-        if (!serviceNameExists(serviceName)) throw new IllegalArgumentException(String.format("%s does not exist!"));
+        String serviceExists = serviceNameExists(null); // Pro FAZERERERER
+        if (serviceExists != null) throw new IllegalArgumentException(String.format("%s does not exist!"));
         if (!isEatingOrLeisureService(serviceName)) throw new IllegalArgumentException(String.format("%s is not a valid service!"));
 
         return loadedArea.getAllStudentsIterator();

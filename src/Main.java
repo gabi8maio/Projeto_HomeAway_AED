@@ -260,7 +260,7 @@ public class Main {
             // go Student
             system.goStudentToLocation(studentName, locationName);
             System.out.printf(STUDENT_NOW_AT,studentName,locationName);
-        } catch (StudentAlreadyThereException e) {
+        } catch (StudentAlreadyThereException | StudentAlreadyExistsException e) {
             System.out.println(e.getMessage());
         } catch (UnknownLocationException | InvalidServiceException | EatingIsFullException e){
             System.out.printf(e.getMessage(), locationName);

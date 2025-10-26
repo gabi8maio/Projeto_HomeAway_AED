@@ -8,7 +8,7 @@ public interface HomeAwaySystem {
 
     Iterator<Services> getServiceIterator();
     boolean hasArea(String name);
-    String serviceNameExists(String name, TypesOfService types);
+    String serviceNameExists(String name);
     void addService(String serviceType,long latitude,long longitude,double price,int value,String serviceName) throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException,
             InvalidTicketPriceException, InvalidDiscountException, InvalidCapacityException, ServiceAlreadyExistsException;
     String getTempAreaName();
