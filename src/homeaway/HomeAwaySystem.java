@@ -8,23 +8,23 @@ public interface HomeAwaySystem {
 
     Iterator<Services> getServiceIterator();
     boolean hasArea(String name);
-    boolean serviceNameExists(String name, TypesOfService types);
-    void addService(String serviceType,long latitude,long longitude,Double price,Double value,String serviceName) throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException,
+    String serviceNameExists(String name, TypesOfService types);
+    void addService(String serviceType,long latitude,long longitude,double price,int value,String serviceName) throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException,
             InvalidTicketPriceException, InvalidDiscountException, InvalidCapacityException, ServiceAlreadyExistsException;
     String getTempAreaName();
     String saveArea() throws SystemBoundsNotDefinedException;
     String loadArea(String name) throws BoundsDoesNotExistException;
     void removeStudent(String studentName) throws StudentDoesNotExistsException;
     boolean lodgingExists(String name);
-    boolean lodgingIsFull(String name);
-    Services getStudentLocationInfo(String studentName);
+    String lodgingIsFull(String name);
+    Students getStudentLocationInfo(String studentName);
     Iterator<Services> getVisitedLocationsIterator(String studentName);
     void starCommand(int rating,String serviceName, String tag);
     Iterator<Services> getServicesByRankingIterator();
     Iterator<Services> getServicesByTagIterator(String tag);
     Services findMostRelevantService(String studentName, String serviceType);
     Iterator<Services> getRankedServicesIterator(int stars, String type, String studentName);
-    boolean studentExists(String name);
+    String studentExists(String name);
     void moveStudentToLocation(String studentName, String locationName);
     void goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException;
     Iterator<Students> usersCommand(String order, String serviceName);

@@ -6,7 +6,7 @@ public class LeisureClass extends ServicesClassAbstract implements Leisure, Seri
 
 
 
-    public LeisureClass(long latitude, long longitude, Double price, Double value, String serviceName){
+    public LeisureClass(long latitude, long longitude, double price, int value, String serviceName){
         super(latitude,longitude,price,value,serviceName);
     }
 

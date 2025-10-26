@@ -11,10 +11,11 @@ public interface Services extends Comparable<Services>, ServicesChange {
     String getServiceType();
     long getLatitude();
     long getLongitude();
-    double getValue();
+    int getValue();
     int getLastUpdatedOrder();
     int getAverageStars();
     float getTotalStars();
     int getRatingCount();
     Iterator<String> getTags();
+    String isFull();
 }

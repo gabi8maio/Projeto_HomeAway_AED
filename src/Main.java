@@ -163,20 +163,18 @@ public class Main {
         long latitude = in.nextLong();
         long longitude = in.nextLong();
         double price = in.nextDouble();
-        double value = in.nextDouble();
+        int value = in.nextInt();
         String serviceName = in.nextLine().trim();
 
         try{
-
-        // Adicionar serviço
-        system.addService(serviceType, latitude, longitude, price, value, serviceName);
-        System.out.printf(SERVICE_ADDED, serviceType.toLowerCase(), serviceName);
+            system.addService(serviceType, latitude, longitude, price, value, serviceName);
+            System.out.printf(SERVICE_ADDED, serviceType.toLowerCase(), serviceName);
 
     } catch(InvalidServiceTypeException | InvalidLocationException | InvalidPriceMenuException | InvalidRoomPriceException |
                 InvalidTicketPriceException | InvalidDiscountException | InvalidCapacityException e) {
         System.out.println(e.getMessage());
     } catch ( ServiceAlreadyExistsException e){
-            System.out.printf(e.getMessage(), serviceName);
+            System.out.print(e.getMessage());
         }
     }
 
@@ -205,7 +203,6 @@ public class Main {
         String name = in.nextLine().trim();
         String country = in.nextLine().trim();
         String lodging = in.nextLine().trim();
-        in.nextLine();
 
         try{
             system.addStudent(studentType, name, country, lodging);
@@ -213,10 +210,8 @@ public class Main {
 
         }catch (InvalidStudentTypeException e){
             System.out.println(e.getMessage());
-        } catch (LodgingNotExistsException | LodgingIsFullException e) {
-            System.out.printf(e.getMessage(), lodging);
-        } catch (StudentAlreadyExistsException e){
-            System.out.printf(e.getMessage(), name);
+        } catch (LodgingNotExistsException | LodgingIsFullException | StudentAlreadyExistsException e) {
+            System.out.printf(e.getMessage());
         }
     }
 
@@ -233,7 +228,7 @@ public class Main {
                 System.out.printf(STUDENTS_COMMAND,
                     student.getName(),
                     student.getType().toLowerCase(),
-                    student.getPlaceHome());
+                    student.getPlaceHome().getServiceName());
             }
 
 
@@ -304,12 +299,14 @@ public class Main {
         String studentName = in.nextLine().trim();
 
         try {
-            if (!system.studentExists(studentName)) {
+            String studentExistsName = system.studentExists(studentName);
+            if (studentExistsName != null){
                 System.out.printf(STUDENT_NOT_EXISTS, studentName);
                 return;
             }
-            Services service = system.getStudentLocationInfo(studentName);
-            System.out.printf(WHERE_FORMAT, studentName, service.getServiceName(),service.getServiceType(),service.getLatitude(),service.getLongitude());
+            Students student = system.getStudentLocationInfo(studentName);
+            Services place = student.getPlaceNow();
+            System.out.printf(WHERE_FORMAT, student.getName(), place.getServiceName(),place.getServiceType().toLowerCase(),place.getLatitude(),place.getLongitude());
 
         } catch (Exception e) {
             System.out.println("Error locating student");

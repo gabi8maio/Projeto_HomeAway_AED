@@ -17,9 +17,6 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         savedAreas = new DoublyLinkedList<>();
     }
 
-    public Services getWhereService(){
-
-    }
 
     @Override
     public void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude)
@@ -56,7 +53,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
 
-    public Services getStudentLocationInfo(String studentName){
+    public Students getStudentLocationInfo(String studentName){
         return loadedArea.getStudentLocationInfo(studentName);
     }
 
@@ -74,8 +71,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     @Override
-    public boolean serviceNameExists(String name, TypesOfService types) {
-        return loadedArea.serviceExists(name, types);
+    public String serviceNameExists(String name, TypesOfService types) {
+        return loadedArea.serviceExists(name);
     }
 
     // Sem parametros
@@ -98,9 +95,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
 
     @Override
-    public void addService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName)
-            throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException,
-            InvalidTicketPriceException, InvalidDiscountException, InvalidCapacityException, ServiceAlreadyExistsException{
+    public void addService(String serviceType, long latitude, long longitude, double price, int value, String serviceName)
+            throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException, InvalidTicketPriceException, InvalidDiscountException, InvalidCapacityException, ServiceAlreadyExistsException{
         TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType); // Podemos fazer isto?
         if (serviceTypeEnum == null) {
             throw new InvalidServiceTypeException();
@@ -132,8 +128,9 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         }
 
         // Validar se nome já existe
-        if (serviceNameExists(serviceName, serviceTypeEnum)) {
-            throw new ServiceAlreadyExistsException();
+        String previousServiceName = serviceNameExists(serviceName, serviceTypeEnum);
+        if (previousServiceName != null) {
+            throw new ServiceAlreadyExistsException(previousServiceName);
         }
 
         loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
@@ -176,7 +173,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.lodgingExists(name);
     }
 
-    public boolean lodgingIsFull(String name){
+    public String lodgingIsFull(String name){
         return loadedArea.isItFull(name);
     }
 
@@ -188,8 +185,9 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     public void removeStudent(String studentName) throws StudentDoesNotExistsException{
-        if (!studentExists(studentName)) {
-            throw new StudentDoesNotExistsException();
+        String studentExistsName = studentExists(studentName);
+        if (studentExists(studentName) != null){
+            throw new StudentAlreadyExistsException(studentExistsName);
         }
         loadedArea.removeStudent(studentName);
     }
@@ -198,8 +196,10 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
         if (!serviceNameExists(locationName))
             throw new UnknownLocationException();
-        if (!studentExists(studentName))
-            throw new StudentDoesNotExistsException();
+        String studentExistsName = studentExists(studentName);
+        if (studentExists(studentName) != null){
+            throw new StudentAlreadyExistsException(studentExistsName);
+        }
         if (!isEatingOrLeisureService(locationName))
             throw new InvalidServiceException();
         if (isStudentAtLocation(studentName, locationName))
@@ -212,13 +212,17 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
     public void moveStudentToLocation(String studentName, String locationName){
         if (!serviceNameExists(locationName))
-            throw new LodgingNotExistsException();
-        if (!studentExists(studentName))
-            throw new StudentDoesNotExistsException();
+            throw new LodgingNotExistsException(locationName);
+        String studentExistsName = studentExists(studentName);
+        if (studentExists(studentName) != null){
+            throw new StudentAlreadyExistsException(studentExistsName);
+        }
         if (isStudentHome(studentName, locationName))
             throw new StudentHomeException();
-        if (lodgingIsFull(locationName))
-            throw new LodgingIsFullException();
+        String fullLodging = lodgingIsFull(locationName);
+        if (fullLodging != null) {
+            throw new LodgingIsFullException(fullLodging);
+        }
         if (!isAcceptable(studentName, locationName))
             throw new MoveNotAcceptableException();
 
@@ -245,7 +249,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.getAllStudentsIterator();
     }
 
-    public boolean studentExists (String name){
+    public String studentExists (String name){
         return loadedArea.studentExists(name);
     }
 
@@ -260,21 +264,30 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.getAllStudentsIterator();
     }
 
+    @Override
+    public Iterator<Students> getStudentsByCountryIterator(String country) {
+        return loadedArea.getStudentsByCountryIterator(country);
+    }
+
 
     public Iterator<Students> getStudentsByCountryIterator() {
         return null;
     }
 
     public void addStudent (String studentType, String name, String country, String lodging)
-            throws InvalidStudentTypeException, LodgingNotExistsException, LodgingIsFullException, StudentAlreadyExistsException {
+    {
         if (StudentTypes.fromString(studentType) == null) {
             throw new InvalidStudentTypeException();
         } if (!lodgingExists(lodging)) {
-            throw new LodgingNotExistsException();
-        } if (lodgingIsFull(lodging)){
-            throw new LodgingIsFullException();
-        } if (studentExists(name)){
-            throw new StudentAlreadyExistsException();
+            throw new LodgingNotExistsException(lodging);
+        }
+        String fullLodging = lodgingIsFull(lodging);
+        if (fullLodging != null) {
+            throw new LodgingIsFullException(fullLodging);
+        }
+        String studentExistsName = studentExists(name);
+         if (studentExists(name) != null){
+            throw new StudentAlreadyExistsException(studentExistsName);
         }
         loadedArea.addStudent(studentType, name, country, lodging);
     }

@@ -89,7 +89,12 @@ public class AreaClass implements Serializable {
         Services service = findServicesElem(serviceName);
 
         assert student != null; // Deixamos??
+        assert service != null;
+        Services previousService = student.getPlaceNow();
+        previousService.removeStudentsThere(student);    // Remove from previous Service
+        service.addStudentsThere(student);               // Add on new Service
         student.setPlaceGo(service);
+
     }
 
     public void moveStudentToLocation(String studentName, String serviceName){
@@ -111,13 +116,13 @@ public class AreaClass implements Serializable {
         student.setPlaceGo(service);
     }
 
-    public boolean studentExists(String name) {
+    public String studentExists(String name) {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if (s.getName().equalsIgnoreCase(name)) return true;
+            if (s.getName().equalsIgnoreCase(name)) return s.getName();
         }
-        return false;
+        return null;
     }
 
     public Students getStudent(String name) {
@@ -133,20 +138,26 @@ public class AreaClass implements Serializable {
         return allStudents.iterator();
     }
 
-    public Iterator<Students> getStudentsByCountryIterator(){
-        return studentsByCountry.iterator();
+    public Iterator<Students> getStudentsByCountryIterator(String country){
+        ListInArray<Students> tempList = new ListInArray<>(studentsByCountry.size()); // mudar sercalhar pra students by country
+        Iterator<Students> iterator = studentsByCountry.iterator();
+        while (iterator.hasNext()) {
+            Students student = iterator.next();
+            if (student.getCountry().equalsIgnoreCase(country)) tempList.addLast(student);
+        }
+        return tempList.iterator();
     }
 
     public boolean lodgingExists(String serviceName) {
         Iterator<Services> it = services.iterator();
         while (it.hasNext()) {
             Services s = it.next();
-            if (s.getServiceName().equals(serviceName)) return true;
+            if (s.getServiceName().equalsIgnoreCase(serviceName)) return true;
         }
         return false;
     }
 
-    public void createService(String serviceType, long latitude, long longitude, Double price, Double value, String serviceName) {
+    public void createService(String serviceType, long latitude, long longitude, double price, int value, String serviceName) {
 
         Services newService = null;
         TypesOfService type = TypesOfService.fromString(serviceType);
@@ -166,23 +177,14 @@ public class AreaClass implements Serializable {
     }
 
     // By type btw
-    public boolean serviceExists(String serviceName, TypesOfService type) {
+    public String serviceExists(String serviceName) {
 
         Iterator<Services> it = services.iterator();
         while (it.hasNext()) {
             Services s = it.next();
-            if((s.getServiceName().equalsIgnoreCase(serviceName))) return true;
+            if((s.getServiceName().equalsIgnoreCase(serviceName))) return s.getServiceName();
         }
-        return false;
-    }
-    public boolean serviceExists(String serviceName) {
-
-        Iterator<Services> it = services.iterator();
-        while (it.hasNext()) {
-            Services s = it.next();
-            if((s.getServiceName().equalsIgnoreCase(serviceName))) return true;
-        }
-        return false;
+        return null;
     }
 
     public boolean isEatingOrLeisureService(String serviceName) {
@@ -239,22 +241,21 @@ public class AreaClass implements Serializable {
         return false;
     }
 
-    public boolean isItFull(String name) {
+    public String isItFull(String name) {
         Iterator<Services> iterator = services.iterator();
         while(iterator.hasNext()) {
             Services service = iterator.next();
             if(service.getServiceName().equals(name))
-                if (service instanceof Lodging lodging) // If it's Lodging
-                    return lodging.isFull();
+                    return service.isFull();
         }
-        return false;
+        return null;
     }
 
-    public Services getStudentLocationInfo(String studentName){
+    public Students getStudentLocationInfo(String studentName){
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if((s.getName().equalsIgnoreCase(studentName))) return s.getPlaceNow();
+            if((s.getName().equalsIgnoreCase(studentName))) return s;
         }
         return null;
     }
@@ -470,12 +471,15 @@ public class AreaClass implements Serializable {
             case BOOKISH -> newStudent = new BookishClass(studentType, name, country, service);
             case THRIFTY -> newStudent = new ThriftyClass(studentType, name, country, service);
         }
+        assert service != null;
+        service.addStudentsThere(newStudent);
         allStudents.add(newStudent);
+        studentsByCountry.addLast(newStudent);
     }
 
     public boolean isInBounds (long latitude, long longitude) {
         return latitude >= this.bottomLatitude && latitude <= this.topLatitude &&
-                longitude >= this.rightLongitude && longitude <= this.leftLongitude;
+                longitude >= this.leftLongitude && longitude <= this.rightLongitude;
     }
 
     public boolean isStudentHome(String studentName, String locationName) {
