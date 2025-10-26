@@ -300,7 +300,7 @@ public class Main {
 
         try {
             String studentExistsName = system.studentExists(studentName);
-            if (studentExistsName != null){
+            if (studentExistsName == null){
                 System.out.printf(STUDENT_NOT_EXISTS, studentName);
                 return;
             }
