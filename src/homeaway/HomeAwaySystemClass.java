@@ -205,6 +205,10 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.goStudentToLocation(studentName,locationName);
     }
 
+    public boolean isServiceMoreExpensiveForThrifty(String studentName, String serviceName){
+        return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
+    }
+
     public void moveStudentToLocation(String studentName, String locationName){
         String serviceName = serviceNameExists(locationName);
         if (serviceName != null)

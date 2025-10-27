@@ -76,15 +76,6 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         return numOfPeople;
     }
 
-    @Override
-    public void addOneStudent(){
-        numOfPeople++;
-    }
-
-    @Override
-    public void removeOneStudent(){
-        numOfPeople--;
-    }
 
     public int getLastUpdatedOrder() {
         return lastUpdateCounter;

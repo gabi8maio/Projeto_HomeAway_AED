@@ -13,12 +13,18 @@ public class ThriftyClass extends StudentsClassAbstract implements Thrifty, Stud
         super (studentType, name, country, lodging);
         cheapestEatingService = null;
         cheapestLodgingService = (Lodging) lodging;
-        cheapestEatingPrice = 0;
+        cheapestEatingPrice = Integer.MAX_VALUE;
         cheapestLodgingPrice = lodging.getServicePrice();
     }
 
     public boolean isMoreExpensiveThanCheapest(Services services){
-        return services.getServicePrice() > cheapestEatingPrice;
+        if (services.getServicePrice() <= cheapestEatingPrice) {
+            cheapestEatingPrice = services.getServicePrice();  // Atualiza o preço mais barato
+            return false; // Não é mais caro - é mais barato
+        } else {
+            return true; // É mais caro que o mais barato atual
+        }
+
     }
 
 }

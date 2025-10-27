@@ -83,17 +83,26 @@ public class AreaClass implements Serializable {
         return null;
     }
 
+    public boolean isServiceMoreExpensiveForThrifty(String studentName, String serviceName){
+        Students student = findStudentElem(studentName);
+        Services newService = findServicesElem(serviceName);
+        if(student instanceof Thrifty thrifty){
+            return thrifty.isMoreExpensiveThanCheapest(newService);
+        }
+        return false;
+    }
+
 
     public String goStudentToLocation(String studentName, String serviceName){
         Students student = findStudentElem(studentName);
-        Services service = findServicesElem(serviceName);
+        Services newService = findServicesElem(serviceName);
 
         assert student != null; // Deixamos??
-        assert service != null;
+        assert newService != null;
         Services previousService = student.getPlaceNow();
         previousService.removeStudentsThere(student);    // Remove from previous Service
-        service.addStudentsThere(student);               // Add on new Service
-        student.setPlaceGo(service);
+        newService.addStudentsThere(student);               // Add on new Service
+        student.setPlaceGo(newService);
         return student.getName();
 
     }
@@ -203,7 +212,7 @@ public class AreaClass implements Serializable {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if((s.getName().equalsIgnoreCase(studentName))&&s.getPlaceHome().getServiceName().equalsIgnoreCase(locationName)) return true;
+            if((s.getName().equalsIgnoreCase(studentName))&&s.getPlaceNow().getServiceName().equalsIgnoreCase(locationName)) return true;
         }
         return false;
     }
@@ -212,7 +221,7 @@ public class AreaClass implements Serializable {
         Iterator<Services> it = services.iterator();
         while (it.hasNext()) {
             Services s = it.next();
-            //if((s.get().equalsIgnoreCase(studentName))&&s.getPlaceInTheMoment().equalsIgnoreCase(locationName)) return true;
+            if((s.getServiceName().equalsIgnoreCase(serviceName)) && s.isFull() != null ) return true;
         }
         return false;
     }

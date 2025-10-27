@@ -44,7 +44,7 @@ public class Main {
     private static final String ALREADY_THERE = "Already there!\n";
     private static final String SERVICE_NOT_VALID = "%s is not a valid service!\n";
     private static final String EATING_FULL = "eating %s is full!\n";
-    private static final String STUDENT_DISTRACTED = "%s is distracted!\n";
+    private static final String STUDENT_DISTRACTED = "%s is now at %s. %s is distracted!\n";
     private static final String STUDENT_NOW_AT = "%s is now at %s.\n";
     private static final String MOVE_HOME = "lodging %s is now %s's home. %s is at home.\n";
     private static final String ALREADY_HOME = "That is %s's home!\n";
@@ -228,7 +228,7 @@ public class Main {
                 System.out.printf(STUDENTS_COMMAND,
                     student.getName(),
                     student.getType().toLowerCase(),
-                    student.getPlaceHome().getServiceName());
+                    student.getPlaceNow().getServiceName());
             }
 
 
@@ -259,7 +259,10 @@ public class Main {
         try {
             // go Student
             String studentNameReal = system.goStudentToLocation(studentName, locationName);
-            System.out.printf(STUDENT_NOW_AT,studentNameReal,locationName);
+
+            if(system.isServiceMoreExpensiveForThrifty(studentName, locationName)) System.out.printf(STUDENT_DISTRACTED,studentNameReal,locationName,studentName);
+            else System.out.printf(STUDENT_NOW_AT,studentNameReal,locationName);
+
         } catch (StudentAlreadyThereException | StudentAlreadyExistsException e) {
             System.out.println(e.getMessage());
         } catch (UnknownLocationException | InvalidServiceException | EatingIsFullException e){
