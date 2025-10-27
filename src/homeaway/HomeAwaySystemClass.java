@@ -211,11 +211,11 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
 
     public void moveStudentToLocation(String studentName, String locationName){
         String serviceName = serviceNameExists(locationName);
-        if (serviceName != null)
+        if (serviceName == null)
             throw new LodgingNotExistsException(locationName);
-        String studentExistsName = studentExists(studentName);
-        if (studentExists(studentName) != null){
-            throw new StudentAlreadyExistsException(studentExistsName);
+
+        if (studentExists(studentName) == null){
+            throw new StudentDoesNotExistsException(studentName);
         }
         if (isStudentHome(studentName, locationName))
             throw new StudentHomeException();
@@ -268,6 +268,10 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     @Override
     public Iterator<Students> getStudentsByCountryIterator(String country) {
         return loadedArea.getStudentsByCountryIterator(country);
+    }
+
+    public boolean hasBounds() {
+        return loadedArea != null;
     }
 
 

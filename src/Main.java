@@ -94,24 +94,34 @@ public class Main {
                 case BOUNDS -> executeBounds(in, system);
                 case SAVE -> executeSave(in, system);
                 case LOAD -> executeLoad(in, system);
-                case SERVICE -> executeService(in, system);
-                case SERVICES -> executeServices(in, system);
-                case STUDENT -> executeStudent(in, system);
-                case STUDENTS -> executeStudents(in, system);
-                case LEAVE -> executeLeave(in, system);
-                case GO -> executeGo(in, system);
-                case MOVE -> executeMove(in, system);
-                case USERS -> executeUsers(in, system);
-                case WHERE -> executeWhere(in, system);
-                case VISITED -> executeVisited(in, system);
-                case STAR -> executeStar(in, system);
-                case RANKING -> executeRanking(in, system);
-                case RANKED -> executeRanked(in, system);
-                case TAG -> executeTag(in, system);
-                case FIND -> executeFind(in, system);
-                case UNKNOWN -> {
-                    System.out.println(CMD_NOT_EXIST);
-                    in.nextLine();
+                default -> {
+                    // Verificar se o sistema tem bounds definidos para os outros comandos
+                    if (!system.hasBounds()) {
+                        System.out.println("System bounds not defined.");
+                        in.nextLine(); // consumir a linha restante
+                    } else {
+                        switch (cmd) {
+                            case SERVICE -> executeService(in, system);
+                            case SERVICES -> executeServices(in, system);
+                            case STUDENT -> executeStudent(in, system);
+                            case STUDENTS -> executeStudents(in, system);
+                            case LEAVE -> executeLeave(in, system);
+                            case GO -> executeGo(in, system);
+                            case MOVE -> executeMove(in, system);
+                            case USERS -> executeUsers(in, system);
+                            case WHERE -> executeWhere(in, system);
+                            case VISITED -> executeVisited(in, system);
+                            case STAR -> executeStar(in, system);
+                            case RANKING -> executeRanking(in, system);
+                            case RANKED -> executeRanked(in, system);
+                            case TAG -> executeTag(in, system);
+                            case FIND -> executeFind(in, system);
+                            case UNKNOWN -> {
+                                System.out.println(CMD_NOT_EXIST);
+                                in.nextLine();
+                            }
+                        }
+                    }
                 }
             }
         } while (!cmd.equals(Command.EXIT));

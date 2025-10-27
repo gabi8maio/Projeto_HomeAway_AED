@@ -32,6 +32,6 @@ public interface HomeAwaySystem {
     Iterator<Students> getAllStudentsIterator();
     Iterator<Students> getStudentsByCountryIterator(String country);
     void addStudent(String studentType, String name, String country, String lodging)throws InvalidStudentTypeException, LodgingNotExistsException, LodgingIsFullException, StudentAlreadyExistsException;
-
+    boolean hasBounds();
     Iterator <Students> getStudents(String argument) throws NoStudentsException, NoStudentsFromCountryException;
 }
