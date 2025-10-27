@@ -70,7 +70,7 @@ public class AreaClass implements Serializable {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if (s.getName().equals(name)) return s;
+            if (s.getName().equalsIgnoreCase(name)) return s;
         }
        return null;
     }
@@ -78,13 +78,13 @@ public class AreaClass implements Serializable {
         Iterator<Services> it = services.iterator();
         while (it.hasNext()) {
             Services s = it.next();
-            if (s.getServiceName().equals(name)) return s;
+            if (s.getServiceName().equalsIgnoreCase(name)) return s;
         }
         return null;
     }
 
 
-    public void goStudentToLocation(String studentName, String serviceName){
+    public String goStudentToLocation(String studentName, String serviceName){
         Students student = findStudentElem(studentName);
         Services service = findServicesElem(serviceName);
 
@@ -94,6 +94,7 @@ public class AreaClass implements Serializable {
         previousService.removeStudentsThere(student);    // Remove from previous Service
         service.addStudentsThere(student);               // Add on new Service
         student.setPlaceGo(service);
+        return student.getName();
 
     }
 
@@ -192,8 +193,8 @@ public class AreaClass implements Serializable {
         while (it.hasNext()) {
             Services s = it.next();
             if((s.getServiceName().equalsIgnoreCase(serviceName)) &&
-                    (s.getServiceType().equals(TypesOfService.LEISURE.toString()) ||
-                    s.getServiceType().equals(TypesOfService.LODGING.toString()))) return true;
+                    (s.getServiceType().equalsIgnoreCase(TypesOfService.LEISURE.toString()) ||
+                    s.getServiceType().equalsIgnoreCase(TypesOfService.EATING.toString()))) return true;
         }
         return false;
     }

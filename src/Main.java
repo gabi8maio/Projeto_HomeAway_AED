@@ -8,7 +8,7 @@ public class Main {
 
     // Constants for output messages
     private static final String CMD_NOT_EXIST = "Unknown command. Type help to see available commands.";
-    private static final String END = "Bye!\n";
+    private static final String END = "Bye!";
     private static final String SYSTEM_BOUNDS_NOT_DEFINED = "System bounds not defined.";
     private static final String BOUNDS_ALREADY_EXISTS = "Bounds already exists. Please load it!\n";
     private static final String INVALID_BOUNDS = "Invalid bounds.\n";
@@ -258,8 +258,8 @@ public class Main {
 
         try {
             // go Student
-            system.goStudentToLocation(studentName, locationName);
-            System.out.printf(STUDENT_NOW_AT,studentName,locationName);
+            String studentNameReal = system.goStudentToLocation(studentName, locationName);
+            System.out.printf(STUDENT_NOW_AT,studentNameReal,locationName);
         } catch (StudentAlreadyThereException | StudentAlreadyExistsException e) {
             System.out.println(e.getMessage());
         } catch (UnknownLocationException | InvalidServiceException | EatingIsFullException e){

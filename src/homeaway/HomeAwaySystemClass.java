@@ -187,13 +187,13 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         loadedArea.removeStudent(studentName);
     }
 
-    public void goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
-        String serviceName = serviceNameExists(studentName);
-        if (serviceName != null)
-            throw new UnknownLocationException(serviceName);
+    public String goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
+        String serviceName = serviceNameExists(locationName);
+        if (serviceName == null)
+            throw new UnknownLocationException(locationName);
         String studentExistsName = studentExists(studentName);
-        if (studentExistsName != null){
-            throw new StudentAlreadyExistsException(studentExistsName);
+        if (studentExistsName == null){
+            throw new StudentDoesNotExistsException(studentName);
         }
         if (!isEatingOrLeisureService(locationName))
             throw new InvalidServiceException();
@@ -202,7 +202,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         if (isEatingServiceFull(locationName))
             throw new EatingIsFullException();
 
-        loadedArea.goStudentToLocation(studentName,locationName);
+        return loadedArea.goStudentToLocation(studentName,locationName);
     }
 
     public void moveStudentToLocation(String studentName, String locationName){
