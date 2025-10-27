@@ -18,7 +18,7 @@ public class ThriftyClass extends StudentsClassAbstract implements Thrifty, Stud
     }
 
     public boolean isMoreExpensiveThanCheapest(Services services){
-        if (services.getServicePrice() <= cheapestEatingPrice) {
+        if (services.getServicePrice() < cheapestEatingPrice) {
             cheapestEatingPrice = services.getServicePrice();  // Atualiza o preço mais barato
             return false; // Não é mais caro - é mais barato
         } else {

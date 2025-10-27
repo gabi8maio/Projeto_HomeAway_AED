@@ -99,6 +99,11 @@ public class AreaClass implements Serializable {
 
         assert student != null; // Deixamos??
         assert newService != null;
+
+        if (student instanceof Bookish bookish && newService instanceof Leisure) bookish.addVisitedService(newService);
+        else if (student instanceof Outgoing outgoing) outgoing.addVisitedService(newService);
+
+
         Services previousService = student.getPlaceNow();
         previousService.removeStudentsThere(student);    // Remove from previous Service
         newService.addStudentsThere(student);               // Add on new Service
@@ -111,16 +116,7 @@ public class AreaClass implements Serializable {
         Students student = findStudentElem(studentName);
         Services service = findServicesElem(serviceName);
 
-        if (student instanceof Thrifty thrifty && service instanceof Eating) {
-            if (thrifty.isMoreExpensiveThanCheapest(service)) {
-                //result += " " + studentName + " is distracted!";
-            }
-        }
-        if (student instanceof Bookish bookish && service instanceof Leisure) {
-            bookish.addVisitedService(service);
-        } else if (student instanceof Outgoing outgoing) {
-            outgoing.addVisitedService(service);
-        }
+
 
         assert student != null; // Deixamos??
         student.setPlaceGo(service);
