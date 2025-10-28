@@ -58,7 +58,7 @@ public class Main {
     private static final String STUDENT_THRIFTY = "%s is thrifty!\n";
     private static final String NO_VISITED_LOCATIONS = "%s has not visited any locations!\n";
     private static final String INVALID_EVALUATION = "Invalid evaluation!\n";
-    private static final String EVALUATION_REGISTERED = "Your evaluation has been registered!\n";
+    private static final String EVALUATION_REGISTERED = "Your evaluation has been registered!";
     private static final String NO_SERVICES_IN_SYSTEM = "No services in the system.\n";
     private static final String SERVICES_SORTED_HEADER = "Services sorted in descending order\n";
     private static final String INVALID_STARS = "Invalid stars!\n";
@@ -269,10 +269,12 @@ public class Main {
 
         try {
             // go Student
-            String studentNameReal = system.goStudentToLocation(studentName, locationName);
+            Students studentNameReal = system.goStudentToLocation(studentName, locationName);
 
-            if(system.isServiceMoreExpensiveForThrifty(studentName, locationName)) System.out.printf(STUDENT_DISTRACTED,studentNameReal,locationName,studentName);
-            else System.out.printf(STUDENT_NOW_AT,studentNameReal,locationName);
+            if(system.isServiceMoreExpensiveForThrifty(studentName, locationName))
+                System.out.printf(STUDENT_DISTRACTED,studentNameReal.getName(),studentNameReal.getPlaceNow().getServiceName(),studentNameReal.getName());
+            else
+                System.out.printf(STUDENT_NOW_AT,studentNameReal.getName(),studentNameReal.getPlaceNow().getServiceName());
 
         } catch (StudentAlreadyThereException | StudentAlreadyExistsException | InvalidServiceException |
                  StudentDoesNotExistsException e) {
@@ -288,8 +290,8 @@ public class Main {
 
         try {
             // move Student
-            String realStudent = system.moveStudentToLocation(studentName, locationName);
-            System.out.printf(MOVE_HOME,locationName,realStudent,realStudent);
+            Students student = system.moveStudentToLocation(studentName, locationName);
+            System.out.printf(MOVE_HOME,student.getPlaceHome().getServiceName(),student.getName(),student.getName());
         } catch (LodgingNotExistsException | StudentDoesNotExistsException | StudentHomeException | LodgingIsFullException | MoveNotAcceptableException e) {
             System.out.println(e.getMessage());
         }
@@ -320,7 +322,7 @@ public class Main {
                         student.getType().toLowerCase());
                 }
             }
-        }catch(LodgingNotExistsException | InvalidServiceException e){
+        }catch(NoStudentsOnServiceException | OrderNotExistsException | ServiceDoesNotExistException | ServiceNotControlEntryExitException e){
             System.out.println(e.getMessage());
         }
 
@@ -330,17 +332,13 @@ public class Main {
         String studentName = in.nextLine().trim();
 
         try {
-            String studentExistsName = system.studentExists(studentName);
-            if (studentExistsName == null){
-                System.out.printf(STUDENT_NOT_EXISTS, studentName);
-                return;
-            }
+
             Students student = system.getStudentLocationInfo(studentName);
             Services place = student.getPlaceNow();
             System.out.printf(WHERE_FORMAT, student.getName(), place.getServiceName(),place.getServiceType().toLowerCase(),place.getLatitude(),place.getLongitude());
 
-        } catch (Exception e) {
-            System.out.println("Error locating student");
+        } catch (StudentDoesNotExistsException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -369,7 +367,7 @@ public class Main {
             system.starCommand(stars, serviceName, description);
             System.out.println(EVALUATION_REGISTERED);
 
-        } catch (Exception e) {
+        } catch (InvalidEvaluationException | ServiceDoesNotExistException e) {
             System.out.println(e.getMessage());
         }
     }

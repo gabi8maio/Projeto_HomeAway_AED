@@ -1,9 +1,12 @@
 package homeaway;
 import dataStructures.*;
 import dataStructures.exceptions.InvalidPositionException;
+import homeaway.Exeptions.InvalidEvaluationException;
+import homeaway.Exeptions.ServiceDoesNotExistException;
 
 import java.io.InvalidObjectException;
 import java.io.Serializable;
+import java.security.Provider;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -93,7 +96,7 @@ public class AreaClass implements Serializable {
     }
 
 
-    public String goStudentToLocation(String studentName, String serviceName){
+    public Students goStudentToLocation(String studentName, String serviceName){
         Students student = findStudentElem(studentName);
         Services newService = findServicesElem(serviceName);
 
@@ -108,15 +111,18 @@ public class AreaClass implements Serializable {
         previousService.removeStudentsThere(student);    // Remove from previous Service
         newService.addStudentsThere(student);               // Add on new Service
         student.setPlaceGo(newService);
-        return student.getName();
+        return student;
 
     }
 
-    public String moveStudentToLocation(String studentName, String serviceName){
+    public Students moveStudentToLocation(String studentName, String serviceName){
         Students student = findStudentElem(studentName);
         Services service = findServicesElem(serviceName);
         assert service != null;
-        assert student != null; // Deixamos??
+        assert student != null; // Deixamos?
+
+        if (student instanceof Outgoing outgoing)
+            outgoing.addVisitedService(service);
 
         Services oldService = student.getPlaceHome();
         oldService.removeStudentsThere(student);
@@ -127,7 +133,7 @@ public class AreaClass implements Serializable {
 
         student.setPlaceHome(service);
         student.setPlaceGo(service);
-        return student.getName();
+        return student;
     }
 
     public String studentExists(String name) {
@@ -157,6 +163,11 @@ public class AreaClass implements Serializable {
         assert service != null;
         return service.getStudentsThere();
 
+    }
+
+    public boolean isThereAnyStudents (String serviceName){
+        Services service = findServicesElem(serviceName);
+        return service != null && service.isThereAnyStudents();
     }
 
     public Iterator<Students> getStudentsByCountryIterator(String country){
@@ -283,6 +294,7 @@ public class AreaClass implements Serializable {
     }
 
     public void starCommand(int rating, String serviceName,String tag){
+
         Services service = findServicesElem(serviceName);
         assert service != null;
         service.addTag(tag); // ADd a  tag
@@ -517,4 +529,27 @@ public class AreaClass implements Serializable {
     }
 
 
+    public boolean isEatingOrLodgingService(String serviceName) {
+        Services service = findServicesElem(serviceName);
+        if (service instanceof Eating || service instanceof Lodging) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isThrifty(String studentName) {
+        Students student = findStudentElem(studentName);
+        return student instanceof Thrifty;
+    }
+
+    public boolean hasVisitedLocation(String name) {
+        Students student = findStudentElem(name);
+        if (student instanceof Bookish) {
+            return ((Bookish) student).hasVisitedLocation();
+        }
+        if (student instanceof Outgoing){
+            return ((Outgoing) student).hasVisitedLocation();
+        }
+        return false;
+    }
 }

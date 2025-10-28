@@ -54,7 +54,11 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
 
-    public Students getStudentLocationInfo(String studentName){
+    public Students getStudentLocationInfo(String studentName) throws StudentDoesNotExistsException {
+        String studentExistsName = studentExists(studentName);
+        if (studentExistsName == null){
+            throw new StudentDoesNotExistsException(studentName);
+        }
         return loadedArea.getStudentLocationInfo(studentName);
     }
 
@@ -158,7 +162,22 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     public Iterator<Services> getVisitedLocationsIterator(String studentName){
+        String name = studentExists(studentName);
+        if (name == null)
+            throw new StudentDoesNotExistsException(studentName);
+        if(isThrifty(studentName))
+            throw new StudentIsThriftyException(name);
+        if (!hasVisitedLocation(name))
+            throw new NoVisitedLocationsException(name);
         return loadedArea.getVisitedLocationsIterator(studentName);
+    }
+
+    private boolean hasVisitedLocation(String name) {
+        return loadedArea.hasVisitedLocation(name);
+    }
+
+    private boolean isThrifty(String studentName) {
+        return loadedArea.isThrifty(studentName);
     }
 
     public Iterator<Services> getServicesByTagIterator(String tag){
@@ -188,7 +207,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         loadedArea.removeStudent(studentName);
     }
 
-    public String goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
+    public Students goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
         String serviceName = serviceNameExists(locationName);
         if (serviceName == null)
             throw new UnknownLocationException(locationName);
@@ -210,7 +229,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
     }
 
-    public String moveStudentToLocation(String studentName, String locationName)
+    public Students moveStudentToLocation(String studentName, String locationName)
     throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException{
 
         String serviceName = serviceNameExists(locationName);
@@ -220,16 +239,16 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         if (studentExists(studentName) == null){
             throw new StudentDoesNotExistsException(studentName);
         }
-        if (isStudentHome(studentName, locationName))
+        if (isStudentHome(studentName, serviceName))
             throw new StudentHomeException(studentNameReal);
-        String fullLodging = lodgingIsFull(locationName);
+        String fullLodging = lodgingIsFull(serviceName);
         if (fullLodging != null) {
             throw new LodgingIsFullException(fullLodging);
         }
-        if (!isAcceptable(studentName, locationName))
+        if (!isAcceptable(studentName, serviceName))
             throw new MoveNotAcceptableException(studentNameReal);
 
-        return loadedArea.moveStudentToLocation(studentName,locationName);
+        return loadedArea.moveStudentToLocation(studentName,serviceName);
     }
 
     private boolean isAcceptable(String studentName, String locationName) {
@@ -244,22 +263,38 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return order.equals(">") || order.equals("<");
     }
 
-    public TwoWayIterator<Students> usersCommand(String order, String serviceName){
-        if (!isCorrectOrder(order)) throw new IllegalArgumentException(String.format("Unknown %s!"));
+    public TwoWayIterator<Students> usersCommand(String order, String serviceName) throws NoStudentsOnServiceException, ServiceDoesNotExistException, ServiceNotControlEntryExitException{
         String service = serviceNameExists(serviceName);
         if (service == null)
-            throw new LodgingNotExistsException(serviceName);
-        if (isEatingOrLeisureService(serviceName))
-            throw new InvalidServiceException(serviceName);
+            throw new ServiceDoesNotExistException(serviceName);
+        if (!isThereAnyStudent(serviceName)) {
+            throw new NoStudentsOnServiceException(service);
+        }
+        if (!isCorrectOrder(order)) {
+            throw new OrderNotExistsException();
+        }
+        if (!isEatingOrLodgingService(serviceName))
+            throw new ServiceNotControlEntryExitException(service);
+        return loadedArea.getStudentsByService(service);
+    }
 
-        return loadedArea.getStudentsByService(serviceName);
+    private boolean isThereAnyStudent(String serviceName) {
+        return loadedArea.isThereAnyStudents(serviceName);
+    }
+
+    private boolean isEatingOrLodgingService(String serviceName) {
+        return loadedArea.isEatingOrLodgingService(serviceName);
     }
 
     public String studentExists (String name){
         return loadedArea.studentExists(name);
     }
 
-    public void starCommand(int rating,String serviceName,String tag){
+    public void starCommand(int rating,String serviceName,String tag) throws InvalidEvaluationException, ServiceDoesNotExistException{
+        if(rating < 1 || rating > 5)
+            throw new InvalidEvaluationException();
+        if(serviceNameExists(serviceName) == null)
+            throw  new ServiceDoesNotExistException(serviceName);
         loadedArea.starCommand(rating,serviceName,tag);
     }
     public Iterator<Services> getServicesByRankingIterator(){

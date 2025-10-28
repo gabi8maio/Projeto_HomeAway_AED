@@ -64,6 +64,11 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     }
 
     @Override
+    public boolean isThereAnyStudents() {
+        return !studentsThere.isEmpty();
+    }
+
+    @Override
     public int compareTo(Services o) {
         return 0;
     }

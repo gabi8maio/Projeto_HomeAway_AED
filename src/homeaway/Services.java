@@ -20,4 +20,6 @@ public interface Services extends Comparable<Services>, ServicesChange {
     Iterator<String> getTags();
     TwoWayIterator<Students> getStudentsThere();
     String isFull();
+
+    boolean isThereAnyStudents();
 }

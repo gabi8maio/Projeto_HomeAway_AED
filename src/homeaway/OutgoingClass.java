@@ -13,14 +13,19 @@ public class OutgoingClass extends StudentsClassAbstract implements Outgoing, St
     OutgoingClass(String type, String name, String country, Services lodging) {
         super(type, name, country, lodging);
         allVisitedServices = new DoublyLinkedList<Services>();
+        allVisitedServices.addLast(lodging);
     }
 
     public void addVisitedService(Services service){
-        allVisitedServices.addLast(service);
+        if(allVisitedServices.indexOf(service) == -1)
+            allVisitedServices.addLast(service);
     }
 
     public Iterator<Services> getAllVisitedServices(){
         return allVisitedServices.iterator();
     }
 
+    public boolean hasVisitedLocation() {
+        return !allVisitedServices.isEmpty();
+    }
 }

@@ -12,8 +12,9 @@ public class BookishClass extends StudentsClassAbstract implements Bookish, Stud
         visitedLeisureServices = new DoublyLinkedList<>();
     }
 
-    public void addVisitedService(Services services){
-        visitedLeisureServices.addLast(services);
+    public void addVisitedService(Services service){
+        if(visitedLeisureServices.indexOf(service) == -1)
+            visitedLeisureServices.addLast(service);
     }
 
     public Iterator<Services> getAllVisitedServices(){
@@ -21,4 +22,8 @@ public class BookishClass extends StudentsClassAbstract implements Bookish, Stud
     }
 
 
+
+    public boolean hasVisitedLocation() {
+        return !visitedLeisureServices.isEmpty();
+    }
 }
