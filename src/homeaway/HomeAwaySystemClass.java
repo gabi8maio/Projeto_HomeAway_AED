@@ -208,7 +208,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     public boolean isServiceMoreExpensiveForThrifty(String studentName, String serviceName){
         return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
     }
-
+//sd
     public String moveStudentToLocation(String studentName, String locationName)
     throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException{
 
@@ -240,14 +240,16 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     private boolean isCorrectOrder(String order){
-        return !order.equals(">") && !order.equals("<");
+        return order.equals(">") || order.equals("<");
     }
 
     public Iterator<Students> usersCommand(String order, String serviceName){
         if (!isCorrectOrder(order)) throw new IllegalArgumentException(String.format("Unknown %s!"));
-        String serviceExists = serviceNameExists(null); // Pro FAZERERERER
-        if (serviceExists != null) throw new IllegalArgumentException(String.format("%s does not exist!"));
-        if (!isEatingOrLeisureService(serviceName)) throw new IllegalArgumentException(String.format("%s is not a valid service!"));
+        String service = serviceNameExists(serviceName);
+        if (service == null)
+            throw new LodgingNotExistsException(serviceName);
+        if (isEatingOrLeisureService(serviceName))
+            throw new InvalidServiceException(serviceName);
 
         return loadedArea.getAllStudentsIterator();
     }

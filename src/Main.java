@@ -286,8 +286,8 @@ public class Main {
 
         try {
             // move Student
-            system.moveStudentToLocation(studentName, locationName);
-            System.out.printf(MOVE_HOME,locationName,studentName,studentName);
+            String realStudent = system.moveStudentToLocation(studentName, locationName);
+            System.out.printf(MOVE_HOME,locationName,realStudent,realStudent);
         } catch (LodgingNotExistsException | StudentDoesNotExistsException | StudentHomeException | LodgingIsFullException | MoveNotAcceptableException e) {
             System.out.println(e.getMessage());
         }
@@ -296,14 +296,20 @@ public class Main {
     private static void executeUsers(Scanner in, HomeAwaySystem system) {
         String order = in.next().trim();
         String serviceName = in.nextLine().trim();
-        Iterator<Students> studentIterator = system.usersCommand(order,serviceName);
 
-        while (studentIterator.hasNext()) {
-            Students student = studentIterator.next();
-            System.out.printf(STUDENTS_COMMAND,
-                    student.getName(),
-                    student.getType().toLowerCase());
+        try {
+            Iterator<Students> studentIterator = system.usersCommand(order, serviceName);
+
+            while (studentIterator.hasNext()) {
+                Students student = studentIterator.next();
+                System.out.printf("%s: %s.\n",
+                        student.getName(),
+                        student.getType().toLowerCase());
+            }
+        }catch(LodgingNotExistsException | InvalidServiceException e){
+            System.out.println(e.getMessage());
         }
+
     }
 
     private static void executeWhere(Scanner in, HomeAwaySystem system) {

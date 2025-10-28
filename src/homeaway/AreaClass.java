@@ -205,7 +205,7 @@ public class AreaClass implements Serializable {
         Services service = findServicesElem(serviceName);
         return service instanceof Leisure || service instanceof Eating;
     }
-
+//ss
     public boolean isStudentAtLocation(String studentName,String locationName){
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {

@@ -5,7 +5,7 @@ import dataStructures.*;
 
 public class BookishClass extends StudentsClassAbstract implements Bookish, Students, Serializable {
 
-    private DoublyLinkedList<Services> visitedLeisureServices;
+    private TwoWayList<Services> visitedLeisureServices;
 
     BookishClass (String type, String name, String country, Services lodging) {
         super(type, name, country, lodging);
