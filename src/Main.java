@@ -378,7 +378,7 @@ public class Main {
             System.out.println(SERVICES_SORTED_HEADER);
             while (rankingIterator.hasNext()) {
                 Services service = rankingIterator.next();
-                    System.out.printf("%s: %d.%n", service.getServiceName(), service.getAverageStars());
+                    System.out.printf("%s: %d\n", service.getServiceName(), service.getAverageStars());
             }
         } catch (NoServicesInSystemException e) {
             System.out.println(e.getMessage());

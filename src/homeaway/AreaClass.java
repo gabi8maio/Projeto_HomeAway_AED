@@ -196,8 +196,10 @@ public class AreaClass implements Serializable {
                 newService = new LeisureClass(latitude, longitude, price, value, serviceName);
                 break;
         }
+        newService.updateCounterRating(updateCounter++);
         services.addLast(newService);
         servicesByRank.add(newService);
+
     }
 
     // By type btw
@@ -289,7 +291,23 @@ public class AreaClass implements Serializable {
 
         Services service = findServicesElem(serviceName);
         assert service != null;
+
+        servicesByRank.remove(service);
         service.addRating(rating, tag, updateCounter++);
+        servicesByRank.add(service);
+
+    }
+
+    private int getPosition(String serviceName) {
+        int pos = 0;
+        Iterator<Services> it = servicesByRank.iterator();
+        while (it.hasNext()) {
+            pos++;
+            if (it.next().getServiceName().equalsIgnoreCase(serviceName)) {
+                return pos;
+            }
+        }
+        return -1;
     }
 
     public Iterator<Services> getServicesByRankingIterator(){

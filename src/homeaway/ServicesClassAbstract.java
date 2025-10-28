@@ -15,10 +15,10 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     private final double price;
     private int numOfPeople;
     private final String serviceName;
-    private int lastUpdateCounter;
+    private int lastUpdateCounter=0;
     private int averageStars;
     private int totalStars;
-    private int rating;
+    private int rating = 0;
     int studentsThereLodging;
 
     public TwoWayList<Students> studentsThere;
@@ -34,6 +34,8 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         studentsThere = new DoublyLinkedList<>();
         studentsThereLodging = 0;
         averageStars = 4;
+        totalStars = 4;
+        rating = 1;
 
     }
 
@@ -126,19 +128,21 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         tags.addLast(tag);
     }
 
-    public void updateCounterRating() {
-        lastUpdateCounter++;
+    public void updateCounterRating(int counter) {
+        lastUpdateCounter = counter;
     }
 
     public void addRating(int stars,String tag, int counter) {
+        if(rating == 0) averageStars = 0;
         totalStars += stars;
         rating++;
-        averageStars = Math.round((float)totalStars/(float)rating);
+        averageStars = (totalStars + rating / 2) / rating;
         tags.addLast(tag);
         lastUpdateCounter = counter;
     }
 
     public int getAverageStars() {
+
         return averageStars;
     }
 }
