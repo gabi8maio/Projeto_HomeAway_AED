@@ -6,4 +6,6 @@ public interface ServicesChange {
     void addTag(String tag);
     void addStudentsThere(Students newStudent);
     void removeStudentsThere(Students student);
+    void addStudentsThereLodging();
+    void removeStudentsThereLodging();
 }

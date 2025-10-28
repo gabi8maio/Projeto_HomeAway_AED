@@ -112,7 +112,7 @@ public class AreaClass implements Serializable {
 
     }
 
-    public void moveStudentToLocation(String studentName, String serviceName){
+    public String moveStudentToLocation(String studentName, String serviceName){
         Students student = findStudentElem(studentName);
         Services service = findServicesElem(serviceName);
         assert service != null;
@@ -120,12 +120,14 @@ public class AreaClass implements Serializable {
 
         Services oldService = student.getPlaceHome();
         oldService.removeStudentsThere(student);
+        oldService.removeStudentsThereLodging();
 
         service.addStudentsThere(student);
+        service.addStudentsThereLodging();
 
         student.setPlaceHome(service);
         student.setPlaceGo(service);
-
+        return student.getName();
     }
 
     public String studentExists(String name) {
@@ -479,6 +481,7 @@ public class AreaClass implements Serializable {
         }
         assert service != null;
         service.addStudentsThere(newStudent);
+        service.addStudentsThereLodging();
         allStudents.add(newStudent);
         studentsByCountry.addLast(newStudent);
     }

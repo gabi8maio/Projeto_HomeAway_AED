@@ -209,25 +209,26 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
     }
 
-    public void moveStudentToLocation(String studentName, String locationName)
+    public String moveStudentToLocation(String studentName, String locationName)
     throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException{
 
         String serviceName = serviceNameExists(locationName);
         if (serviceName == null)
             throw new LodgingNotExistsException(locationName);
-
+        String studentNameReal = studentExists(studentName);
         if (studentExists(studentName) == null){
             throw new StudentDoesNotExistsException(studentName);
         }
         if (isStudentHome(studentName, locationName))
-            throw new StudentHomeException(studentName);
+            throw new StudentHomeException(studentNameReal);
         String fullLodging = lodgingIsFull(locationName);
         if (fullLodging != null) {
             throw new LodgingIsFullException(fullLodging);
         }
         if (!isAcceptable(studentName, locationName))
-            throw new MoveNotAcceptableException(studentName);
-        loadedArea.moveStudentToLocation(studentName,locationName);
+            throw new MoveNotAcceptableException(studentNameReal);
+
+        return loadedArea.moveStudentToLocation(studentName,locationName);
     }
 
     private boolean isAcceptable(String studentName, String locationName) {

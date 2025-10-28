@@ -4,6 +4,7 @@ import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 public abstract class ServicesClassAbstract implements Services, ServicesChange, Serializable {
 
@@ -16,6 +17,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     private int averageStars;
     private int totalStars;
     private int rating;
+    int studentsThereLodging;
 
     public DoublyLinkedList<Students> studentsThere;
     private DoublyLinkedList<String> tags;
@@ -28,6 +30,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         this.latitude = latitude;
         tags = new DoublyLinkedList<>();
         studentsThere = new DoublyLinkedList<>();
+        studentsThereLodging = 0;
     }
 
     public void addStudentsThere(Students newStudent){
@@ -41,9 +44,21 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         }
     }
 
+    public void addStudentsThereLodging(){
+        studentsThereLodging++;
+    }
+    public void removeStudentsThereLodging(){
+        studentsThereLodging--;
+    }
+
+
+
     public String isFull(){
-         if(getValue() == studentsThere.size()) return getServiceName();
-         return null;
+        if(getServiceType().equalsIgnoreCase(TypesOfService.LODGING.toString()))
+            if(getValue() == studentsThereLodging) return getServiceName();
+
+        if(getValue() == studentsThere.size()) return getServiceName();
+        return null;
     }
 
     @Override
