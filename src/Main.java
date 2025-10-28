@@ -35,7 +35,7 @@ public class Main {
     private static final String STUDENT_ALREADY_EXISTS = "%s already exists!\n";
     private static final String STUDENT_ADDED = "%s added.\n";
     private static final String STUDENT_LEFT = "%s has left.\n";
-    private static final String STUDENT_NOT_EXISTS = "%s does not exist.\n";
+    private static final String STUDENT_NOT_EXISTS = "%s does not exist!\n";
 
     // Other command constants
     private static final String NO_SERVICES = "No services yet!\n";
@@ -257,7 +257,7 @@ public class Main {
             System.out.printf(STUDENT_LEFT, name);
 
         } catch (StudentDoesNotExistsException e) {
-            System.out.printf(e.getMessage(), name);
+            System.out.println(e.getMessage());
         }
     }
 
@@ -273,12 +273,11 @@ public class Main {
             if(system.isServiceMoreExpensiveForThrifty(studentName, locationName)) System.out.printf(STUDENT_DISTRACTED,studentNameReal,locationName,studentName);
             else System.out.printf(STUDENT_NOW_AT,studentNameReal,locationName);
 
-        } catch (StudentAlreadyThereException | StudentAlreadyExistsException | InvalidServiceException e) {
+        } catch (StudentAlreadyThereException | StudentAlreadyExistsException | InvalidServiceException |
+                 StudentDoesNotExistsException e) {
             System.out.println(e.getMessage());
         } catch (UnknownLocationException | EatingIsFullException e){
             System.out.printf(e.getMessage(), locationName);
-        } catch (StudentDoesNotExistsException e){
-            System.out.printf(e.getMessage(), studentName);
         }
     }
 

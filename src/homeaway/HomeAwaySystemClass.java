@@ -212,7 +212,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     public void moveStudentToLocation(String studentName, String locationName)
     throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException{
 
-        if (isEatingOrLeisureService(locationName))
+        String serviceName = serviceNameExists(locationName);
+        if (serviceName == null)
             throw new LodgingNotExistsException(locationName);
 
         if (studentExists(studentName) == null){
