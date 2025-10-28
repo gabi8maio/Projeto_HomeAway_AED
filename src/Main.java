@@ -1,4 +1,6 @@
 import dataStructures.Iterator;
+import dataStructures.TwoWayDoublyIterator;
+import dataStructures.TwoWayIterator;
 import homeaway.*;
 import homeaway.Exeptions.*;
 
@@ -298,13 +300,25 @@ public class Main {
         String serviceName = in.nextLine().trim();
 
         try {
-            Iterator<Students> studentIterator = system.usersCommand(order, serviceName);
+            TwoWayIterator<Students> studentIterator = system.usersCommand(order, serviceName);
 
-            while (studentIterator.hasNext()) {
-                Students student = studentIterator.next();
-                System.out.printf("%s: %s.\n",
+            if(order.equals("<")) {
+                studentIterator.fullForward();
+                while (studentIterator.hasPrevious()) {
+
+
+                    Students student = studentIterator.previous();
+                    System.out.printf("%s: %s\n",
+                            student.getName(),
+                            student.getType().toLowerCase());
+                }
+            }else{
+                while (studentIterator.hasNext()) {
+                 Students student = studentIterator.next();
+                      System.out.printf("%s: %s\n",
                         student.getName(),
                         student.getType().toLowerCase());
+                }
             }
         }catch(LodgingNotExistsException | InvalidServiceException e){
             System.out.println(e.getMessage());

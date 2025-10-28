@@ -1,6 +1,7 @@
 package homeaway;
 
 import dataStructures.Iterator;
+import dataStructures.TwoWayIterator;
 import homeaway.Exeptions.*;
 
 public interface HomeAwaySystem {
@@ -27,7 +28,7 @@ public interface HomeAwaySystem {
     String studentExists(String name);
     String moveStudentToLocation(String studentName, String locationName) throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException;
     String goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException;
-    Iterator<Students> usersCommand(String order, String serviceName);
+    TwoWayIterator<Students> usersCommand(String order, String serviceName);
     boolean isServiceMoreExpensiveForThrifty(String studentName, String serviceName);
     Iterator<Students> getAllStudentsIterator();
     Iterator<Students> getStudentsByCountryIterator(String country);

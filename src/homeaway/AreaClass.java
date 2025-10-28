@@ -152,7 +152,10 @@ public class AreaClass implements Serializable {
         return allStudents.iterator();
     }
 
-    public Iterator<Students> getStudentsByService(String serviceName){
+    public TwoWayIterator<Students> getStudentsByService(String serviceName){
+        Services service = findServicesElem(serviceName);
+        assert service != null;
+        return service.getStudentsThere();
 
     }
 

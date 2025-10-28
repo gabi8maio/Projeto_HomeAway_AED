@@ -2,6 +2,8 @@ package homeaway;
 
 import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
+import dataStructures.TwoWayIterator;
+import dataStructures.TwoWayList;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -19,7 +21,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     private int rating;
     int studentsThereLodging;
 
-    public DoublyLinkedList<Students> studentsThere;
+    public TwoWayList<Students> studentsThere;
     private DoublyLinkedList<String> tags;
 
     public ServicesClassAbstract(long latitude, long longitude, double price, int numOfPeople, String serviceName) {
@@ -110,6 +112,10 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
 
     public Iterator<String> getTags(){
         return tags.iterator();
+    }
+
+    public TwoWayIterator<Students> getStudentsThere(){
+        return studentsThere.twoWayiterator();
     }
 
     public void addTag(String tag){

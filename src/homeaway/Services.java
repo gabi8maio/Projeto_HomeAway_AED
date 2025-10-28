@@ -1,6 +1,7 @@
 package homeaway;
 
 import dataStructures.Iterator;
+import dataStructures.TwoWayIterator;
 
 import java.io.Serializable;
 
@@ -17,5 +18,6 @@ public interface Services extends Comparable<Services>, ServicesChange {
     float getTotalStars();
     int getRatingCount();
     Iterator<String> getTags();
+    TwoWayIterator<Students> getStudentsThere();
     String isFull();
 }

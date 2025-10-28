@@ -2,6 +2,7 @@ package homeaway;
 
 import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
+import dataStructures.TwoWayIterator;
 import dataStructures.exceptions.NoSuchElementException;
 import homeaway.Exeptions.*;
 
@@ -243,7 +244,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return order.equals(">") || order.equals("<");
     }
 
-    public Iterator<Students> usersCommand(String order, String serviceName){
+    public TwoWayIterator<Students> usersCommand(String order, String serviceName){
         if (!isCorrectOrder(order)) throw new IllegalArgumentException(String.format("Unknown %s!"));
         String service = serviceNameExists(serviceName);
         if (service == null)
@@ -251,7 +252,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         if (isEatingOrLeisureService(serviceName))
             throw new InvalidServiceException(serviceName);
 
-        return loadedArea.getAllStudentsIterator();
+        return loadedArea.getStudentsByService(serviceName);
     }
 
     public String studentExists (String name){
