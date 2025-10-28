@@ -17,7 +17,7 @@ public class ServiceComparatorByStars implements Comparator<Services>, Serializa
 
         // Se stars iguais, ordenar por lastUpdateOrder ASCENDENTE (mais antigo primeiro)
         // Isto faz com que serviços com lastUpdateOrder MAIOR fiquem no FINAL
-        if(o1.didEvaluationChanged()) return -1;
+        //if(o1.didEvaluationChanged()) return -1;
         return Integer.compare(o1.getLastUpdatedOrder(), o2.getLastUpdatedOrder());
     }
 

@@ -378,7 +378,7 @@ public class Main {
             System.out.println(SERVICES_SORTED_HEADER);
             while (rankingIterator.hasNext()) {
                 Services service = rankingIterator.next();
-                    System.out.printf("%s: %d %d\n", service.getServiceName(), service.getAverageStars(),service.getLastUpdatedOrder());
+                    System.out.printf("%s: %d\n", service.getServiceName(), service.getAverageStars());
             }
         } catch (NoServicesInSystemException e) {
             System.out.println(e.getMessage());
@@ -416,7 +416,7 @@ public class Main {
 
             while (tagIterator.hasNext()) {
                 Services service = tagIterator.next();
-                System.out.printf("%s %s%n", service.getServiceType(), service.getServiceName());
+                System.out.printf("%s %s\n", service.getServiceType().toLowerCase(), service.getServiceName());
             }
 
         } catch (Exception e) {

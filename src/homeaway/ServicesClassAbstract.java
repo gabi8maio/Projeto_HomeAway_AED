@@ -150,9 +150,13 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         averageStars = (totalStars + rating / 2) / rating;
         int newAverage = averageStars;
         tags.addLast(tag);
-        lastUpdateCounter = counter;
-        if(oldAverage != newAverage)
+        if(oldAverage != newAverage) lastUpdateCounter = counter;
+        return;
+        /*if(oldAverage != newAverage) {
             evaluationChanged = true;
+            return;
+        }*/
+
     }
 
     public int getAverageStars() {

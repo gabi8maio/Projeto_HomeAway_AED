@@ -386,12 +386,16 @@ public class AreaClass implements Serializable {
         while (it.hasNext()) {
             Services s = it.next();
             Iterator<String> it2 = s.getTags();
-            while (it.hasNext()){
+            while (it2.hasNext()){
                 String tagService = it2.next();
-                if(tagService.equals(tag)) iteratorWithServices.addLast(s);
+                if(tagService.toUpperCase().contains(tag.toUpperCase())) {
+                    iteratorWithServices.addLast(s);
+                     break;
+                }
             }
         }
-        return null;
+
+        return iteratorWithServices.iterator();
     }
 
     public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
