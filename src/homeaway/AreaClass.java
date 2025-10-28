@@ -295,6 +295,7 @@ public class AreaClass implements Serializable {
 
         servicesByRank.remove(service);
         service.addRating(rating, tag, updateCounter++);
+
         servicesByRank.add(service);
 
     }

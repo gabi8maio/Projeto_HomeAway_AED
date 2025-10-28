@@ -11,6 +11,7 @@ public interface Services extends Comparable<Services>, ServicesChange {
     double getServicePrice();
     String getServiceType();
     long getLatitude();
+    boolean didEvaluationChanged();
     long getLongitude();
     int getValue();
     int getLastUpdatedOrder();
