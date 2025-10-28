@@ -185,6 +185,11 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.getServicesByTagIterator(tag);
     }
 
+
+    private boolean isTypeWithAverage(String type, int n){
+        return loadedArea.isTypeWithAverage( type, n);
+    }
+
     public boolean lodgingExists (String name){
         return loadedArea.lodgingExists(name);
     }

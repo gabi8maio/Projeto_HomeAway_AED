@@ -398,6 +398,15 @@ public class AreaClass implements Serializable {
         return iteratorWithServices.iterator();
     }
 
+    public boolean isTypeWithAverage(String type, int n){
+        Iterator<Services> iterator = servicesByRank.iterator();
+        while (iterator.hasNext()) {
+            Services service = iterator.next();
+            if (service.getServiceType().equalsIgnoreCase(type) && service.getAverageStars() == n) return true;
+            }
+        return false;
+    }
+
     public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
 
         // 5. Ordenar por distância Manhattan e depois por lastUpdatedOrder
