@@ -134,6 +134,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         }
 
         loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
+
     }
 
 
@@ -297,8 +298,12 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             throw  new ServiceDoesNotExistException(serviceName);
         loadedArea.starCommand(rating,serviceName,tag);
     }
-    public Iterator<Services> getServicesByRankingIterator(){
-        return loadedArea.getServicesByRankingIterator();
+    public Iterator<Services> getServicesByRankingIterator() throws NoServicesInSystemException{
+        Iterator<Services> rankingIterator = loadedArea.getServicesByRankingIterator();
+        if (!rankingIterator.hasNext()) {
+            throw new NoServicesInSystemException();
+        }
+        return rankingIterator;
     }
 
     public Iterator<Students> getAllStudentsIterator(){

@@ -23,18 +23,12 @@ public class AreaClass implements Serializable {
     private SortedList<Students> allStudents;
     private DoublyLinkedList<Students> studentsByCountry;
     int updateCounter;
-    //private ListInArray</*ListDoubluy...*/> leisureServices; // Tirar estas tres var, e meter apenas uma
-    //private ListInArray<Services> eatingServices;
-    //private ListInArray<Services> lodgingServices;
 
-//sss
+
+
     @SuppressWarnings("unchecked")
     public AreaClass(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
 
-        // Isto parece uma javardice aqui ns
-        //Comparator<Students> studentComparatorByName = (s1, s2) -> s1.getName().compareTo(s2.getName());
-       // Comparator<Services> serviceComparatorByRank = (s1, s2) ->
-         //       s1.getServicePrice().compareTo(s2.getServicePrice());
 
 
         areaName = name;
@@ -43,9 +37,6 @@ public class AreaClass implements Serializable {
         this.leftLongitude = leftLongitude;
         this.rightLongitude = rightLongitude;
         services = new DoublyLinkedList<>();
-        //lodgingServices = new ListInArray<>(100);
-        //leisureServices = new ListInArray<>(100);
-        //eatingServices = new ListInArray<>(100);
         studentsByCountry = new DoublyLinkedList<>();
         allStudents = new SortedDoublyLinkedList<>(new studentComparatorByName()); // Need to change
         servicesByRank = new SortedDoublyLinkedList<>(new ServiceComparatorByStars()); // Need to change
@@ -206,6 +197,7 @@ public class AreaClass implements Serializable {
                 break;
         }
         services.addLast(newService);
+        servicesByRank.add(newService);
     }
 
     // By type btw
@@ -296,6 +288,7 @@ public class AreaClass implements Serializable {
     public void starCommand(int rating, String serviceName,String tag){
 
         Services service = findServicesElem(serviceName);
+        servicesByRank.remove(service);
         assert service != null;
         service.addTag(tag); // ADd a  tag
         int oldUpdateCounter = service.getLastUpdatedOrder();
@@ -307,8 +300,12 @@ public class AreaClass implements Serializable {
             updateCounter++;
             service.updateCounterRating();
             service.addRating(rating,updateCounter);
-        }else
+            servicesByRank.add(service);
+            servicesByRank.add(service);
+        }else {
             service.addRating(rating,oldUpdateCounter);
+            servicesByRank.add(service);
+        }
     }
 
     public Iterator<Services> getServicesByRankingIterator(){

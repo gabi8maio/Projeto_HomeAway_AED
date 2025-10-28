@@ -21,7 +21,7 @@ public interface HomeAwaySystem {
     Students getStudentLocationInfo(String studentName) throws StudentDoesNotExistsException;
     Iterator<Services> getVisitedLocationsIterator(String studentName);
     void starCommand(int rating,String serviceName, String tag) throws InvalidEvaluationException, ServiceDoesNotExistException;
-    Iterator<Services> getServicesByRankingIterator();
+    Iterator<Services> getServicesByRankingIterator()throws NoServicesInSystemException;
     Iterator<Services> getServicesByTagIterator(String tag);
     Services findMostRelevantService(String studentName, String serviceType);
     Iterator<Services> getRankedServicesIterator(int stars, String type, String studentName);

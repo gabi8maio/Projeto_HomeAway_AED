@@ -33,6 +33,8 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         tags = new DoublyLinkedList<>();
         studentsThere = new DoublyLinkedList<>();
         studentsThereLodging = 0;
+        averageStars = 4;
+
     }
 
     public void addStudentsThere(Students newStudent){

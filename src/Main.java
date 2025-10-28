@@ -60,7 +60,7 @@ public class Main {
     private static final String INVALID_EVALUATION = "Invalid evaluation!\n";
     private static final String EVALUATION_REGISTERED = "Your evaluation has been registered!";
     private static final String NO_SERVICES_IN_SYSTEM = "No services in the system.\n";
-    private static final String SERVICES_SORTED_HEADER = "Services sorted in descending order\n";
+    private static final String SERVICES_SORTED_HEADER = "Services sorted in descending order";
     private static final String INVALID_STARS = "Invalid stars!\n";
     private static final String NO_SERVICES_TYPE = "No %s services!\n";
     private static final String NO_SERVICES_AVERAGE = "No %s services with average!\n";
@@ -182,10 +182,10 @@ public class Main {
             system.addService(serviceType, latitude, longitude, price, value, serviceName);
             System.out.printf(SERVICE_ADDED, serviceType.toLowerCase(), serviceName);
 
-    } catch(InvalidServiceTypeException | InvalidLocationException | InvalidPriceMenuException | InvalidRoomPriceException |
-                InvalidTicketPriceException | InvalidDiscountException | InvalidCapacityException e) {
-        System.out.println(e.getMessage());
-    } catch ( ServiceAlreadyExistsException e){
+        } catch(InvalidServiceTypeException | InvalidLocationException | InvalidPriceMenuException | InvalidRoomPriceException |
+            InvalidTicketPriceException | InvalidDiscountException | InvalidCapacityException e) {
+            System.out.println(e.getMessage());
+        } catch ( ServiceAlreadyExistsException e){
             System.out.print(e.getMessage());
         }
     }
@@ -375,19 +375,16 @@ public class Main {
     private static void executeRanking(Scanner in, HomeAwaySystem system) {
         try {
             Iterator<Services> rankingIterator = system.getServicesByRankingIterator();
-            if (!rankingIterator.hasNext()) {
-                System.out.println(NO_SERVICES_IN_SYSTEM);
-                return;
-            }
-
             System.out.println(SERVICES_SORTED_HEADER);
             while (rankingIterator.hasNext()) {
                 Services service = rankingIterator.next();
-                System.out.printf("%s: %d.%n", service.getServiceName(), service.getAverageStars());
+                    System.out.printf("%s: %d.%n", service.getServiceName(), service.getAverageStars());
+
+
             }
 
-        } catch (Exception e) {
-            System.out.println("Error executing ranking command");
+        } catch (NoServicesInSystemException e) {
+            System.out.println(e.getMessage());
         }
     }
 
