@@ -379,10 +379,7 @@ public class Main {
             while (rankingIterator.hasNext()) {
                 Services service = rankingIterator.next();
                     System.out.printf("%s: %d.%n", service.getServiceName(), service.getAverageStars());
-
-
             }
-
         } catch (NoServicesInSystemException e) {
             System.out.println(e.getMessage());
         }

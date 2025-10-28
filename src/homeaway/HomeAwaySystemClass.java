@@ -194,8 +194,24 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
+        if (stars > 5 || stars < 0)
+            throw new InvalidEvaluationException();
+        String name = studentExists(studentName);
+        if (name == null)
+            throw new StudentDoesNotExistsException(studentName);
+        TypesOfService serviceTypeEnum = TypesOfService.fromString(type); // Podemos fazer isto?
+        if (serviceTypeEnum == null) {
+            throw new InvalidServiceTypeException();
+        }
+        if (!hasServicesOfType(type))
+            throw new NoTypeServicesException(type);
         return loadedArea.getRankedServicesIterator(stars,type,studentName);
     }
+
+    private boolean hasServicesOfType(String type) {
+        return loadedArea.hasServiceOfType(type);
+    }
+
     public  Services findMostRelevantService(String studentName, String serviceType){
         return loadedArea.findMostRelevantService(studentName, serviceType);
     }
@@ -296,8 +312,13 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             throw new InvalidEvaluationException();
         if(serviceNameExists(serviceName) == null)
             throw  new ServiceDoesNotExistException(serviceName);
+
+
         loadedArea.starCommand(rating,serviceName,tag);
     }
+
+
+
     public Iterator<Services> getServicesByRankingIterator() throws NoServicesInSystemException{
         Iterator<Services> rankingIterator = loadedArea.getServicesByRankingIterator();
         if (!rankingIterator.hasNext()) {

@@ -40,7 +40,7 @@ public class AreaClass implements Serializable {
         studentsByCountry = new DoublyLinkedList<>();
         allStudents = new SortedDoublyLinkedList<>(new studentComparatorByName()); // Need to change
         servicesByRank = new SortedDoublyLinkedList<>(new ServiceComparatorByStars()); // Need to change
-
+        updateCounter = 0;
     }
 
 
@@ -288,24 +288,8 @@ public class AreaClass implements Serializable {
     public void starCommand(int rating, String serviceName,String tag){
 
         Services service = findServicesElem(serviceName);
-        servicesByRank.remove(service);
         assert service != null;
-        service.addTag(tag); // ADd a  tag
-        int oldUpdateCounter = service.getLastUpdatedOrder();
-        int oldStars = service.getAverageStars();
-        float newTotal = service.getTotalStars();
-        int newCount = service.getRatingCount();
-        int newStars = Math.round((newTotal + rating) / (newCount + 1));
-        if(oldStars != newStars){
-            updateCounter++;
-            service.updateCounterRating();
-            service.addRating(rating,updateCounter);
-            servicesByRank.add(service);
-            servicesByRank.add(service);
-        }else {
-            service.addRating(rating,oldUpdateCounter);
-            servicesByRank.add(service);
-        }
+        service.addRating(rating, tag, updateCounter++);
     }
 
     public Iterator<Services> getServicesByRankingIterator(){
@@ -546,6 +530,17 @@ public class AreaClass implements Serializable {
         }
         if (student instanceof Outgoing){
             return ((Outgoing) student).hasVisitedLocation();
+        }
+        return false;
+    }
+
+    public boolean hasServiceOfType(String type) {
+        Iterator <Services> it = services.iterator();
+        while (it.hasNext()) {
+            Services service = it.next();
+            if (service.getServiceType().equals(type)) {
+                return true;
+            }
         }
         return false;
     }

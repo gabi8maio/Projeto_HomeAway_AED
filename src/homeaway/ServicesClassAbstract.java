@@ -105,9 +105,6 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         return lastUpdateCounter;
     }
 
-    public int getAverageStars() {
-        return averageStars;
-    }
 
     public float getTotalStars() {
         return totalStars;
@@ -133,10 +130,16 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         lastUpdateCounter++;
     }
 
-    public void addRating(int stars, int counter) {
+    public void addRating(int stars,String tag, int counter) {
         totalStars += stars;
         rating++;
+        averageStars = Math.round((float)totalStars/(float)rating);
+        tags.addLast(tag);
         lastUpdateCounter = counter;
+    }
+
+    public int getAverageStars() {
+        return averageStars;
     }
 }
 
