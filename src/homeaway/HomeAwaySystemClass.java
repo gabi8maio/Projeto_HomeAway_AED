@@ -227,7 +227,6 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         }
         if (!isAcceptable(studentName, locationName))
             throw new MoveNotAcceptableException(studentName);
-
         loadedArea.moveStudentToLocation(studentName,locationName);
     }
 

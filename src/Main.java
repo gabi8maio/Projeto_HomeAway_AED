@@ -218,9 +218,9 @@ public class Main {
             system.addStudent(studentType, name, country, lodging);
             System.out.printf(STUDENT_ADDED, name);
 
-        }catch (InvalidStudentTypeException e){
+        }catch (InvalidStudentTypeException | LodgingIsFullException | LodgingNotExistsException e){
             System.out.println(e.getMessage());
-        } catch (LodgingNotExistsException | LodgingIsFullException | StudentAlreadyExistsException e) {
+        } catch ( StudentAlreadyExistsException e) {
             System.out.printf(e.getMessage());
         }
     }
