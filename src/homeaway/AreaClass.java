@@ -23,6 +23,7 @@ public class AreaClass implements Serializable {
     private SortedList<Students> allStudents;
     private DoublyLinkedList<Students> studentsByCountry;
     int updateCounter;
+    int counterByInsertion;
 
 
 
