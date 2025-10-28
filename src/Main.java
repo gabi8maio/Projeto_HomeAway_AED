@@ -273,9 +273,9 @@ public class Main {
             if(system.isServiceMoreExpensiveForThrifty(studentName, locationName)) System.out.printf(STUDENT_DISTRACTED,studentNameReal,locationName,studentName);
             else System.out.printf(STUDENT_NOW_AT,studentNameReal,locationName);
 
-        } catch (StudentAlreadyThereException | StudentAlreadyExistsException e) {
+        } catch (StudentAlreadyThereException | StudentAlreadyExistsException | InvalidServiceException e) {
             System.out.println(e.getMessage());
-        } catch (UnknownLocationException | InvalidServiceException | EatingIsFullException e){
+        } catch (UnknownLocationException | EatingIsFullException e){
             System.out.printf(e.getMessage(), locationName);
         } catch (StudentDoesNotExistsException e){
             System.out.printf(e.getMessage(), studentName);
@@ -289,8 +289,8 @@ public class Main {
         try {
             // move Student
             system.moveStudentToLocation(studentName, locationName);
-            System.out.printf(MOVE_HOME,studentName,locationName,studentName);
-        } catch (Exception e) {
+            System.out.printf(MOVE_HOME,locationName,studentName,studentName);
+        } catch (LodgingNotExistsException | StudentDoesNotExistsException | StudentHomeException | LodgingIsFullException | MoveNotAcceptableException e) {
             System.out.println(e.getMessage());
         }
     }

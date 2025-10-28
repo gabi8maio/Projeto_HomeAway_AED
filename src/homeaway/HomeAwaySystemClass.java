@@ -196,7 +196,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             throw new StudentDoesNotExistsException(studentName);
         }
         if (!isEatingOrLeisureService(locationName))
-            throw new InvalidServiceException();
+            throw new InvalidServiceException(locationName);
         if (isStudentAtLocation(studentName, locationName))
             throw new StudentAlreadyThereException();
         if (isEatingServiceFull(locationName))
@@ -209,22 +209,23 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
     }
 
-    public void moveStudentToLocation(String studentName, String locationName){
-        String serviceName = serviceNameExists(locationName);
-        if (serviceName == null)
+    public void moveStudentToLocation(String studentName, String locationName)
+    throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException{
+
+        if (isEatingOrLeisureService(locationName))
             throw new LodgingNotExistsException(locationName);
 
         if (studentExists(studentName) == null){
             throw new StudentDoesNotExistsException(studentName);
         }
         if (isStudentHome(studentName, locationName))
-            throw new StudentHomeException();
+            throw new StudentHomeException(studentName);
         String fullLodging = lodgingIsFull(locationName);
         if (fullLodging != null) {
             throw new LodgingIsFullException(fullLodging);
         }
         if (!isAcceptable(studentName, locationName))
-            throw new MoveNotAcceptableException();
+            throw new MoveNotAcceptableException(studentName);
 
         loadedArea.moveStudentToLocation(studentName,locationName);
     }

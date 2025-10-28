@@ -25,7 +25,7 @@ public interface HomeAwaySystem {
     Services findMostRelevantService(String studentName, String serviceType);
     Iterator<Services> getRankedServicesIterator(int stars, String type, String studentName);
     String studentExists(String name);
-    void moveStudentToLocation(String studentName, String locationName);
+    void moveStudentToLocation(String studentName, String locationName) throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException;
     String goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException;
     Iterator<Students> usersCommand(String order, String serviceName);
     boolean isServiceMoreExpensiveForThrifty(String studentName, String serviceName);

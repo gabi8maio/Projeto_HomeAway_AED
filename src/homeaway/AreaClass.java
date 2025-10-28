@@ -500,10 +500,8 @@ public class AreaClass implements Serializable {
 
     public boolean isAcceptableMove(String studentName, String locationName) {
         Students student = findStudentElem(studentName);
-        if (student.getPlaceHome().getServicePrice() >= findServicesElem(locationName).getServicePrice())
-            return false;
-
-        return true;
+        Services service = findServicesElem(locationName);
+        return student != null && service != null && student.getPlaceHome().getServicePrice() > service.getServicePrice();
     }
 
 
