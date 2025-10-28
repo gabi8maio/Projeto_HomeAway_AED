@@ -194,14 +194,8 @@ public class AreaClass implements Serializable {
     }
 
     public boolean isEatingOrLeisureService(String serviceName) {
-        Iterator<Services> it = services.iterator();
-        while (it.hasNext()) {
-            Services s = it.next();
-            if((s.getServiceName().equalsIgnoreCase(serviceName)) &&
-                    (s.getServiceType().equalsIgnoreCase(TypesOfService.LEISURE.toString()) ||
-                    s.getServiceType().equalsIgnoreCase(TypesOfService.EATING.toString()))) return true;
-        }
-        return false;
+        Services service = findServicesElem(serviceName);
+        return service instanceof Leisure || service instanceof Eating;
     }
 
     public boolean isStudentAtLocation(String studentName,String locationName){
@@ -489,13 +483,11 @@ public class AreaClass implements Serializable {
     }
 
     public boolean isStudentHome(String studentName, String locationName) {
-        Iterator <Students> it = getAllStudentsIterator();
-        while (it.hasNext() ) {
-            Students student = it.next();
-            if (student.getName().equals(studentName) && student.getPlaceHome().equals(locationName))
-                return true;
+        Students student = findStudentElem(studentName);
+        if (student == null) {
+            return false;
         }
-        return false;
+        return student.getPlaceHome().getServiceName().equals(locationName);
     }
 
     public boolean isAcceptableMove(String studentName, String locationName) {
