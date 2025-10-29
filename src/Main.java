@@ -251,11 +251,11 @@ public class Main {
     }
 
     //exceptions added
-    private static void executeLeave(Scanner in, HomeAwaySystem system) {
+    private static void executeLeave(Scanner in, HomeAwaySystem system) throws StudentDoesNotExistsException{
         String name = in.nextLine().trim();
         try {
-            system.removeStudent(name);
-            System.out.printf(STUDENT_LEFT, name);
+
+            System.out.printf(STUDENT_LEFT, system.removeStudent(name).getName());
 
         } catch (StudentDoesNotExistsException e) {
             System.out.println(e.getMessage());

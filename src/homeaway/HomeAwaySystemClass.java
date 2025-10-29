@@ -236,12 +236,12 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.findMostRelevantService(studentName, serviceType);
     }
 
-    public void removeStudent(String studentName) throws StudentDoesNotExistsException{
+    public Students removeStudent(String studentName) throws StudentDoesNotExistsException{
         String studentExistsName = studentExists(studentName);
-        if (studentExists(studentName) != null){
-            throw new StudentAlreadyExistsException(studentExistsName);
+        if (studentExists(studentName) == null){
+            throw new StudentDoesNotExistsException(studentName);
         }
-        loadedArea.removeStudent(studentName);
+        return loadedArea.removeStudent(studentExistsName);
     }
 
     public Students goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{

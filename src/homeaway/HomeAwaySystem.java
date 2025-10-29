@@ -15,7 +15,7 @@ public interface HomeAwaySystem {
     String getTempAreaName();
     String saveArea() throws SystemBoundsNotDefinedException;
     String loadArea(String name) throws BoundsDoesNotExistException;
-    void removeStudent(String studentName) throws StudentDoesNotExistsException;
+    Students removeStudent(String studentName) throws StudentDoesNotExistsException;
     boolean lodgingExists(String name);
     String lodgingIsFull(String name);
     Students getStudentLocationInfo(String studentName) throws StudentDoesNotExistsException;

@@ -55,10 +55,19 @@ public class AreaClass implements Serializable {
     }
 
 
-    public void removeStudent(String studentName) {
+    public Students removeStudent(String studentName) {
         Students student = findStudentElem(studentName);
-        if(student == null) throw new InvalidPositionException(); // Isto em principio n vai acontecer
+        if(student == null)
+            throw new InvalidPositionException(); // Isto em principio n vai acontecer
+        Services servicesNow = student.getPlaceNow();
+        Services homeService = student.getPlaceHome();
         allStudents.remove(student);
+        int index = studentsByCountry.indexOf(student);
+        studentsByCountry.remove(index);
+        servicesNow.removeStudentsThere(student);
+        homeService.removeStudentsThere(student);
+        homeService.removeStudentsThereLodging();
+        return student;
     }
 
     //TODO: utilizar iterador filtrado
@@ -133,7 +142,8 @@ public class AreaClass implements Serializable {
         Iterator<Students> it = allStudents.iterator();
         while (it.hasNext()) {
             Students s = it.next();
-            if (s.getName().equalsIgnoreCase(name)) return s.getName();
+            if (s.getName().equalsIgnoreCase(name))
+                return s.getName();
         }
         return null;
     }
