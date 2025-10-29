@@ -8,4 +8,5 @@ public interface ServicesChange {
     void removeStudentsThere(Students student);
     void addStudentsThereLodging();
     void removeStudentsThereLodging();
+    void setNumOfInsertion(int counter);
 }

@@ -426,7 +426,7 @@ public class Main {
             String serviceType = in.nextLine().trim();
 
             Services service = system.findMostRelevantService(studentName, serviceType);
-            System.out.println(service);
+            System.out.println(service.getServiceName());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

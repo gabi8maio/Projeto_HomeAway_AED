@@ -23,6 +23,7 @@ public class AreaClass implements Serializable {
     private SortedList<Students> allStudents;
     private DoublyLinkedList<Students> studentsByCountry;
     int updateCounter;
+    int counterOfServicesInsertion;
 
 
 
@@ -41,6 +42,7 @@ public class AreaClass implements Serializable {
         allStudents = new SortedDoublyLinkedList<>(new studentComparatorByName()); // Need to change
         servicesByRank = new SortedDoublyLinkedList<>(new ServiceComparatorByStars()); // Need to change
         updateCounter = 0;
+        counterOfServicesInsertion =0;
     }
 
 
@@ -197,6 +199,7 @@ public class AreaClass implements Serializable {
                 break;
         }
         newService.updateCounterRating(updateCounter++);
+        newService.setNumOfInsertion(counterOfServicesInsertion++);
         services.addLast(newService);
         servicesByRank.add(newService);
     }
@@ -305,9 +308,9 @@ public class AreaClass implements Serializable {
         Students student = getStudent(studentName);
         Services relevantService = null;
 
-        if (student.getType().equals(StudentTypes.THRIFTY.toString())) {
+        if (student.getType().equalsIgnoreCase(StudentTypes.THRIFTY.toString())) {
             // Para thrifty: serviço mais barato
-            relevantService = findCheapestService(serviceType);
+           relevantService = findCheapestService(serviceType);
         } else {
             // Para bookish e outgoing: serviço com melhor avaliação
             relevantService = findBestRatedService(serviceType);
@@ -321,12 +324,12 @@ public class AreaClass implements Serializable {
         Iterator<Services> it = getServicesIterator();
         while (it.hasNext()) {
             Services service = it.next();
-                if (service.getServiceType().equals(serviceType)) {
+                if (service.getServiceType().equalsIgnoreCase(serviceType)) {
                     if (cheapest == null || service.getServicePrice() < cheapest.getServicePrice()) {
                         cheapest = service;
                     } else if (service.getServicePrice() == cheapest.getServicePrice()) {
                         // Em caso de empate: primeiro serviço inserido
-                        if (service.getLastUpdatedOrder() < cheapest.getLastUpdatedOrder()) {
+                        if (service.getLastUpdatedOrder() > cheapest.getLastUpdatedOrder()) {
                             cheapest = service;
                         }
                     }
@@ -340,7 +343,7 @@ public class AreaClass implements Serializable {
         Iterator<Services> it = getServicesIterator();
         while (it.hasNext()) {
             Services service = it.next();
-            if (service.getServiceType().equals(serviceType)) {
+            if (service.getServiceType().equalsIgnoreCase(serviceType)) {
                 if (bestRated == null || service.getAverageStars() > bestRated.getAverageStars()) {
                     bestRated = service;
                 } else if (service.getAverageStars() == bestRated.getAverageStars()) {

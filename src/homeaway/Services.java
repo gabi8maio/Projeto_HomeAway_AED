@@ -12,6 +12,7 @@ public interface Services extends Comparable<Services>, ServicesChange {
     String getServiceType();
     long getLatitude();
     long getLongitude();
+    int getNumOfInsertion();
     int getValue();
     int getLastUpdatedOrder();
     int getAverageStars();

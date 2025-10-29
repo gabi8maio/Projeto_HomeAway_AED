@@ -20,6 +20,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     private int totalStars;
     private int rating;
     int studentsThereLodging;
+    int numOfServiceInsertion; // The number when was inserted;
 
     public TwoWayList<Students> studentsThere;
     private DoublyLinkedList<String> tags;
@@ -48,6 +49,11 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         if (position != -1) {
             studentsThere.remove(position);
         }
+    }
+
+
+    public int getNumOfInsertion(){
+        return numOfServiceInsertion;
     }
 
     public void addStudentsThereLodging(){
@@ -132,7 +138,12 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         lastUpdateCounter = counter;
     }
 
+    public void setNumOfInsertion(int counter){
+        numOfServiceInsertion = counter;
+    }
+
     public void addRating(int stars,String tag, int counter) {
+
         int oldAverage = averageStars;
 
         totalStars += stars;
