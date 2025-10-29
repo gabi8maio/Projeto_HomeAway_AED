@@ -8,7 +8,7 @@ import java.io.Serializable;
 public interface Services extends Comparable<Services>, ServicesChange {
 
     String getServiceName();
-    double getServicePrice();
+
     String getServiceType();
     long getLatitude();
     long getLongitude();

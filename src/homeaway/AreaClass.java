@@ -325,13 +325,8 @@ public class AreaClass implements Serializable {
         while (it.hasNext()) {
             Services service = it.next();
                 if (service.getServiceType().equalsIgnoreCase(serviceType)) {
-                    if (cheapest == null || service.getServicePrice() < cheapest.getServicePrice()) {
+                    if (cheapest == null || getPrice(service) < getPrice(cheapest)) {
                         cheapest = service;
-                    } else if (service.getServicePrice() == cheapest.getServicePrice()) {
-                        // Em caso de empate: primeiro serviço inserido
-                        if (service.getLastUpdatedOrder() > cheapest.getLastUpdatedOrder()) {
-                            cheapest = service;
-                        }
                     }
                 }
         }
@@ -487,7 +482,7 @@ public class AreaClass implements Serializable {
 
         if(!(student instanceof Thrifty))
             return true;
-        return service != null && student.getPlaceHome().getServicePrice() > service.getServicePrice();
+        return service != null && getPrice(student.getPlaceHome()) > getPrice(service);
     }
 
 
@@ -524,5 +519,17 @@ public class AreaClass implements Serializable {
             }
         }
         return false;
+    }
+
+    private double getPrice (Services service) {
+        double price = 0;
+        if (service instanceof Leisure) {
+            price = ((Leisure)service).getPrice();
+        } else if (service instanceof Lodging) {
+            price = ((Lodging)service).getPrice();
+        } else if (service instanceof Eating) {
+            price = ((Eating)service).getPrice();
+        }
+        return price;
     }
 }

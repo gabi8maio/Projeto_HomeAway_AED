@@ -12,9 +12,8 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
 
     private final long latitude;
     private final long longitude;
-    private final double price;
-    private int numOfPeople;
     private final String serviceName;
+    private final int value;
     private int lastUpdateCounter;
     private int averageStars;
     private int totalStars;
@@ -25,12 +24,11 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     public TwoWayList<Students> studentsThere;
     private DoublyLinkedList<String> tags;
 
-    public ServicesClassAbstract(long latitude, long longitude, double price, int numOfPeople, String serviceName) {
+    public ServicesClassAbstract(long latitude, long longitude, int value, String serviceName) {
         this.serviceName = serviceName;
-        this.numOfPeople = numOfPeople;
-        this.price = price;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.value = value;
         tags = new DoublyLinkedList<>();
         studentsThere = new DoublyLinkedList<>();
         studentsThereLodging = 0;
@@ -38,6 +36,10 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         rating = 1;
         totalStars = 4;
 
+    }
+
+    public int getValue(){
+        return value;
     }
 
     public void addStudentsThere(Students newStudent){
@@ -88,10 +90,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         return serviceName;
     }
 
-    @Override
-    public double getServicePrice() {
-        return price;
-    }
+
 
     @Override
     public long getLatitude() {
@@ -103,10 +102,6 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         return longitude;
     }
 
-    @Override
-    public int getValue() {
-        return numOfPeople;
-    }
 
 
     public int getLastUpdatedOrder() {
