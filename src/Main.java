@@ -399,7 +399,7 @@ public class Main {
                 System.out.println(service.getServiceName());
             }
 
-        } catch (Exception e) {
+        } catch (InvalidEvaluationException | StudentDoesNotExistsException | InvalidServiceTypeException | NoTypeServicesException | NoServicesWithAverage e) {
             System.out.println(e.getMessage());
         }
     }
@@ -409,18 +409,14 @@ public class Main {
         try {
             Iterator<Services> tagIterator = system.getServicesByTagIterator(tag);
 
-            if (!tagIterator.hasNext()) {
-                System.out.println("There are no services with this tag!");
-                return;
-            }
 
             while (tagIterator.hasNext()) {
                 Services service = tagIterator.next();
                 System.out.printf("%s %s\n", service.getServiceType().toLowerCase(), service.getServiceName());
             }
 
-        } catch (Exception e) {
-            System.out.println("Error executing tag command");
+        } catch (NoServicesWithTagException e) {
+            System.out.println(e.getMessage());
         }
     }
 

@@ -181,13 +181,16 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.isThrifty(studentName);
     }
 
-    public Iterator<Services> getServicesByTagIterator(String tag){
+    public Iterator<Services> getServicesByTagIterator(String tag) throws NoServicesWithTagException{
+        Iterator <Services> tagIterator = loadedArea.getServicesByTagIterator(tag);
+        if (!tagIterator.hasNext()) {
+            throw new NoServicesWithTagException();
+        }
         return loadedArea.getServicesByTagIterator(tag);
     }
 
-
-    private boolean isTypeWithAverage(String type, int n){
-        return loadedArea.isTypeWithAverage( type, n);
+    private boolean isTypeWithAverage (String type, int n){
+        return loadedArea.isTypeWithAverage(type, n);
     }
 
     public boolean lodgingExists (String name){
@@ -198,7 +201,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.isItFull(name);
     }
 
-    public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
+    public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName)
+    throws InvalidEvaluationException, StudentDoesNotExistsException, InvalidServiceTypeException, NoTypeServicesException, NoServicesWithAverage{
         if (stars > 5 || stars < 0)
             throw new InvalidEvaluationException();
         String name = studentExists(studentName);
@@ -210,6 +214,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         }
         if (!hasServicesOfType(type))
             throw new NoTypeServicesException(type);
+        if (!isTypeWithAverage(type, stars))
+            throw new NoServicesWithAverage(type);
         return loadedArea.getRankedServicesIterator(stars,type,studentName);
     }
 

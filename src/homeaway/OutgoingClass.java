@@ -12,7 +12,7 @@ public class OutgoingClass extends StudentsClassAbstract implements Outgoing, St
 
     OutgoingClass(String type, String name, String country, Services lodging) {
         super(type, name, country, lodging);
-        allVisitedServices = new DoublyLinkedList<>();
+        allVisitedServices = new DoublyLinkedList<Services>();
         allVisitedServices.addLast(lodging);
     }
 

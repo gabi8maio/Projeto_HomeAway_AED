@@ -20,5 +20,4 @@ public class ServiceComparatorByStars implements Comparator<Services>, Serializa
         //if(o1.didEvaluationChanged()) return -1;
         return Integer.compare(o1.getLastUpdatedOrder(), o2.getLastUpdatedOrder());
     }
-
 }

@@ -15,12 +15,11 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
     private final double price;
     private int numOfPeople;
     private final String serviceName;
-    private int lastUpdateCounter=0;
+    private int lastUpdateCounter;
     private int averageStars;
     private int totalStars;
-    private int rating = 0;
+    private int rating;
     int studentsThereLodging;
-    boolean evaluationChanged = false;
 
     public TwoWayList<Students> studentsThere;
     private DoublyLinkedList<String> tags;
@@ -35,9 +34,6 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         studentsThere = new DoublyLinkedList<>();
         studentsThereLodging = 0;
         averageStars = 4;
-        totalStars = 4;
-        rating = 1;
-
 
     }
 
@@ -118,14 +114,6 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         return rating;
     }
 
-    public boolean didEvaluationChanged(){
-        if(evaluationChanged){
-            evaluationChanged = false;
-            return true;
-        }
-        return false;
-    }
-
     public Iterator<String> getTags(){
         return tags.iterator();
     }
@@ -151,16 +139,9 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
         int newAverage = averageStars;
         tags.addLast(tag);
         if(oldAverage != newAverage) lastUpdateCounter = counter;
-        return;
-        /*if(oldAverage != newAverage) {
-            evaluationChanged = true;
-            return;
-        }*/
-
     }
 
     public int getAverageStars() {
-
         return averageStars;
     }
 }

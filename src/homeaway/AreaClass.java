@@ -23,7 +23,6 @@ public class AreaClass implements Serializable {
     private SortedList<Students> allStudents;
     private DoublyLinkedList<Students> studentsByCountry;
     int updateCounter;
-    int counterByInsertion;
 
 
 
@@ -200,7 +199,6 @@ public class AreaClass implements Serializable {
         newService.updateCounterRating(updateCounter++);
         services.addLast(newService);
         servicesByRank.add(newService);
-
     }
 
     // By type btw
@@ -297,19 +295,6 @@ public class AreaClass implements Serializable {
         service.addRating(rating, tag, updateCounter++);
 
         servicesByRank.add(service);
-
-    }
-
-    private int getPosition(String serviceName) {
-        int pos = 0;
-        Iterator<Services> it = servicesByRank.iterator();
-        while (it.hasNext()) {
-            pos++;
-            if (it.next().getServiceName().equalsIgnoreCase(serviceName)) {
-                return pos;
-            }
-        }
-        return -1;
     }
 
     public Iterator<Services> getServicesByRankingIterator(){
@@ -390,7 +375,7 @@ public class AreaClass implements Serializable {
                 String tagService = it2.next();
                 if(tagService.toUpperCase().contains(tag.toUpperCase())) {
                     iteratorWithServices.addLast(s);
-                     break;
+                    break;
                 }
             }
         }
@@ -403,7 +388,7 @@ public class AreaClass implements Serializable {
         while (iterator.hasNext()) {
             Services service = iterator.next();
             if (service.getServiceType().equalsIgnoreCase(type) && service.getAverageStars() == n) return true;
-            }
+        }
         return false;
     }
 
