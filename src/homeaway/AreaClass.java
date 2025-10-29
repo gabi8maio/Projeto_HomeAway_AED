@@ -373,7 +373,7 @@ public class AreaClass implements Serializable {
             Iterator<String> it2 = s.getTags();
             while (it2.hasNext()){
                 String tagService = it2.next();
-                if(tagService.toUpperCase().contains(tag.toUpperCase())) {
+                if(tagService.toUpperCase().matches(".*\\b" + tag.toUpperCase() + "\\b.*")) {
                     iteratorWithServices.addLast(s);
                     break;
                 }
@@ -405,7 +405,7 @@ public class AreaClass implements Serializable {
 
         while (iterator.hasNext()) {
             Services service = iterator.next();
-            if (service.getServiceType().equals(type) && service.getAverageStars() == stars) {
+            if (service.getServiceType().equalsIgnoreCase(type) && service.getAverageStars() == stars) {
                 tempList.addLast(service);
             }
         }
@@ -556,7 +556,7 @@ public class AreaClass implements Serializable {
         Iterator <Services> it = services.iterator();
         while (it.hasNext()) {
             Services service = it.next();
-            if (service.getServiceType().equals(type)) {
+            if (service.getServiceType().equalsIgnoreCase(type)) {
                 return true;
             }
         }
