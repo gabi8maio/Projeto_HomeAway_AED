@@ -28,9 +28,17 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         if (topLatitude <= bottomLatitude || rightLongitude <= leftLongitude) {
             throw new InvalidBoundsException();
         }
+        saveAreaIfLoaded();
         AreaClass area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
         this.tempArea = area;
         loadedArea = area;
+    }
+
+    private void saveAreaIfLoaded(){
+        if(loadedArea != null && !fileExistsCaseInsensitive(loadedArea.getName())){
+
+            saveArea();
+        }
     }
 
     @Override
@@ -68,11 +76,28 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         if (loadedArea != null && loadedArea.getName().equalsIgnoreCase(name)) {
             return true;
         }
+        return fileExistsCaseInsensitive(name);
+    }
 
-        // 2. Verificar se existe ficheiro com esse nome na pasta "data"
-        String filename = name.replace(" ", "_") + ".dat";
-        File file = new File("data", filename);
-        return file.exists();
+    private boolean fileExistsCaseInsensitive(String name) {
+        File directory = new File(".");
+
+        if (!directory.exists() || !directory.isDirectory()) {
+            return false;
+        }
+
+        String[] files = directory.list();
+        if (files == null) {
+            return false;
+        }
+
+        String targetName = name.toLowerCase();
+        for (String file : files) {
+            if (file.toLowerCase().equals(targetName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -152,6 +177,9 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     public String loadArea (String name) throws BoundsDoesNotExistException{
          loadedArea = null;
         try{
+            //File foundFile = findFileCaseInsensitive(name);
+
+            //System.out.println("Este é o nome q encontrou :" + foundFile.getName());
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(name));
             loadedArea = (AreaClass) ois.readObject();
             ois.close();
@@ -160,6 +188,20 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             e.printStackTrace(); // See what's actually wrong
             throw new BoundsDoesNotExistException();
         }
+    }
+
+    private File findFileCaseInsensitive(String fileName) {
+        File currentDir = new File("."); // Diretório atual - podes mudar para o path certo
+        File[] files = currentDir.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.getName().equalsIgnoreCase(fileName)) {
+                    return file;
+                }
+            }
+        }
+        return null;
     }
 
     public Iterator<Services> getVisitedLocationsIterator(String studentName){
@@ -365,11 +407,11 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return null;
     }
 
-    public void addStudent (String studentType, String name, String country, String lodging)
-    {
+    public void addStudent (String studentType, String name, String country, String lodging) {
         if (StudentTypes.fromString(studentType) == null) {
             throw new InvalidStudentTypeException();
-        } if (!lodgingExists(lodging)) {
+        }
+        if (!lodgingExists(lodging)) {
             throw new LodgingNotExistsException(lodging);
         }
         String fullLodging = lodgingIsFull(lodging);
@@ -377,7 +419,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             throw new LodgingIsFullException(fullLodging);
         }
         String studentExistsName = studentExists(name);
-         if (studentExists(name) != null){
+        if (studentExists(name) != null){
             throw new StudentAlreadyExistsException(studentExistsName);
         }
         loadedArea.addStudent(studentType, name, country, lodging);

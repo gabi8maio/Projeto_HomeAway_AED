@@ -187,7 +187,7 @@ public class AreaClass implements Serializable {
         Iterator<Services> it = services.iterator();
         while (it.hasNext()) {
             Services s = it.next();
-            if (s.getServiceName().equalsIgnoreCase(serviceName)) return true;
+            if (s.getServiceName().equalsIgnoreCase(serviceName) && s.getServiceType().equalsIgnoreCase(TypesOfService.LODGING.toString())) return true;
         }
         return false;
     }
