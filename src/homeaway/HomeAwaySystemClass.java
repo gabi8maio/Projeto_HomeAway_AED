@@ -202,9 +202,9 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
     public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName)
-    throws InvalidEvaluationException, StudentDoesNotExistsException, InvalidServiceTypeException, NoTypeServicesException, NoServicesWithAverage{
-        if (stars > 5 || stars < 0)
-            throw new InvalidEvaluationException();
+    throws InvalidStarsException, StudentDoesNotExistsException, InvalidServiceTypeException, NoTypeServicesException, NoServicesWithAverage{
+        if (stars > 5 || stars < 1)
+            throw new InvalidStarsException();
         String name = studentExists(studentName);
         if (name == null)
             throw new StudentDoesNotExistsException(studentName);
@@ -216,7 +216,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
             throw new NoTypeServicesException(type);
         if (!isTypeWithAverage(type, stars))
             throw new NoServicesWithAverage(type);
-        return loadedArea.getRankedServicesIterator(stars,type,studentName);
+        return loadedArea.getRankedServicesIterator2(stars,type,studentName);
     }
 
     private boolean hasServicesOfType(String type) {

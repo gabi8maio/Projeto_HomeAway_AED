@@ -392,66 +392,25 @@ public class AreaClass implements Serializable {
         return false;
     }
 
-    public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName){
 
-        // 5. Ordenar por distância Manhattan e depois por lastUpdatedOrder
+
+    public Iterator<Services> getRankedServicesIterator2 (int stars,String type,String studentName){
         Students student = findStudentElem(studentName);
         assert student != null;
         Services studentLocation = student.getPlaceNow();
-
-        // Converter SortedDoublyLinkedList para array temporário
+        long minDistance = Long.MAX_VALUE;
+        ListInArray <Services> tempList = new ListInArray<>(20);
         Iterator<Services> iterator = servicesByRank.iterator();
-        ListInArray<Services> tempList = new ListInArray<>(100);
-
         while (iterator.hasNext()) {
             Services service = iterator.next();
-            if (service.getServiceType().equalsIgnoreCase(type) && service.getAverageStars() == stars) {
-                tempList.addLast(service);
-            }
-        }
-
-        // Calcular distância Manhattan para cada serviço
-        // Bubble sort para ordenar por distância
-        for (int i = 0; i < tempList.size() - 1; i++) {
-            for (int j = 0; j < tempList.size() - i - 1; j++) {
-                Services s1 = tempList.get(j);
-                Services s2 = tempList.get(j + 1);
-
-                long dist1 = calculateManhattanDistance(studentLocation, s1);
-                long dist2 = calculateManhattanDistance(studentLocation, s2);
-
-                if (dist1 > dist2) {
-                    // Trocar
-                    tempList.add(j, s2);
-                    tempList.add(j + 1, s1);
-                } else if (dist1 == dist2) {
-                    // Distância igual, ordenar por lastUpdatedOrder (mais recente primeiro)
-                    if (s1.getLastUpdatedOrder() < s2.getLastUpdatedOrder()) {
-                        tempList.add(j, s2);
-                        tempList.add(j + 1, s1);
-                    }
+            if (service.getServiceType().equalsIgnoreCase(type) && service.getAverageStars() == stars)
+                if ( calculateManhattanDistance(studentLocation, service) < minDistance) {
+                    minDistance = calculateManhattanDistance(studentLocation, service); //atualiza a nova distância minima
+                    tempList = new ListInArray<>(20);
+                    tempList.addLast(service); //adiciona o serviço que é mais perto
+                } else if (calculateManhattanDistance(studentLocation, service) == minDistance) {
+                    tempList.addLast(service); //se a distância for = adiciona no final da lista temporária
                 }
-            }
-        }
-
-        // Ordenar por distância (mais perto primeiro) e depois por lastUpdatedOrder (mais recente primeiro)
-        for (int i = 0; i < tempList.size() - 1; i++) {
-            for (int j = 0; j < tempList.size() - i - 1; j++) {
-                Services s1 = tempList.get(j);
-                Services s2 = tempList.get(j + 1);
-
-                long dist1 = calculateManhattanDistance(studentLocation, s1);
-                long dist2 = calculateManhattanDistance(studentLocation, s2);
-
-                if (dist1 > dist2 ||
-                        (dist1 == dist2 && s1.getLastUpdatedOrder() < s2.getLastUpdatedOrder())) {
-                    // Trocar diretamente usando set
-                    tempList.remove(j);
-                    tempList.add(j, s2);
-                    tempList.remove(j + 1);
-                    tempList.add(j + 1, s1);
-                }
-            }
         }
         return tempList.iterator();
     }

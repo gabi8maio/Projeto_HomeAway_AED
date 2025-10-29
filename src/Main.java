@@ -399,7 +399,7 @@ public class Main {
                 System.out.println(service.getServiceName());
             }
 
-        } catch (InvalidEvaluationException | StudentDoesNotExistsException | InvalidServiceTypeException | NoTypeServicesException | NoServicesWithAverage e) {
+        } catch (InvalidStarsException | StudentDoesNotExistsException | InvalidServiceTypeException | NoTypeServicesException | NoServicesWithAverage e) {
             System.out.println(e.getMessage());
         }
     }
