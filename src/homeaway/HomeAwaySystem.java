@@ -23,7 +23,7 @@ public interface HomeAwaySystem {
     void starCommand(int rating,String serviceName, String tag) throws InvalidEvaluationException, ServiceDoesNotExistException;
     Iterator<Services> getServicesByRankingIterator()throws NoServicesInSystemException;
     Iterator<Services> getServicesByTagIterator(String tag) throws NoServicesWithTagException;
-    Services findMostRelevantService(String studentName, String serviceType);
+    Services findMostRelevantService(String studentName, String serviceType) throws InvalidServiceTypeException, StudentDoesNotExistsException, NoTypeServicesException;
     Iterator<Services> getRankedServicesIterator(int stars, String type, String studentName)throws InvalidStarsException, StudentDoesNotExistsException, InvalidServiceTypeException, NoTypeServicesException, NoServicesWithAverage;
     String studentExists(String name);
     Students moveStudentToLocation(String studentName, String locationName) throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException;

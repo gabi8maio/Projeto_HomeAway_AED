@@ -306,7 +306,7 @@ public class AreaClass implements Serializable {
 
     public Services findMostRelevantService(String studentName, String serviceType){
         Students student = getStudent(studentName);
-        Services relevantService = null;
+        Services relevantService;
 
         if (student.getType().equalsIgnoreCase(StudentTypes.THRIFTY.toString())) {
             // Para thrifty: serviço mais barato
@@ -356,6 +356,7 @@ public class AreaClass implements Serializable {
         }
         return bestRated;
     }
+
 
     private boolean hasServicesOfType(String serviceType) {
         Iterator<Services> it = getServicesIterator();

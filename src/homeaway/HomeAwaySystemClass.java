@@ -223,7 +223,16 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         return loadedArea.hasServiceOfType(type);
     }
 
-    public  Services findMostRelevantService(String studentName, String serviceType){
+    public  Services findMostRelevantService(String studentName, String serviceType) throws InvalidServiceTypeException, StudentDoesNotExistsException, NoTypeServicesException{
+        TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType);
+        if (serviceTypeEnum == null) {
+            throw new InvalidServiceTypeException();
+        }
+        String name = studentExists(studentName);
+        if (name == null)
+            throw new StudentDoesNotExistsException(studentName);
+        if (!hasServicesOfType(serviceType))
+            throw new NoTypeServicesException(serviceType);
         return loadedArea.findMostRelevantService(studentName, serviceType);
     }
 

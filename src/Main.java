@@ -427,7 +427,7 @@ public class Main {
 
             Services service = system.findMostRelevantService(studentName, serviceType);
             System.out.println(service.getServiceName());
-        } catch (Exception e) {
+        } catch (InvalidServiceTypeException | StudentDoesNotExistsException | NoTypeServicesException e) {
             System.out.println(e.getMessage());
         }
     }
