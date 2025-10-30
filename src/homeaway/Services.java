@@ -5,7 +5,7 @@ import dataStructures.TwoWayIterator;
 
 import java.io.Serializable;
 
-public interface Services extends Comparable<Services>, ServicesChange {
+public interface Services extends Comparable<Services>, ServicesChange, Serializable {
 
     String getServiceName();
 

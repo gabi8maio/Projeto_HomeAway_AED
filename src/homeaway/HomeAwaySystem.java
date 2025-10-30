@@ -4,7 +4,9 @@ import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 import homeaway.Exeptions.*;
 
-public interface HomeAwaySystem {
+import java.io.Serializable;
+
+public interface HomeAwaySystem extends Serializable {
     void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude) throws BoundsAlreadyExistException, InvalidBoundsException;
 
     Iterator<Services> getServiceIterator();

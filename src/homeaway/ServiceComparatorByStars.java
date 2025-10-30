@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class ServiceComparatorByStars implements Comparator<Services>, Serializable {
 
+    private static final long serialVersionUID = 0L;
 
     @Override
     public int compare(Services o1, Services o2) {

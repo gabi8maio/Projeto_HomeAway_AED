@@ -5,6 +5,8 @@ import java.io.Serializable;
 
 public class studentComparatorByName implements Comparator<Students>, Serializable {
 
+    private static final long serialVersionUID = 0L;
+
     @Override
     public int compare(Students o1, Students o2) {
         return o1.compareTo(o2);

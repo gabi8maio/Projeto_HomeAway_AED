@@ -1,5 +1,6 @@
 package homeaway;
 
+
 import java.io.Serializable;
 
 public abstract class StudentsClassAbstract implements Students, Serializable {
@@ -10,6 +11,7 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
     private Services lodging;
     private Services placeNow;
 
+    private static final long serialVersionUID = 0L;
 
     public StudentsClassAbstract(String type, String name, String country, Services lodging){
         this.type = type;

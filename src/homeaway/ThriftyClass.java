@@ -1,13 +1,13 @@
 package homeaway;
 
-import java.io.Serializable;
-
-public class ThriftyClass extends StudentsClassAbstract implements Thrifty, Students, Serializable {
+public class ThriftyClass extends StudentsClassAbstract implements Thrifty, Students {
 
     private Eating cheapestEatingService;
     private Lodging cheapestLodgingService;
     private double cheapestEatingPrice;
     private double cheapestLodgingPrice;
+
+    private static final long serialVersionUID = 0L;
 
     ThriftyClass(String studentType, String name, String country, Services lodging) {
         super (studentType, name, country, lodging);

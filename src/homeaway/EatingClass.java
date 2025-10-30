@@ -1,8 +1,8 @@
 package homeaway;
 
-import java.io.Serializable;
+public class EatingClass extends ServicesClassAbstract implements Eating {
 
-public class EatingClass extends ServicesClassAbstract implements Eating, Serializable {
+    private static final long serialVersionUID = 0L;
 
     private final double price;
 

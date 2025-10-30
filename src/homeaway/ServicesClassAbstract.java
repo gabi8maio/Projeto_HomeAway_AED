@@ -5,10 +5,7 @@ import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 import dataStructures.TwoWayList;
 
-import java.io.Serializable;
-import java.lang.reflect.Type;
-
-public abstract class ServicesClassAbstract implements Services, ServicesChange, Serializable {
+public abstract class ServicesClassAbstract implements Services, ServicesChange{
 
     private final long latitude;
     private final long longitude;
@@ -23,6 +20,8 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange,
 
     public TwoWayList<Students> studentsThere;
     private DoublyLinkedList<String> tags;
+
+    private static final long serialVersionUID = 0L;
 
     public ServicesClassAbstract(long latitude, long longitude, int value, String serviceName) {
         this.serviceName = serviceName;

@@ -7,7 +7,9 @@ import homeaway.Exeptions.*;
 
 import java.io.*;
 
-public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
+public class HomeAwaySystemClass implements HomeAwaySystem{
+
+    private static final long serialVersionUID = 0L;
 
     AreaClass tempArea;
     AreaClass loadedArea; // NS se devemos ter isto ou usar apenas a tempArea como a loaded
@@ -70,7 +72,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
         if (loadedArea != null && loadedArea.getName().equalsIgnoreCase(name)) {
             return true;
         }
-        return fileExistsCaseInsensitive(name);
+        return fileExistsCaseInsensitive(getFileName(name));
     }
 
     private boolean fileExistsCaseInsensitive(String name) {
@@ -157,21 +159,27 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     }
 
 
-    private static void store(String fileName, AreaClass area){
+    private void store(String fileName, AreaClass area){
         try{
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+            String nameFile = this.getFileName (fileName);
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nameFile));
             oos.writeObject(area);
             oos.flush();
             oos.close();
         }catch (IOException e){
-            System.out.println(e.getMessage());
-            System.out.println("Erro de escrita");
+            e.printStackTrace();
         }
     }
+
+    private String getFileName (String fileName){
+        return fileName.replace(" ", "_") + ".ser";
+    }
+
     public String loadArea (String name) throws BoundsDoesNotExistException{
          loadedArea = null;
         try{
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(name));
+            String fileName = getFileName (name);
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
             loadedArea = (AreaClass) ois.readObject();
             ois.close();
             return loadedArea.getName();

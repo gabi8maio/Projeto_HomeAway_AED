@@ -7,6 +7,8 @@ public enum StudentTypes {
     THRIFTY("THRIFTY");
     private final String typeName;
 
+    private static final long serialVersionUID = 0L;
+
     StudentTypes(String typeName) {
 
         this.typeName = typeName;

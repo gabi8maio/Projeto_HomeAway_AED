@@ -2,7 +2,9 @@ package homeaway;
 
 import java.io.Serializable;
 
-public class LeisureClass extends ServicesClassAbstract implements Leisure, Serializable {
+public class LeisureClass extends ServicesClassAbstract implements Leisure {
+
+    private static final long serialVersionUID = 0L;
 
     private final double price;
 

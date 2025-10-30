@@ -21,6 +21,8 @@ public enum Command {
     EXIT("exit - Terminates the execution of the program"),
     UNKNOWN("");
 
+    private static final long serialVersionUID = 0L;
+
     private final String msg;
 
     Command(String msg) {

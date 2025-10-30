@@ -1,9 +1,10 @@
 package homeaway;
 
-import java.io.Serializable;
 import dataStructures.*;
 
-public class BookishClass extends StudentsClassAbstract implements Bookish, Students, Serializable {
+public class BookishClass extends StudentsClassAbstract implements Bookish, Students {
+
+    private static final long serialVersionUID = 0L;
 
     private TwoWayList<Services> visitedLeisureServices;
 

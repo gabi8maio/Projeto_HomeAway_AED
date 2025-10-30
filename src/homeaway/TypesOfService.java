@@ -7,6 +7,8 @@ public enum TypesOfService {
     LEISURE("LEISURE");
     private final String typeName;
 
+    private static final long serialVersionUID = 0L;
+
     TypesOfService(String typeName) {
 
         this.typeName = typeName;

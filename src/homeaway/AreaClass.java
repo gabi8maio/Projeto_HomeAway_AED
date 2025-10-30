@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 public class AreaClass implements Serializable {
 
+    private static final long serialVersionUID = 0L;
+
     private final long topLatitude;
     private final long bottomLatitude;
     private final long leftLongitude;
