@@ -3,7 +3,6 @@ package homeaway;
 import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
-import dataStructures.exceptions.NoSuchElementException;
 import homeaway.Exeptions.*;
 
 import java.io.*;
@@ -44,11 +43,6 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     @Override
     public Iterator<Services> getServiceIterator() {
         return loadedArea.getServicesIterator();
-    }
-
-    @Override
-    public String getTempAreaName(){
-        return tempArea.getName();
     }
 
     @Override
@@ -177,31 +171,14 @@ public class HomeAwaySystemClass implements HomeAwaySystem, Serializable{
     public String loadArea (String name) throws BoundsDoesNotExistException{
          loadedArea = null;
         try{
-            //File foundFile = findFileCaseInsensitive(name);
-
-            //System.out.println("Este é o nome q encontrou :" + foundFile.getName());
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(name));
             loadedArea = (AreaClass) ois.readObject();
             ois.close();
             return loadedArea.getName();
         }catch (IOException | ClassNotFoundException e){
-            e.printStackTrace(); // See what's actually wrong
+           // e.printStackTrace(); // See what's actually wrong
             throw new BoundsDoesNotExistException();
         }
-    }
-
-    private File findFileCaseInsensitive(String fileName) {
-        File currentDir = new File("."); // Diretório atual - podes mudar para o path certo
-        File[] files = currentDir.listFiles();
-
-        if (files != null) {
-            for (File file : files) {
-                if (file.getName().equalsIgnoreCase(fileName)) {
-                    return file;
-                }
-            }
-        }
-        return null;
     }
 
     public Iterator<Services> getVisitedLocationsIterator(String studentName){

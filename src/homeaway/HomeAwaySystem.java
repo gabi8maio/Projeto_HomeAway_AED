@@ -12,7 +12,6 @@ public interface HomeAwaySystem {
     String serviceNameExists(String name);
     void addService(String serviceType,long latitude,long longitude,double price,int value,String serviceName) throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException,
             InvalidTicketPriceException, InvalidDiscountException, InvalidCapacityException, ServiceAlreadyExistsException;
-    String getTempAreaName();
     String saveArea() throws SystemBoundsNotDefinedException;
     String loadArea(String name) throws BoundsDoesNotExistException;
     Students removeStudent(String studentName) throws StudentDoesNotExistsException;

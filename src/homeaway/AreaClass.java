@@ -1,36 +1,28 @@
 package homeaway;
 import dataStructures.*;
 import dataStructures.exceptions.InvalidPositionException;
-import homeaway.Exeptions.InvalidEvaluationException;
-import homeaway.Exeptions.ServiceDoesNotExistException;
 
-import java.io.InvalidObjectException;
 import java.io.Serializable;
-import java.security.Provider;
-import java.util.ArrayList;
-import java.util.Collections;
+
 
 
 public class AreaClass implements Serializable {
 
-    private long topLatitude;
-    private long bottomLatitude;
-    private long leftLongitude;
-    private long rightLongitude;
-    private String areaName;
-    private DoublyLinkedList<Services> services;
-    private SortedDoublyLinkedList<Services> servicesByRank;
-    private SortedList<Students> allStudents;
-    private DoublyLinkedList<Students> studentsByCountry;
+    private final long topLatitude;
+    private final long bottomLatitude;
+    private final long leftLongitude;
+    private final long rightLongitude;
+    private final String areaName;
+    private final DoublyLinkedList<Services> services;
+    private final SortedDoublyLinkedList<Services> servicesByRank;
+    private final SortedList<Students> allStudents;
+    private final DoublyLinkedList<Students> studentsByCountry;
     int updateCounter;
     int counterOfServicesInsertion;
 
 
 
-    @SuppressWarnings("unchecked")
     public AreaClass(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude){
-
-
 
         areaName = name;
         this.topLatitude = topLatitude;
@@ -207,7 +199,10 @@ public class AreaClass implements Serializable {
             case LEISURE:
                 newService = new LeisureClass(latitude, longitude, price, value, serviceName);
                 break;
+            case null:
+                break;
         }
+        assert newService != null;
         newService.updateCounterRating(updateCounter++);
         newService.setNumOfInsertion(counterOfServicesInsertion++);
         services.addLast(newService);
@@ -315,8 +310,9 @@ public class AreaClass implements Serializable {
     }
 
     public Services findMostRelevantService(String studentName, String serviceType){
-        Students student = getStudent(studentName);
+        Students student = findStudentElem(studentName);
         Services relevantService;
+        assert student != null;
 
         if (student.getType().equalsIgnoreCase(StudentTypes.THRIFTY.toString())) {
             // Para thrifty: serviço mais barato
@@ -328,6 +324,8 @@ public class AreaClass implements Serializable {
 
         return relevantService;
     }
+
+
 
     private Services findCheapestService(String serviceType) {
         Services cheapest = null;
@@ -429,33 +427,6 @@ public class AreaClass implements Serializable {
                 Math.abs(s1.getLongitude() - s2.getLongitude());
     }
 
-    public void changedLodging() {
-    }
-
-    public Services whereIsStudent() {
-        return null;
-    }
-
-    public TwoWayDoublyIterator locationStudentIterator() {
-        return null;
-    }
-
-    public DoublyIterator rankServicesIterator() {
-        return null;
-    }
-
-    public long getDistance() {
-        return 0;
-    }
-
-    public DoublyIterator rankedCommand() {
-        return null;
-    }
-
-    public Services findCommand() {
-        return null;
-    }
-
     public void addStudent(String studentType, String name, String country, String lodging) {
         Students newStudent = null;
         Services service = findServicesElem(lodging);
@@ -464,6 +435,7 @@ public class AreaClass implements Serializable {
             case OUTGOING -> newStudent = new OutgoingClass (studentType, name, country, service);
             case BOOKISH -> newStudent = new BookishClass(studentType, name, country, service);
             case THRIFTY -> newStudent = new ThriftyClass(studentType, name, country, service);
+            case null -> {}
         }
         assert service != null;
         service.addStudentsThere(newStudent);
@@ -498,10 +470,7 @@ public class AreaClass implements Serializable {
 
     public boolean isEatingOrLodgingService(String serviceName) {
         Services service = findServicesElem(serviceName);
-        if (service instanceof Eating || service instanceof Lodging) {
-            return true;
-        }
-        return false;
+        return service instanceof Eating || service instanceof Lodging;
     }
 
     public boolean isThrifty(String studentName) {
