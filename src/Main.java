@@ -222,7 +222,7 @@ public class Main {
     private static void executeStudents(Scanner in, HomeAwaySystem system) {
         String argument = in.nextLine().trim();
         try {
-            Iterator <Students> it = system.getStudents(argument);
+            Iterator <Students> it = system.getStudentsIterator(argument);
 
             while (it.hasNext()) {
                 Students student = it.next();

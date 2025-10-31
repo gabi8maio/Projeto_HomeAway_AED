@@ -1,3 +1,6 @@
+/**
+ * Enum used to print the description of all the commands accepted by the application
+ */
 public enum Command {
     BOUNDS("bounds - Defines the new geographic bounding rectangle"),
     SAVE("save - Saves the current geographic bounding rectangle to a text file"),
@@ -29,6 +32,9 @@ public enum Command {
         this.msg = msg;
     }
 
+    /**
+     * Method that returns the message with all te commands
+     */
     public String getMsg() {
         return msg;
     }

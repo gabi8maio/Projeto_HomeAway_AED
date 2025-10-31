@@ -248,7 +248,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
     }
 
     @Override
-    public Iterator<Students> getStudents(String argument) throws NoStudentsException, NoStudentsFromCountryException {
+    public Iterator<Students> getStudentsIterator(String argument) throws NoStudentsException, NoStudentsFromCountryException {
         if (argument.equals("all")) {
             Iterator <Students> it = getAllStudentsIterator();
             if (!it.hasNext()) throw new NoStudentsException();

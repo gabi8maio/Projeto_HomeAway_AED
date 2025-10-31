@@ -1,5 +1,8 @@
 package homeaway;
 
+/**
+ * Enum used to check if the type of service given by the user is a valid service type
+ */
 public enum TypesOfService {
 
     LODGING("LODGING"),
@@ -14,10 +17,18 @@ public enum TypesOfService {
         this.typeName = typeName;
     }
 
+    /**
+     * @return - The type given ate the constructor
+     */
     public String getTypeName() {
         return typeName;
     }
 
+    /**
+     * Checks if the type given is valid or not
+     * @param type - String of the type
+     * @return the enum value corresponding to the given string, case-insensitive. Null if no matching enum value was found.
+     */
     public static TypesOfService fromString(String type) {
         for (TypesOfService serviceType : TypesOfService.values()) {
             if (serviceType.typeName.equalsIgnoreCase(type)) {
