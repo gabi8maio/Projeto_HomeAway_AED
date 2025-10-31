@@ -158,8 +158,9 @@ public class AreaClass implements Serializable, Area {
     }
     @Override
     public Iterator<Students> getStudentsByCountryIterator(String country){
-        ListInArray<Students> tempList = new ListInArray<>(studentsByCountry.size()); // mudar sercalhar pra students by country
+        ListInArray<Students> tempList = new ListInArray<>(studentsByCountry.size());
         Iterator<Students> iterator = studentsByCountry.iterator();
+
         while (iterator.hasNext()) {
             Students student = iterator.next();
             if (student.getCountry().equalsIgnoreCase(country)) tempList.addLast(student);
@@ -336,11 +337,11 @@ public class AreaClass implements Serializable, Area {
     @Override
     public boolean hasVisitedLocation(String name) {
         Students student = findStudentElem(name);
-        if (student instanceof Bookish) {
-            return ((Bookish) student).hasVisitedLocations();
+        if (student instanceof Bookish bookish) {
+            return bookish.hasVisitedLocations();
         }
-        if (student instanceof Outgoing){
-            return ((Outgoing) student).hasVisitedLocation();
+        if (student instanceof Outgoing outgoing){
+            return outgoing.hasVisitedLocation();
         }
         return false;
     }
@@ -384,19 +385,15 @@ public class AreaClass implements Serializable, Area {
         Services relevantService;
         assert student != null;
 
-        if (student.getType().equalsIgnoreCase(StudentTypes.THRIFTY.toString())) {
-            // Para thrifty: serviço mais barato
+        if (student.getType().equalsIgnoreCase(StudentTypes.THRIFTY.toString()))
             relevantService = findCheapestService(serviceType);
-        } else {
-            // Para bookish e outgoing: serviço com melhor avaliação
+        else
             relevantService = findBestRatedService(serviceType);
-        }
-
         return relevantService;
     }
 
     /**
-     *
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param name The name of the Student
      * @return - returns the Student Object by the given name of the Student
      */
@@ -409,6 +406,7 @@ public class AreaClass implements Serializable, Area {
         return null;
     }
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param name - The name of the Service
      * @return - returns the Service Object by the given name of the Service
      */
@@ -422,6 +420,7 @@ public class AreaClass implements Serializable, Area {
     }
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param serviceType - The service type
      * @return - returns the cheapest Service on the area
      */
@@ -440,6 +439,7 @@ public class AreaClass implements Serializable, Area {
     }
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * It will check which is the best rated Service on the Area
      * @param serviceType - The Service Type to check
      * @return - returns the best Rated Service on the Area

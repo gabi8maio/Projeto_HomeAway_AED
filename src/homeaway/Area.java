@@ -68,18 +68,24 @@ public interface Area extends Serializable {
 
     /**
      * Method used to iterate the student os a given country
+     * Complexity:  Best case: O(1)
+     *              Worst case: O(n)
      * @param country - The country from where wa want to iterate
      * @return - The iterator of the students from the country
      */
     Iterator<Students> getStudentsByCountryIterator(String country);
 
     /**
+     * Complexity: Best case: O(n)
+     *             Worst case: O(n*m)
      * @param tag - Tag chosen to see
      * @return - returns an Iterator that has the tag of a certain Service
      */
     Iterator<Services> getServicesByTagIterator(String tag);
 
     /**
+     * Complexity: Best case: O(n)
+     *               Worst case: O(n*m)
      * @param stars - The stars given
      * @param type - The type of Students
      * @param studentName - The Student name
@@ -107,6 +113,7 @@ public interface Area extends Serializable {
     Iterator<Services> getVisitedLocationsIterator(String studentName);
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param serviceName - The Service Name
      * @return - returns the name of the Service if exists, if not null
      */
@@ -115,6 +122,7 @@ public interface Area extends Serializable {
     String serviceExists(String serviceName);
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param serviceName - The service Name
      * @return - returns true if the Lodging exists
      */
@@ -127,6 +135,7 @@ public interface Area extends Serializable {
     boolean isThereAnyStudents(String serviceName);
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param studentName - The Student Name
      * @param locationName - The location Name
      * @return - returns true if the student is at the location given
@@ -141,18 +150,21 @@ public interface Area extends Serializable {
     boolean isStudentHome(String studentName, String locationName);
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param serviceName - The Service name
      * @return - returns true if the Eating Service is full of Students
      */
     boolean isEatingServiceFull(String serviceName);
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param name - Name of the Student to check
      * @return - returns the name of the Student if Exists, if not null
      */
     String studentExists(String name);
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param name - The service Name
      * @return - returns true if the Service given is full of Students
      */
@@ -207,12 +219,14 @@ public interface Area extends Serializable {
     boolean hasVisitedLocation(String name);
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param type - the type to be verified
      * @return - returns true if there is any Service with a certain Type
      */
     boolean hasServiceOfType(String type);
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param type - type chosen
      * @param n - Average chosen
      * @return - returns true if there is a certain Type with a certain average
@@ -225,6 +239,7 @@ public interface Area extends Serializable {
     String getName();
 
     /**
+     * Complexity: Best case: O(1) Worst case: O(n)
      * @param studentName - Student Name
      * @return - returns the Student place at the moment Service Object
      */
