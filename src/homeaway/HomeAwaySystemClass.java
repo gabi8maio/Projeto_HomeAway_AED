@@ -43,6 +43,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return tempAreaName;
     }
 
+    @Override
     public String loadArea (String name) throws BoundsDoesNotExistException{
         loadedArea = null;
         try{
@@ -64,6 +65,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return fileExistsCaseInsensitive(getFileName(name));
     }
 
+    @Override
     public boolean hasBounds() {
         return loadedArea != null;
     }
@@ -75,6 +77,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.getServicesIterator();
     }
 
+    @Override
     public Iterator<Services> getServicesByTagIterator(String tag) throws NoServicesWithTagException{
         Iterator <Services> tagIterator = loadedArea.getServicesByTagIterator(tag);
         if (!tagIterator.hasNext()) {
@@ -83,6 +86,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.getServicesByTagIterator(tag);
     }
 
+    @Override
     public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName)
             throws InvalidStarsException, StudentDoesNotExistsException, InvalidServiceTypeException, NoTypeServicesException, NoServicesWithAverage{
         if (stars > 5 || stars < 1)
@@ -101,6 +105,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.getRankedServicesIterator(stars,type,studentName);
     }
 
+    @Override
     public Iterator<Services> getServicesByRankingIterator() throws NoServicesInSystemException{
         Iterator<Services> rankingIterator = loadedArea.getServicesByRankingIterator();
         if (!rankingIterator.hasNext()) {
@@ -109,6 +114,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return rankingIterator;
     }
 
+    @Override
     public Iterator<Services> getVisitedLocationsIterator(String studentName){
         String name = studentExists(studentName);
         if (name == null)
@@ -151,6 +157,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
     }
 
+    @Override
     public void addStudent (String studentType, String name, String country, String lodging) {
         if (StudentTypes.fromString(studentType) == null) {
             throw new InvalidStudentTypeException();
@@ -169,6 +176,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         loadedArea.addStudent(studentType, name, country, lodging);
     }
 
+    @Override
     public Students getStudentLocationInfo(String studentName) throws StudentDoesNotExistsException {
         String studentExistsName = studentExists(studentName);
         if (studentExistsName == null){
@@ -177,6 +185,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.getStudentLocationInfo(studentName);
     }
 
+    @Override
     public Students removeStudent(String studentName) throws StudentDoesNotExistsException{
         String studentExistsName = studentExists(studentName);
         if (studentExists(studentName) == null){
@@ -185,6 +194,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.removeStudent(studentExistsName);
     }
 
+    @Override
     public Students goStudentToLocation(String studentName, String locationName) throws UnknownLocationException, StudentDoesNotExistsException, InvalidServiceException, StudentAlreadyThereException, EatingIsFullException{
         String serviceName = serviceNameExists(locationName);
         if (serviceName == null)
@@ -203,6 +213,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.goStudentToLocation(studentName,locationName);
     }
 
+    @Override
     public Students moveStudentToLocation(String studentName, String locationName)
             throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException{
 
@@ -225,6 +236,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.moveStudentToLocation(studentName,serviceName);
     }
 
+    @Override
     public  Services findMostRelevantService(String studentName, String serviceType) throws InvalidServiceTypeException, StudentDoesNotExistsException, NoTypeServicesException{
         TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType);
         if (serviceTypeEnum == null) {
@@ -262,6 +274,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         }
     }
 
+    @Override
     public TwoWayIterator<Students> usersCommand(String order, String serviceName) throws NoStudentsOnServiceException, ServiceDoesNotExistException, ServiceNotControlEntryExitException{
         String service = serviceNameExists(serviceName);
         if (service == null)
@@ -277,6 +290,7 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.getStudentsByService(service);
     }
 
+    @Override
     public void starCommand(int rating,String serviceName,String tag) throws InvalidEvaluationException, ServiceDoesNotExistException{
         if(rating < 1 || rating > 5)
             throw new InvalidEvaluationException();
@@ -285,25 +299,31 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         loadedArea.starCommand(rating,serviceName,tag);
     }
 
+    @Override
     public String serviceNameExists(String name) {
         return loadedArea.serviceExists(name);
     }
 
+    @Override
     public String studentExists (String name){
         return loadedArea.studentExists(name);
     }
 
+    @Override
     public boolean lodgingExists (String name){
         return loadedArea.lodgingExists(name);
     }
 
+    @Override
     public String lodgingIsFull(String name){
         return loadedArea.isItFull(name);
     }
 
+    @Override
     public boolean isServiceMoreExpensiveForThrifty(String studentName, String serviceName){
         return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
     }
+
 
     private void saveAreaIfLoaded(){
         if(loadedArea != null && !fileExistsCaseInsensitive(loadedArea.getName())){
