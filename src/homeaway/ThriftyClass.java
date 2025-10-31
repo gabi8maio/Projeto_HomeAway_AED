@@ -2,19 +2,13 @@ package homeaway;
 
 public class ThriftyClass extends StudentsClassAbstract implements Thrifty, Students {
 
-    private Eating cheapestEatingService;
-    private Lodging cheapestLodgingService;
     private double cheapestEatingPrice;
-    private double cheapestLodgingPrice;
 
     private static final long serialVersionUID = 0L;
 
     ThriftyClass(String studentType, String name, String country, Services lodging) {
         super (studentType, name, country, lodging);
-        cheapestEatingService = null;
-        cheapestLodgingService = (Lodging) lodging;
         cheapestEatingPrice = Integer.MAX_VALUE;
-        cheapestLodgingPrice = getPrice(lodging);
     }
 
     public boolean isMoreExpensiveThanCheapest(Services services){
@@ -26,7 +20,6 @@ public class ThriftyClass extends StudentsClassAbstract implements Thrifty, Stud
         } else {
             return true; // É mais caro que o mais barato atual
         }
-
     }
 
     private double getPrice (Services service) {

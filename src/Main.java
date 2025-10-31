@@ -2,7 +2,6 @@ import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 import homeaway.*;
 import homeaway.Exeptions.*;
-
 import java.util.Scanner;
 
 public class Main {
@@ -13,25 +12,22 @@ public class Main {
     private static final String BOUNDS_CREATED = "%s created.\n";
     private static final String BOUNDS_SAVED = "%s saved.\n";
     private static final String BOUNDS_LOADED = "%s loaded.\n";
-
+    private static final String BOUNDS_NOT_DEFINED = "System bounds not defined.";
+    private static final String USERS_COMMAND = "%s: %s\n";
+    private static final String RANKING_COMMAND = "%s: %d\n";
+    private static final String RANKED_COMMAND = "%s services closer with %d average\n";
+    private static final String LESS_SIGNAL = "<";
+    private static final String TAG_COMMAND = "%s %s\n";
     private static final String SERVICE_ADDED = "%s %s added.\n";
-
-
     private static final String STUDENT_ADDED = "%s added.\n";
     private static final String STUDENT_LEFT = "%s has left.\n";
-
-
     private static final String STUDENT_DISTRACTED = "%s is now at %s. %s is distracted!\n";
     private static final String STUDENT_NOW_AT = "%s is now at %s.\n";
     private static final String MOVE_HOME = "lodging %s is now %s's home. %s is at home.\n";
     private static final String WHERE_FORMAT = "%s is at %s %s (%d, %d).\n";
-
     private static final String NO_VISITED_LOCATIONS = "%s has not visited any locations!\n";
-
     private static final String EVALUATION_REGISTERED = "Your evaluation has been registered!";
-
     private static final String SERVICES_SORTED_HEADER = "Services sorted in descending order";
-
     private static final String SERVICES_COMMAND = "%s: %s (%d, %d).\n";
     private static final String STUDENTS_COMMAND = "%s: %s at %s.\n";
 
@@ -44,7 +40,6 @@ public class Main {
         }
     }
 
-    //TODO: Colocar a mensagem de erro de comando como uma excepção
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         HomeAwaySystem system = new HomeAwaySystemClass();
@@ -64,10 +59,10 @@ public class Main {
                 case SAVE -> executeSave( system);
                 case LOAD -> executeLoad(in, system);
                 default -> {
-                    // Verificar se o sistema tem bounds definidos para os outros comandos
+                    // Are bounds defines to other commands
                     if (!system.hasBounds()) {
-                        System.out.println("System bounds not defined.");
-                        in.nextLine(); // consumir a linha restante
+                        System.out.println(BOUNDS_NOT_DEFINED);
+                        in.nextLine();
                     } else {
                         switch (cmd) {
                             case SERVICE -> executeService(in, system);
@@ -97,7 +92,6 @@ public class Main {
         in.close();
     }
 
-    //exceptions feitas
     private static void executeBounds(Scanner in, HomeAwaySystem system) {
         String name;
         try {
@@ -113,7 +107,6 @@ public class Main {
         }
     }
 
-    //excpetions adicionadas
     private static void executeSave( HomeAwaySystem system) {
         try {
             String areaName = system.saveArea();
@@ -123,10 +116,9 @@ public class Main {
         }
     }
 
-    //excpetions adicionadas
     private static void executeLoad(Scanner in, HomeAwaySystem system) {
         String areaName;
-        String realAreaName = null; // Porque nos "outputs" vem o nome da area guardada
+        String realAreaName = null; // Porque nos "outputs" vem o nome da area
         try {
             areaName = in.nextLine().trim();
             realAreaName = system.loadArea(areaName);
@@ -136,7 +128,6 @@ public class Main {
         }
     }
 
-    //exceptions added
     private static void executeService(Scanner in, HomeAwaySystem system) {
         String serviceType = in.next().toUpperCase().trim();
         long latitude = in.nextLong();
@@ -157,27 +148,24 @@ public class Main {
         }
     }
 
-    //no exceptions needed
+
     private static void executeServices(HomeAwaySystem system) {
-        Iterator<Services> serviceIterator = system.getServiceIterator();
-
-        if (!serviceIterator.hasNext()) {
-            System.out.println("No services yet!");
-            return;
-        }
-
-        while (serviceIterator.hasNext()) {
-            Services service = serviceIterator.next();
-            System.out.printf(SERVICES_COMMAND ,service.getServiceName(),
-                    service.getServiceType().toLowerCase(),
-                    service.getLatitude(),
-                    service.getLongitude());
+        try {
+            Iterator<Services> serviceIterator = system.getServiceIterator();
+            while (serviceIterator.hasNext()) {
+                Services service = serviceIterator.next();
+                System.out.printf(SERVICES_COMMAND, service.getServiceName(),
+                        service.getServiceType().toLowerCase(),
+                        service.getLatitude(),
+                        service.getLongitude());
+            }
+        }catch(NoServicesYetException e){
+            System.out.println(e.getMessage());
         }
     }
 
-    //exceptions added
     private static void executeStudent(Scanner in, HomeAwaySystem system) {
-        // Implementation for student command
+
         String studentType = in.nextLine().toLowerCase().trim();
         String name = in.nextLine().trim();
         String country = in.nextLine().trim();
@@ -193,12 +181,9 @@ public class Main {
         }
     }
 
-    //exceptions added
     private static void executeStudents(Scanner in, HomeAwaySystem system) {
         String argument = in.nextLine().trim();
-
         try {
-
             Iterator <Students> it = system.getStudents(argument);
 
             while (it.hasNext()) {
@@ -209,7 +194,6 @@ public class Main {
                     student.getPlaceNow().getServiceName());
             }
 
-
         } catch (NoStudentsException e) {
             System.out.println(e.getMessage());
         } catch  (NoStudentsFromCountryException e) {
@@ -217,7 +201,6 @@ public class Main {
         }
     }
 
-    //exceptions added
     private static void executeLeave(Scanner in, HomeAwaySystem system) throws StudentDoesNotExistsException{
         String name = in.nextLine().trim();
         try {
@@ -229,13 +212,12 @@ public class Main {
         }
     }
 
-    //exceptions added
     private static void executeGo(Scanner in, HomeAwaySystem system) {
         String studentName = in.nextLine().trim();
         String locationName = in.nextLine().trim();
 
         try {
-            // go Student
+
             Students studentNameReal = system.goStudentToLocation(studentName, locationName);
 
             if(system.isServiceMoreExpensiveForThrifty(studentName, locationName))
@@ -256,7 +238,7 @@ public class Main {
         String locationName = in.nextLine().trim();
 
         try {
-            // move Student
+
             Students student = system.moveStudentToLocation(studentName, locationName);
             System.out.printf(MOVE_HOME,student.getPlaceHome().getServiceName(),student.getName(),student.getName());
         } catch (LodgingNotExistsException | StudentDoesNotExistsException | StudentHomeException | LodgingIsFullException | MoveNotAcceptableException e) {
@@ -271,20 +253,19 @@ public class Main {
         try {
             TwoWayIterator<Students> studentIterator = system.usersCommand(order, serviceName);
 
-            if(order.equals("<")) {
+            if(order.equals(LESS_SIGNAL)) {
                 studentIterator.fullForward();
                 while (studentIterator.hasPrevious()) {
 
-
                     Students student = studentIterator.previous();
-                    System.out.printf("%s: %s\n",
+                    System.out.printf(USERS_COMMAND,
                             student.getName(),
                             student.getType().toLowerCase());
                 }
             }else{
                 while (studentIterator.hasNext()) {
                  Students student = studentIterator.next();
-                      System.out.printf("%s: %s\n",
+                      System.out.printf(USERS_COMMAND,
                         student.getName(),
                         student.getType().toLowerCase());
                 }
@@ -345,7 +326,7 @@ public class Main {
             System.out.println(SERVICES_SORTED_HEADER);
             while (rankingIterator.hasNext()) {
                 Services service = rankingIterator.next();
-                    System.out.printf("%s: %d\n", service.getServiceName(), service.getAverageStars());
+                    System.out.printf(RANKING_COMMAND, service.getServiceName(), service.getAverageStars());
             }
         } catch (NoServicesInSystemException e) {
             System.out.println(e.getMessage());
@@ -360,7 +341,7 @@ public class Main {
 
             Iterator<Services> rankedIterator = system.getRankedServicesIterator(stars, type, studentName);
 
-            System.out.printf("%s services closer with %d average%n", type, stars);
+            System.out.printf(RANKED_COMMAND, type, stars);
             while (rankedIterator.hasNext()) {
                 Services service = rankedIterator.next();
                 System.out.println(service.getServiceName());
@@ -376,10 +357,9 @@ public class Main {
         try {
             Iterator<Services> tagIterator = system.getServicesByTagIterator(tag);
 
-
             while (tagIterator.hasNext()) {
                 Services service = tagIterator.next();
-                System.out.printf("%s %s\n", service.getServiceType().toLowerCase(), service.getServiceName());
+                System.out.printf(TAG_COMMAND, service.getServiceType().toLowerCase(), service.getServiceName());
             }
 
         } catch (NoServicesWithTagException e) {

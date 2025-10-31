@@ -7,8 +7,11 @@ import homeaway.Exeptions.*;
 import java.io.Serializable;
 
 public interface HomeAwaySystem extends Serializable {
-    void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude) throws BoundsAlreadyExistException, InvalidBoundsException;
 
+    /***
+     *
+     ***/
+    void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude) throws BoundsAlreadyExistException, InvalidBoundsException;
     Iterator<Services> getServiceIterator();
     boolean hasArea(String name);
     String serviceNameExists(String name);

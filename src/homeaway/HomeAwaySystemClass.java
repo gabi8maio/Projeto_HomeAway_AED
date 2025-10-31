@@ -4,21 +4,19 @@ import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 import homeaway.Exeptions.*;
-
 import java.io.*;
 
 public class HomeAwaySystemClass implements HomeAwaySystem{
 
     private static final long serialVersionUID = 0L;
 
-    AreaClass tempArea;
-    AreaClass loadedArea; // NS se devemos ter isto ou usar apenas a tempArea como a loaded
-    DoublyLinkedList<AreaClass> savedAreas;
+    private AreaClass tempArea;
+    private AreaClass loadedArea;
+    private DoublyLinkedList<AreaClass> savedAreas;
 
     public HomeAwaySystemClass(){
         savedAreas = new DoublyLinkedList<>();
     }
-
 
     @Override
     public void addTemporaryArea(String name, long topLatitude, long bottomLatitude, long leftLongitude, long rightLongitude)
@@ -35,18 +33,6 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         loadedArea = area;
     }
 
-    private void saveAreaIfLoaded(){
-        if(loadedArea != null && !fileExistsCaseInsensitive(loadedArea.getName())){
-
-            saveArea();
-        }
-    }
-
-    @Override
-    public Iterator<Services> getServiceIterator() {
-        return loadedArea.getServicesIterator();
-    }
-
     @Override
     public String saveArea() throws SystemBoundsNotDefinedException{
         if(loadedArea == null)
@@ -57,126 +43,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return tempAreaName;
     }
 
-
-    public Students getStudentLocationInfo(String studentName) throws StudentDoesNotExistsException {
-        String studentExistsName = studentExists(studentName);
-        if (studentExistsName == null){
-            throw new StudentDoesNotExistsException(studentName);
-        }
-        return loadedArea.getStudentLocationInfo(studentName);
-    }
-
-    @Override
-    public boolean hasArea(String name){
-
-        if (loadedArea != null && loadedArea.getName().equalsIgnoreCase(name)) {
-            return true;
-        }
-        return fileExistsCaseInsensitive(getFileName(name));
-    }
-
-    private boolean fileExistsCaseInsensitive(String name) {
-        File directory = new File(".");
-
-        if (!directory.exists() || !directory.isDirectory()) {
-            return false;
-        }
-
-        String[] files = directory.list();
-        if (files == null) {
-            return false;
-        }
-
-        String targetName = name.toLowerCase();
-        for (String file : files) {
-            if (file.toLowerCase().equals(targetName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public String serviceNameExists(String name) {
-        return loadedArea.serviceExists(name);
-    }
-
-    private boolean isEatingOrLeisureService(String serviceName){
-        return loadedArea.isEatingOrLeisureService(serviceName);
-    }
-
-    private boolean isStudentAtLocation(String studentName,String locationName){
-        return loadedArea.isStudentAtLocation(studentName,locationName);
-    }
-
-    private boolean isEatingServiceFull(String locationName){
-        return loadedArea.isEatingServiceFull(locationName);
-    }
-
-
-
-    @Override
-    public void addService(String serviceType, long latitude, long longitude, double price, int value, String serviceName)
-            throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException, InvalidTicketPriceException, InvalidDiscountException, InvalidCapacityException, ServiceAlreadyExistsException{
-        TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType); // Podemos fazer isto?
-        if (serviceTypeEnum == null) {
-            throw new InvalidServiceTypeException();
-        }
-        if (!loadedArea.isInBounds(latitude, longitude)) { // Meti ao calhas
-            throw new InvalidLocationException();
-        }
-
-        if (price <= 0) {
-            switch (serviceTypeEnum) {
-                case EATING:
-                    throw new InvalidPriceMenuException();
-                case LODGING:
-                    throw new InvalidRoomPriceException();
-                case LEISURE:
-                    throw new InvalidTicketPriceException();
-            }
-        }
-
-        // Validar  value conforme o tipo de serviço
-        if (serviceTypeEnum.equals(TypesOfService.LEISURE)) {
-            if (value < 0 || value > 100) {
-                throw new InvalidDiscountException();
-            }
-        } else { // eating ou lodging
-            if (value <= 0) {
-                throw new InvalidCapacityException();
-            }
-        }
-
-        // Validar se nome já existe
-        String previousServiceName = serviceNameExists(serviceName);
-        if (previousServiceName != null) {
-            throw new ServiceAlreadyExistsException(previousServiceName);
-        }
-
-        loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
-
-    }
-
-
-    private void store(String fileName, AreaClass area){
-        try{
-            String nameFile = this.getFileName (fileName);
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nameFile));
-            oos.writeObject(area);
-            oos.flush();
-            oos.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    private String getFileName (String fileName){
-        return fileName.replace(" ", "_") + ".ser";
-    }
-
     public String loadArea (String name) throws BoundsDoesNotExistException{
-         loadedArea = null;
+        loadedArea = null;
         try{
             String fileName = getFileName (name);
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
@@ -184,9 +52,61 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
             ois.close();
             return loadedArea.getName();
         }catch (IOException | ClassNotFoundException e){
-           // e.printStackTrace(); // See what's actually wrong
             throw new BoundsDoesNotExistException();
         }
+    }
+
+    @Override
+    public boolean hasArea(String name){
+        if (loadedArea != null && loadedArea.getName().equalsIgnoreCase(name)) {
+            return true;
+        }
+        return fileExistsCaseInsensitive(getFileName(name));
+    }
+
+    public boolean hasBounds() {
+        return loadedArea != null;
+    }
+
+    @Override
+    public Iterator<Services> getServiceIterator() throws NoServicesYetException {
+        Iterator<Services> servicesIterator = loadedArea.getServicesIterator();
+        if(!servicesIterator.hasNext()) throw new NoServicesYetException();
+        return loadedArea.getServicesIterator();
+    }
+
+    public Iterator<Services> getServicesByTagIterator(String tag) throws NoServicesWithTagException{
+        Iterator <Services> tagIterator = loadedArea.getServicesByTagIterator(tag);
+        if (!tagIterator.hasNext()) {
+            throw new NoServicesWithTagException();
+        }
+        return loadedArea.getServicesByTagIterator(tag);
+    }
+
+    public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName)
+            throws InvalidStarsException, StudentDoesNotExistsException, InvalidServiceTypeException, NoTypeServicesException, NoServicesWithAverage{
+        if (stars > 5 || stars < 1)
+            throw new InvalidStarsException();
+        String name = studentExists(studentName);
+        if (name == null)
+            throw new StudentDoesNotExistsException(studentName);
+        TypesOfService serviceTypeEnum = TypesOfService.fromString(type);
+        if (serviceTypeEnum == null) {
+            throw new InvalidServiceTypeException();
+        }
+        if (!hasServicesOfType(type))
+            throw new NoTypeServicesException(type);
+        if (!isTypeWithAverage(type, stars))
+            throw new NoServicesWithAverage(type);
+        return loadedArea.getRankedServicesIterator(stars,type,studentName);
+    }
+
+    public Iterator<Services> getServicesByRankingIterator() throws NoServicesInSystemException{
+        Iterator<Services> rankingIterator = loadedArea.getServicesByRankingIterator();
+        if (!rankingIterator.hasNext()) {
+            throw new NoServicesInSystemException();
+        }
+        return rankingIterator;
     }
 
     public Iterator<Services> getVisitedLocationsIterator(String studentName){
@@ -200,67 +120,61 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.getVisitedLocationsIterator(studentName);
     }
 
-    private boolean hasVisitedLocation(String name) {
-        return loadedArea.hasVisitedLocation(name);
-    }
-
-    private boolean isThrifty(String studentName) {
-        return loadedArea.isThrifty(studentName);
-    }
-
-    public Iterator<Services> getServicesByTagIterator(String tag) throws NoServicesWithTagException{
-        Iterator <Services> tagIterator = loadedArea.getServicesByTagIterator(tag);
-        if (!tagIterator.hasNext()) {
-            throw new NoServicesWithTagException();
-        }
-        return loadedArea.getServicesByTagIterator(tag);
-    }
-
-    private boolean isTypeWithAverage (String type, int n){
-        return loadedArea.isTypeWithAverage(type, n);
-    }
-
-    public boolean lodgingExists (String name){
-        return loadedArea.lodgingExists(name);
-    }
-
-    public String lodgingIsFull(String name){
-        return loadedArea.isItFull(name);
-    }
-
-    public Iterator<Services> getRankedServicesIterator(int stars,String type,String studentName)
-    throws InvalidStarsException, StudentDoesNotExistsException, InvalidServiceTypeException, NoTypeServicesException, NoServicesWithAverage{
-        if (stars > 5 || stars < 1)
-            throw new InvalidStarsException();
-        String name = studentExists(studentName);
-        if (name == null)
-            throw new StudentDoesNotExistsException(studentName);
-        TypesOfService serviceTypeEnum = TypesOfService.fromString(type); // Podemos fazer isto?
-        if (serviceTypeEnum == null) {
-            throw new InvalidServiceTypeException();
-        }
-        if (!hasServicesOfType(type))
-            throw new NoTypeServicesException(type);
-        if (!isTypeWithAverage(type, stars))
-            throw new NoServicesWithAverage(type);
-        return loadedArea.getRankedServicesIterator2(stars,type,studentName);
-    }
-
-    private boolean hasServicesOfType(String type) {
-        return loadedArea.hasServiceOfType(type);
-    }
-
-    public  Services findMostRelevantService(String studentName, String serviceType) throws InvalidServiceTypeException, StudentDoesNotExistsException, NoTypeServicesException{
+    @Override
+    public void addService(String serviceType, long latitude, long longitude, double price, int value, String serviceName)
+            throws InvalidServiceTypeException, InvalidLocationException, InvalidPriceMenuException, InvalidRoomPriceException, InvalidTicketPriceException, InvalidDiscountException, InvalidCapacityException, ServiceAlreadyExistsException{
         TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType);
-        if (serviceTypeEnum == null) {
+        if (serviceTypeEnum == null)
             throw new InvalidServiceTypeException();
+        if (!loadedArea.isInBounds(latitude, longitude))
+            throw new InvalidLocationException();
+        if (price <= 0) {
+            switch (serviceTypeEnum) {
+                case EATING:
+                    throw new InvalidPriceMenuException();
+                case LODGING:
+                    throw new InvalidRoomPriceException();
+                case LEISURE:
+                    throw new InvalidTicketPriceException();
+            }
         }
-        String name = studentExists(studentName);
-        if (name == null)
+
+        if (serviceTypeEnum.equals(TypesOfService.LEISURE)) {
+            if (value < 0 || value > 100)
+                throw new InvalidDiscountException();
+        } else
+        if (value <= 0)
+            throw new InvalidCapacityException();
+        String previousServiceName = serviceNameExists(serviceName);
+        if (previousServiceName != null)
+            throw new ServiceAlreadyExistsException(previousServiceName);
+        loadedArea.createService( serviceType,  latitude,  longitude,  price,  value,  serviceName);
+    }
+
+    public void addStudent (String studentType, String name, String country, String lodging) {
+        if (StudentTypes.fromString(studentType) == null) {
+            throw new InvalidStudentTypeException();
+        }
+        if (!lodgingExists(lodging)) {
+            throw new LodgingNotExistsException(lodging);
+        }
+        String fullLodging = lodgingIsFull(lodging);
+        if (fullLodging != null) {
+            throw new LodgingIsFullException(fullLodging);
+        }
+        String studentExistsName = studentExists(name);
+        if (studentExists(name) != null){
+            throw new StudentAlreadyExistsException(studentExistsName);
+        }
+        loadedArea.addStudent(studentType, name, country, lodging);
+    }
+
+    public Students getStudentLocationInfo(String studentName) throws StudentDoesNotExistsException {
+        String studentExistsName = studentExists(studentName);
+        if (studentExistsName == null){
             throw new StudentDoesNotExistsException(studentName);
-        if (!hasServicesOfType(serviceType))
-            throw new NoTypeServicesException(serviceType);
-        return loadedArea.findMostRelevantService(studentName, serviceType);
+        }
+        return loadedArea.getStudentLocationInfo(studentName);
     }
 
     public Students removeStudent(String studentName) throws StudentDoesNotExistsException{
@@ -289,12 +203,8 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.goStudentToLocation(studentName,locationName);
     }
 
-    public boolean isServiceMoreExpensiveForThrifty(String studentName, String serviceName){
-        return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
-    }
-
     public Students moveStudentToLocation(String studentName, String locationName)
-    throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException{
+            throws LodgingNotExistsException, StudentDoesNotExistsException, StudentHomeException,LodgingIsFullException, MoveNotAcceptableException{
 
         String serviceName = serviceNameExists(locationName);
         if (serviceName == null)
@@ -315,16 +225,41 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.moveStudentToLocation(studentName,serviceName);
     }
 
-    private boolean isAcceptable(String studentName, String locationName) {
-        return loadedArea.isAcceptableMove(studentName, locationName);
+    public  Services findMostRelevantService(String studentName, String serviceType) throws InvalidServiceTypeException, StudentDoesNotExistsException, NoTypeServicesException{
+        TypesOfService serviceTypeEnum = TypesOfService.fromString(serviceType);
+        if (serviceTypeEnum == null) {
+            throw new InvalidServiceTypeException();
+        }
+        String name = studentExists(studentName);
+        if (name == null)
+            throw new StudentDoesNotExistsException(studentName);
+        if (!hasServicesOfType(serviceType))
+            throw new NoTypeServicesException(serviceType);
+        return loadedArea.findMostRelevantService(studentName, serviceType);
     }
 
-    private boolean isStudentHome(String studentName, String locationName) {
-        return loadedArea.isStudentHome(studentName, locationName);
+    @Override
+    public Iterator<Students> getStudentsByCountryIterator(String country) {
+        return loadedArea.getStudentsByCountryIterator(country);
     }
 
-    private boolean isCorrectOrder(String order){
-        return order.equals(">") || order.equals("<");
+    public Iterator<Students> getAllStudentsIterator(){
+        return loadedArea.getAllStudentsIterator();
+    }
+
+    @Override
+    public Iterator<Students> getStudents(String argument) throws NoStudentsException, NoStudentsFromCountryException {
+        if (argument.equals("all")) {
+            Iterator <Students> it = getAllStudentsIterator();
+            if (!it.hasNext()) throw new NoStudentsException();
+            else return it;
+        } else {
+            Iterator<Students> countryStudentIterator = getStudentsByCountryIterator(argument);
+            if (!countryStudentIterator.hasNext()) {
+                throw new NoStudentsFromCountryException();
+            }else
+                return countryStudentIterator;
+        }
     }
 
     public TwoWayIterator<Students> usersCommand(String order, String serviceName) throws NoStudentsOnServiceException, ServiceDoesNotExistException, ServiceNotControlEntryExitException{
@@ -342,91 +277,116 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.getStudentsByService(service);
     }
 
-    private boolean isThereAnyStudent(String serviceName) {
-        return loadedArea.isThereAnyStudents(serviceName);
+    public void starCommand(int rating,String serviceName,String tag) throws InvalidEvaluationException, ServiceDoesNotExistException{
+        if(rating < 1 || rating > 5)
+            throw new InvalidEvaluationException();
+        if(serviceNameExists(serviceName) == null)
+            throw  new ServiceDoesNotExistException(serviceName);
+        loadedArea.starCommand(rating,serviceName,tag);
     }
 
-    private boolean isEatingOrLodgingService(String serviceName) {
-        return loadedArea.isEatingOrLodgingService(serviceName);
+    public String serviceNameExists(String name) {
+        return loadedArea.serviceExists(name);
     }
 
     public String studentExists (String name){
         return loadedArea.studentExists(name);
     }
 
-    public void starCommand(int rating,String serviceName,String tag) throws InvalidEvaluationException, ServiceDoesNotExistException{
-        if(rating < 1 || rating > 5)
-            throw new InvalidEvaluationException();
-        if(serviceNameExists(serviceName) == null)
-            throw  new ServiceDoesNotExistException(serviceName);
-
-
-        loadedArea.starCommand(rating,serviceName,tag);
+    public boolean lodgingExists (String name){
+        return loadedArea.lodgingExists(name);
     }
 
+    public String lodgingIsFull(String name){
+        return loadedArea.isItFull(name);
+    }
 
+    public boolean isServiceMoreExpensiveForThrifty(String studentName, String serviceName){
+        return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
+    }
 
-    public Iterator<Services> getServicesByRankingIterator() throws NoServicesInSystemException{
-        Iterator<Services> rankingIterator = loadedArea.getServicesByRankingIterator();
-        if (!rankingIterator.hasNext()) {
-            throw new NoServicesInSystemException();
+    private void saveAreaIfLoaded(){
+        if(loadedArea != null && !fileExistsCaseInsensitive(loadedArea.getName())){
+            saveArea();
         }
-        return rankingIterator;
     }
 
-    public Iterator<Students> getAllStudentsIterator(){
-        return loadedArea.getAllStudentsIterator();
-    }
-
-    @Override
-    public Iterator<Students> getStudentsByCountryIterator(String country) {
-        return loadedArea.getStudentsByCountryIterator(country);
-    }
-
-    public boolean hasBounds() {
-        return loadedArea != null;
-    }
-
-
-    public Iterator<Students> getStudentsByCountryIterator() {
-        return null;
-    }
-
-    public void addStudent (String studentType, String name, String country, String lodging) {
-        if (StudentTypes.fromString(studentType) == null) {
-            throw new InvalidStudentTypeException();
+    private void store(String fileName, AreaClass area){
+        try{
+            String nameFile = this.getFileName (fileName);
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(nameFile));
+            oos.writeObject(area);
+            oos.flush();
+            oos.close();
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        if (!lodgingExists(lodging)) {
-            throw new LodgingNotExistsException(lodging);
-        }
-        String fullLodging = lodgingIsFull(lodging);
-        if (fullLodging != null) {
-            throw new LodgingIsFullException(fullLodging);
-        }
-        String studentExistsName = studentExists(name);
-        if (studentExists(name) != null){
-            throw new StudentAlreadyExistsException(studentExistsName);
-        }
-        loadedArea.addStudent(studentType, name, country, lodging);
     }
 
-    @Override
-    public Iterator<Students> getStudents(String argument) throws NoStudentsException, NoStudentsFromCountryException {
-        if (argument.equals("all")) {
-             Iterator <Students> it = getAllStudentsIterator();
-             if (!it.hasNext())
-                 throw new NoStudentsException();
-             else
-                 return it;
+    private String getFileName (String fileName){
+        return fileName.toLowerCase().replace(" ", "_") + ".ser";
+    }
 
-        } else {
-            // The argument will be the country now
-            Iterator<Students> countryStudentIterator = getStudentsByCountryIterator(argument);
+    private boolean fileExistsCaseInsensitive(String name) {
+        File directory = new File(".");
 
-            if (!countryStudentIterator.hasNext()) {
-                throw new NoStudentsFromCountryException();
-            }else
-                return countryStudentIterator;
-        }
+        if (!directory.exists() || !directory.isDirectory())
+            return false;
+        String[] files = directory.list();
+        if (files == null)
+            return false;
+        String targetName = name.toLowerCase();
+        for (String file : files)
+            if (file.toLowerCase().equals(targetName))
+                return true;
+        return false;
+    }
+
+    private boolean isEatingOrLeisureService(String serviceName){
+        return loadedArea.isEatingOrLeisureService(serviceName);
+    }
+
+    private boolean isStudentAtLocation(String studentName,String locationName){
+        return loadedArea.isStudentAtLocation(studentName,locationName);
+    }
+
+    private boolean isEatingServiceFull(String locationName){
+        return loadedArea.isEatingServiceFull(locationName);
+    }
+
+    private boolean hasVisitedLocation(String name) {
+        return loadedArea.hasVisitedLocation(name);
+    }
+
+    private boolean isThrifty(String studentName) {
+        return loadedArea.isThrifty(studentName);
+    }
+
+    private boolean isTypeWithAverage (String type, int n){
+        return loadedArea.isTypeWithAverage(type, n);
+    }
+
+    private boolean hasServicesOfType(String type) {
+        return loadedArea.hasServiceOfType(type);
+    }
+
+    private boolean isAcceptable(String studentName, String locationName) {
+        return loadedArea.isAcceptableMove(studentName, locationName);
+    }
+
+    private boolean isStudentHome(String studentName, String locationName) {
+        return loadedArea.isStudentHome(studentName, locationName);
+    }
+
+    private boolean isCorrectOrder(String order){
+        return order.equals(">") || order.equals("<");
+    }
+
+    private boolean isThereAnyStudent(String serviceName) {
+        return loadedArea.isThereAnyStudents(serviceName);
+    }
+
+    private boolean isEatingOrLodgingService(String serviceName) {
+        return loadedArea.isEatingOrLodgingService(serviceName);
     }
 }

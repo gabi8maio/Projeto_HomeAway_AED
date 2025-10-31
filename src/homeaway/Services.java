@@ -16,8 +16,10 @@ public interface Services extends Comparable<Services>, ServicesChange, Serializ
     int getValue();
     int getLastUpdatedOrder();
     int getAverageStars();
-    float getTotalStars();
-    int getRatingCount();
+
+    /**
+     * @return - An iterator of the tags that a service was tagged with
+     */
     Iterator<String> getTags();
     TwoWayIterator<Students> getStudentsThere();
     String isFull();

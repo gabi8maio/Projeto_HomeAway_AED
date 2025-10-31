@@ -19,7 +19,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
     int numOfServiceInsertion; // The number when was inserted;
 
     public TwoWayList<Students> studentsThere;
-    private DoublyLinkedList<String> tags;
+    private final TwoWayList<String> tags;
 
     private static final long serialVersionUID = 0L;
 
@@ -36,36 +36,30 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
         totalStars = 4;
 
     }
-
+    @Override
     public int getValue(){
         return value;
     }
-
+    @Override
     public void addStudentsThere(Students newStudent){
         studentsThere.addLast(newStudent);
     }
-
+    @Override
     public void removeStudentsThere(Students student){
         int position = studentsThere.indexOf(student);
         if (position != -1) {
             studentsThere.remove(position);
         }
     }
-
-
-    public int getNumOfInsertion(){
-        return numOfServiceInsertion;
-    }
-
+    @Override
     public void addStudentsThereLodging(){
         studentsThereLodging++;
     }
+    @Override
     public void removeStudentsThereLodging(){
         studentsThereLodging--;
     }
-
-
-
+    @Override
     public String isFull(){
         if(getServiceType().equalsIgnoreCase(TypesOfService.LODGING.toString()))
             if(getValue() == studentsThereLodging) return getServiceName();
@@ -89,8 +83,6 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
         return serviceName;
     }
 
-
-
     @Override
     public long getLatitude() {
         return latitude;
@@ -101,45 +93,32 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
         return longitude;
     }
 
-
-
+    @Override
     public int getLastUpdatedOrder() {
         return lastUpdateCounter;
     }
 
-
-    public float getTotalStars() {
-        return totalStars;
-    }
-
-    public int getRatingCount() {
-        return rating;
-    }
-
+    @Override
     public Iterator<String> getTags(){
         return tags.iterator();
     }
 
+    @Override
     public TwoWayIterator<Students> getStudentsThere(){
         return studentsThere.twoWayiterator();
     }
 
-    public void addTag(String tag){
-        tags.addLast(tag);
-    }
-
+    @Override
     public void updateCounterRating(int counter) {
         lastUpdateCounter = counter;
     }
-
+    @Override
     public void setNumOfInsertion(int counter){
         numOfServiceInsertion = counter;
     }
-
+    @Override
     public void addRating(int stars,String tag, int counter) {
-
         int oldAverage = averageStars;
-
         totalStars += stars;
         rating++;
         averageStars = (totalStars + rating / 2) / rating;
@@ -147,7 +126,7 @@ public abstract class ServicesClassAbstract implements Services, ServicesChange{
         tags.addLast(tag);
         if(oldAverage != newAverage) lastUpdateCounter = counter;
     }
-
+    @Override
     public int getAverageStars() {
         return averageStars;
     }

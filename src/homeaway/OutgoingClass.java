@@ -4,17 +4,19 @@ package homeaway;
 import dataStructures.DoublyLinkedList;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+
 import dataStructures.*;
 
 public class OutgoingClass extends StudentsClassAbstract implements Outgoing, Students{
 
-    private DoublyLinkedList<Services> allVisitedServices;
+    private final TwoWayList<Services> allVisitedServices;
 
     private static final long serialVersionUID = 0L;
 
     OutgoingClass(String type, String name, String country, Services lodging) {
         super(type, name, country, lodging);
-        allVisitedServices = new DoublyLinkedList<Services>();
+        allVisitedServices = new DoublyLinkedList<>();
         allVisitedServices.addLast(lodging);
     }
 
