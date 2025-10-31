@@ -31,6 +31,11 @@ public class Main {
     private static final String SERVICES_COMMAND = "%s: %s (%d, %d).\n";
     private static final String STUDENTS_COMMAND = "%s: %s at %s.\n";
 
+    /**
+     * Method to get the command
+     * @param input - Scanner
+     * @return - The command
+     */
     private static Command getCommand(Scanner input) {
         try {
             String comm = input.next().toUpperCase();
@@ -92,6 +97,11 @@ public class Main {
         in.close();
     }
 
+    /**
+     * Executes the "bounds" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeBounds(Scanner in, HomeAwaySystem system) {
         String name;
         try {
@@ -107,6 +117,10 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "save" command
+     * @param system - System class
+     */
     private static void executeSave( HomeAwaySystem system) {
         try {
             String areaName = system.saveArea();
@@ -116,6 +130,11 @@ public class Main {
         }
     }
 
+    /**
+     * Execute the "load" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeLoad(Scanner in, HomeAwaySystem system) {
         String areaName;
         String realAreaName = null; // Porque nos "outputs" vem o nome da area
@@ -128,6 +147,11 @@ public class Main {
         }
     }
 
+    /**
+     * Execute the "services" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeService(Scanner in, HomeAwaySystem system) {
         String serviceType = in.next().toUpperCase().trim();
         long latitude = in.nextLong();
@@ -149,6 +173,10 @@ public class Main {
     }
 
 
+    /**
+     * Execute the "services" command
+     * @param system - System class
+     */
     private static void executeServices(HomeAwaySystem system) {
         try {
             Iterator<Services> serviceIterator = system.getServiceIterator();
@@ -164,6 +192,11 @@ public class Main {
         }
     }
 
+    /**
+     * Execute the "student" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeStudent(Scanner in, HomeAwaySystem system) {
 
         String studentType = in.nextLine().toLowerCase().trim();
@@ -181,6 +214,11 @@ public class Main {
         }
     }
 
+    /**
+     * Execute the "students" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeStudents(Scanner in, HomeAwaySystem system) {
         String argument = in.nextLine().trim();
         try {
@@ -201,7 +239,12 @@ public class Main {
         }
     }
 
-    private static void executeLeave(Scanner in, HomeAwaySystem system) throws StudentDoesNotExistsException{
+    /**
+     * Executes the "leave" command
+     * @param in - Scanner
+     * @param system - System class
+     */
+    private static void executeLeave(Scanner in, HomeAwaySystem system){
         String name = in.nextLine().trim();
         try {
 
@@ -212,6 +255,11 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "go" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeGo(Scanner in, HomeAwaySystem system) {
         String studentName = in.nextLine().trim();
         String locationName = in.nextLine().trim();
@@ -233,6 +281,11 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "move" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeMove(Scanner in, HomeAwaySystem system) {
         String studentName = in.nextLine().trim();
         String locationName = in.nextLine().trim();
@@ -246,6 +299,11 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "users" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeUsers(Scanner in, HomeAwaySystem system) {
         String order = in.next().trim();
         String serviceName = in.nextLine().trim();
@@ -276,6 +334,11 @@ public class Main {
 
     }
 
+    /**
+     * Executes the "where" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeWhere(Scanner in, HomeAwaySystem system) {
         String studentName = in.nextLine().trim();
 
@@ -290,6 +353,11 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "visited" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeVisited(Scanner in, HomeAwaySystem system) {
         String studentName = in.nextLine().trim();
         try {
@@ -306,6 +374,11 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "star" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeStar(Scanner in, HomeAwaySystem system) {
         try {
             int stars = in.nextInt();
@@ -320,6 +393,10 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "ranking" command
+     * @param system - System class
+     */
     private static void executeRanking( HomeAwaySystem system) {
         try {
             Iterator<Services> rankingIterator = system.getServicesByRankingIterator();
@@ -333,6 +410,11 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "ranked" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeRanked(Scanner in, HomeAwaySystem system) {
         try {
             String type = in.next().trim();
@@ -352,6 +434,11 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "tag" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeTag(Scanner in, HomeAwaySystem system) {
         String tag = in.nextLine().trim();
         try {
@@ -367,6 +454,11 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "find" command
+     * @param in - Scanner
+     * @param system - System class
+     */
     private static void executeFind(Scanner in, HomeAwaySystem system) {
         try {
             String studentName = in.nextLine().trim();
@@ -379,10 +471,17 @@ public class Main {
         }
     }
 
+    /**
+     * Executes the "exit" command
+     * @param system - System class
+     */
     private static void executeExit(HomeAwaySystem system) {
         system.saveArea();
     }
 
+    /**
+     * Executes the "help" command
+     */
     private static void executeHelp() {
         Command[] help = Command.values();
         for (int i = 0; i < help.length - 1; i++) {
