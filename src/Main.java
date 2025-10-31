@@ -1,3 +1,8 @@
+/** Authors:
+ *  Gabriel Oliveira 70886 gdm.oliveira@campus.fct.unl.pt
+ *  Diogo Figueiredo 70764 dam.figueiredo@campus.fct.unl.pt
+ */
+
 import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 import homeaway.*;
