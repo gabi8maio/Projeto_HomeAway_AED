@@ -10,7 +10,6 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
 
     private static final long serialVersionUID = 0L;
 
-    private AreaClass tempArea;
     private AreaClass loadedArea;
     private DoublyLinkedList<AreaClass> savedAreas;
 
@@ -324,13 +323,20 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return loadedArea.isServiceMoreExpensiveForThrifty(studentName, serviceName);
     }
 
-
+    /**
+     * Method to save the area if it's been loaded on the system
+     */
     private void saveAreaIfLoaded(){
         if(loadedArea != null && !fileExistsCaseInsensitive(loadedArea.getName())){
             saveArea();
         }
     }
 
+    /**
+     * Method to store the area into a .ser file
+     * @param fileName - The name that will be the file
+     * @param area - The object that will be stored
+     */
     private void store(String fileName, AreaClass area){
         try{
             String nameFile = this.getFileName (fileName);
@@ -343,10 +349,19 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         }
     }
 
+    /**
+     * Method to get the name with extensions and underscores (So the read can be correct)
+     * @param fileName - The file name
+     * @return - returns the name of the file with everything done
+     */
     private String getFileName (String fileName){
         return fileName.toLowerCase().replace(" ", "_") + ".ser";
     }
 
+    /**
+     * @param name - Name of the file to see
+     * @return - returns true if it finds the file
+     */
     private boolean fileExistsCaseInsensitive(String name) {
         File directory = new File(".");
 
@@ -362,50 +377,106 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         return false;
     }
 
+    /**
+     * @param serviceName - The service Name
+     * @return - returns true if is an Eating or Leisure service
+     */
     private boolean isEatingOrLeisureService(String serviceName){
         return loadedArea.isEatingOrLeisureService(serviceName);
     }
 
+    /**
+     * @param studentName - The student's name
+     * @param locationName - The location Service Name
+     * @return - returns true if the student is at the certain location given
+     */
     private boolean isStudentAtLocation(String studentName,String locationName){
         return loadedArea.isStudentAtLocation(studentName,locationName);
     }
 
+    /**
+     * @param locationName - The name of the service
+     * @return - returns true if the Eating Service is full
+     */
     private boolean isEatingServiceFull(String locationName){
         return loadedArea.isEatingServiceFull(locationName);
     }
 
+    /**
+     * @param name - Student's name
+     * @return - returns true if the given student has visited any location
+     */
     private boolean hasVisitedLocation(String name) {
         return loadedArea.hasVisitedLocation(name);
     }
 
+    /**
+     * @param studentName - The Student's name
+     * @return - returns true if the Student is a type Thrifty
+     */
     private boolean isThrifty(String studentName) {
         return loadedArea.isThrifty(studentName);
     }
 
+    /**
+     *
+     * @param type - Type of the service
+     * @param n - The certain average
+     * @return - returns true if the certain type of service has a certain average
+     */
     private boolean isTypeWithAverage (String type, int n){
         return loadedArea.isTypeWithAverage(type, n);
     }
 
+    /**
+     * @param type - The type to check
+     * @return - returns true if there is a service with a certain type
+     */
     private boolean hasServicesOfType(String type) {
         return loadedArea.hasServiceOfType(type);
     }
 
+    /**
+     *
+     * @param studentName - Student name
+     * @param locationName - Service lodging name
+     * @return - returns true if the Student is thrifty and the lodging is cheaper than the one that is currently in
+     */
     private boolean isAcceptable(String studentName, String locationName) {
         return loadedArea.isAcceptableMove(studentName, locationName);
     }
 
+    /**
+     * @param studentName - Student name
+     * @param locationName - Service name
+     * @return - returns true if the student given is at home
+     */
     private boolean isStudentHome(String studentName, String locationName) {
         return loadedArea.isStudentHome(studentName, locationName);
     }
 
+    /**
+     *
+     * @param order - the char of < or >
+     * @return - returns true if the order is the correct char
+     */
     private boolean isCorrectOrder(String order){
         return order.equals(">") || order.equals("<");
     }
 
+    /**
+     *
+     * @param serviceName - The service name
+     * @return - returns true if there are any student on the area
+     */
     private boolean isThereAnyStudent(String serviceName) {
         return loadedArea.isThereAnyStudents(serviceName);
     }
 
+    /**
+     * @param serviceName - The service name
+     * @return - returns true if it is an Eating or Lodging service, the one given
+     */
     private boolean isEatingOrLodgingService(String serviceName) {
         return loadedArea.isEatingOrLodgingService(serviceName);
     }
