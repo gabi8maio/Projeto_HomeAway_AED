@@ -28,7 +28,6 @@ public class HomeAwaySystemClass implements HomeAwaySystem{
         }
         saveAreaIfLoaded();
         AreaClass area = new AreaClass(name, topLatitude, bottomLatitude, leftLongitude, rightLongitude);
-        this.tempArea = area;
         loadedArea = area;
     }
 
