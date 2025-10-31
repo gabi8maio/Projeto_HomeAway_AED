@@ -24,7 +24,7 @@ public class BookishClass extends StudentsClassAbstract implements Bookish, Stud
 
 
 
-    public boolean hasVisitedLocation() {
+    public boolean hasVisitedLocations() {
         return !visitedLeisureServices.isEmpty();
     }
 }

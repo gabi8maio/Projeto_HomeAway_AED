@@ -20,6 +20,7 @@ public class LeisureClass extends ServicesClassAbstract implements Leisure {
         return TypesOfService.LEISURE.toString();
     }
 
+    @Override
     public double getPrice (){
         return this.price;
     }

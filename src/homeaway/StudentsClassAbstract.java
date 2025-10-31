@@ -22,33 +22,42 @@ public abstract class StudentsClassAbstract implements Students, Serializable {
 
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public int compareTo(Students o1){
         return this.getName().compareTo(o1.getName());
     }
 
+    @Override
     public String getType() {
         return type;
     }
 
+    @Override
     public String getCountry() {
         return country;
     }
 
+    @Override
     public void setPlaceHome(Services newPlace) {
         lodging = newPlace;
     }
 
+    @Override
     public void setPlaceGo(Services newPlace) {
         placeNow = newPlace;
     }
 
+    @Override
     public  Services getPlaceHome() {
         return lodging;
     }
+
+    @Override
     public  Services getPlaceNow() {
         return placeNow;
     }

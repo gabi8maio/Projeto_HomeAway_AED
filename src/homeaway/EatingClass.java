@@ -18,6 +18,7 @@ public class EatingClass extends ServicesClassAbstract implements Eating {
         return TypesOfService.EATING.toString();
     }
 
+    @Override
     public double getPrice() {
         return price;
     }

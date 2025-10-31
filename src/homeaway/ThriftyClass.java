@@ -22,6 +22,11 @@ public class ThriftyClass extends StudentsClassAbstract implements Thrifty, Stud
         }
     }
 
+    /**
+     * Method used to get the price of a service depending on its type
+     * @param service - the service
+     * @return
+     */
     private double getPrice (Services service) {
         double price = 0;
         if (service instanceof Leisure) {
